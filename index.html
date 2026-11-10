@@ -2712,7 +2712,7 @@
   </script>
 
   <script>
-  // ===== Vẽ đối xứng, âm thanh thiên nhiên và câu nói mỗi ngày =====
+  // ===== Vẽ đối xứng và câu nói mỗi ngày =====
   (() => {
     const $ = (id) => document.getElementById(id);
 
@@ -2762,73 +2762,6 @@
     // ----- Hộp nhận xét của AI: cho phép cuộn khi màn hình thấp -----
     const aiBox = $('ai-result-modal')?.firstElementChild;
     if (aiBox) aiBox.classList.add('max-h-[92vh]', 'overflow-y-auto');
-
-    // ----- Âm thanh thiên nhiên tạo ngay trong trình duyệt (không cần mạng) -----
-    const panel = $('music-panel');
-    if (panel) {
-      const SOUNDS = [['rain', 'Tiếng mưa'], ['waves', 'Sóng biển'], ['wind', 'Gió']];
-      const sec = document.createElement('div');
-      sec.className = 'mt-4 pt-3 border-t border-slate-200 dark:border-slate-700';
-      sec.innerHTML = `<div class="text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-2">Âm thanh thiên nhiên</div>` +
-        SOUNDS.map(([k, n]) => `<div class="flex items-center gap-2 mb-2">
-          <button type="button" data-snd="${k}" aria-pressed="false" class="w-24 px-2 py-1.5 rounded-lg text-[11px] font-semibold border border-teal-200 dark:border-slate-600 text-teal-800 dark:text-teal-200">${n}</button>
-          <input type="range" data-svol="${k}" min="0" max="100" value="50" class="flex-1 min-w-0 accent-teal-600" aria-label="Âm lượng ${n}"></div>`).join('');
-      panel.appendChild(sec);
-
-      let ac = null, white = null, brown = null;
-      const on = {}, vol = { rain: .5, waves: .5, wind: .5 };
-      function audio() {
-        if (ac) return ac;
-        ac = new (window.AudioContext || window.webkitAudioContext)();
-        const len = ac.sampleRate * 4;
-        white = ac.createBuffer(1, len, ac.sampleRate); brown = ac.createBuffer(1, len, ac.sampleRate);
-        const w = white.getChannelData(0), b = brown.getChannelData(0);
-        let last = 0;
-        for (let i = 0; i < len; i++) { const r = Math.random() * 2 - 1; w[i] = r; last = (last + 0.02 * r) / 1.02; b[i] = last * 3.5; }
-        return ac;
-      }
-      const filt = (a, type, f, q) => { const n = a.createBiquadFilter(); n.type = type; n.frequency.value = f; if (q) n.Q.value = q; return n; };
-      function build(kind) {
-        const a = audio(), g = a.createGain(), src = a.createBufferSource(), extra = [];
-        g.gain.value = 0; g.connect(a.destination); src.loop = true;
-        if (kind === 'rain') {
-          src.buffer = white; const hp = filt(a, 'highpass', 900), lp = filt(a, 'lowpass', 8000);
-          src.connect(hp); hp.connect(lp); lp.connect(g);
-        } else if (kind === 'waves') {
-          src.buffer = brown; const lp = filt(a, 'lowpass', 900), amp = a.createGain(), lfo = a.createOscillator(), depth = a.createGain();
-          amp.gain.value = 0.6; lfo.frequency.value = 0.11; depth.gain.value = 0.45;
-          lfo.connect(depth); depth.connect(amp.gain); src.connect(lp); lp.connect(amp); amp.connect(g); lfo.start(); extra.push(lfo);
-        } else {
-          src.buffer = white; const bp = filt(a, 'bandpass', 550, 0.9), lfo = a.createOscillator(), depth = a.createGain();
-          lfo.frequency.value = 0.07; depth.gain.value = 260;
-          lfo.connect(depth); depth.connect(bp.frequency); src.connect(bp); bp.connect(g); lfo.start(); extra.push(lfo);
-        }
-        src.start();
-        return { src, g, extra };
-      }
-      const level = (k) => vol[k] * (k === 'rain' ? 0.5 : 0.8);
-      sec.addEventListener('click', (e) => {
-        const btn = e.target.closest('[data-snd]'); if (!btn) return;
-        const k = btn.dataset.snd, a = audio();
-        if (a.state === 'suspended') a.resume();
-        if (on[k]) {
-          const n = on[k]; on[k] = null;
-          n.g.gain.setTargetAtTime(0, a.currentTime, 0.15);
-          setTimeout(() => { try { n.src.stop(); n.extra.forEach(o => o.stop()); n.g.disconnect(); } catch (_) {} }, 800);
-        } else {
-          on[k] = build(k);
-          on[k].g.gain.setTargetAtTime(level(k), a.currentTime, 0.3);
-        }
-        const isOn = !!on[k];
-        btn.setAttribute('aria-pressed', String(isOn));
-        ['bg-teal-600', 'text-white', 'border-teal-600'].forEach(c => btn.classList.toggle(c, isOn));
-      });
-      sec.addEventListener('input', (e) => {
-        const r = e.target.closest('[data-svol]'); if (!r) return;
-        const k = r.dataset.svol; vol[k] = r.value / 100;
-        if (on[k]) on[k].g.gain.setTargetAtTime(level(k), ac.currentTime, 0.1);
-      });
-    }
 
     // ----- Câu nói tích cực mỗi ngày ở màn chào -----
     const QUOTES = [
@@ -3064,10 +2997,9 @@
     function setPlayLabel() {
       playBtn.innerHTML = playing ? `${ICON.pause}<span>Dừng</span>` : `${ICON.play}<span>Phát</span>`;
     }
-    // Tắt nhạc người dùng đang nghe ở nút nhạc nổi (YouTube và âm thanh thiên nhiên)
+    // Tắt nhạc người dùng đang nghe ở nút nhạc nổi (YouTube)
     function stopOtherMusic() {
       try { document.getElementById('music-stop-all')?.click(); } catch (_) {}
-      document.querySelectorAll('#music-panel [data-snd][aria-pressed="true"]').forEach((b) => b.click());
     }
     function play() {
       if (playing) return;
