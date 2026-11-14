@@ -1,4 +1,4 @@
-const CACHE = 'mindart-v22';
+const CACHE = 'mindart-v35';
 const CORE = ['./', './index.html', './manifest.webmanifest', './favicon.png', './icon-192.png', './icon-512.png'];
 const SKIP = /youtube\.com|youtu\.be|googlevideo\.com|ytimg\.com/;
 

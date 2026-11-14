@@ -47,6 +47,8 @@
     }
   
     html { scroll-behavior: smooth; }
+    html header > div:last-child > button { width: 2.5rem; height: 2.5rem; padding: 0; flex: none; display: inline-flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 700; line-height: 1; }
+    html header > div:last-child > button svg { width: 1.25rem; height: 1.25rem; display: block; }
     html { font-size: clamp(16px, min(1.61vh - 2.8px, 1.6vw + 3px), 22px); }
     @media (max-width: 767px) { html { font-size: 16px; } }
     html .text-\[10px\] { font-size: 0.625rem; }
@@ -177,13 +179,13 @@
       </div>
     </section>
 
-    <section id="screen-dass-result" class="hidden w-full bg-white/90 dark:bg-slate-900/90 p-6 md:p-8 rounded-3xl shadow-xl border border-teal-100 dark:border-slate-800 max-w-2xl my-auto">
-      <div class="text-center mb-6">
+    <section id="screen-dass-result" class="hidden w-full bg-white/90 dark:bg-slate-900/90 p-5 md:p-6 rounded-3xl shadow-xl border border-teal-100 dark:border-slate-800 max-w-5xl my-auto">
+      <div class="text-center mb-4">
         <h2 id="dass-result-title" class="text-xl font-bold text-teal-950 dark:text-teal-100">Kết Quả Đánh Giá Tâm Lý DASS-21</h2>
         <p class="text-xs text-slate-500">Dành cho: <span id="res-user-name" class="font-bold text-teal-700 dark:text-teal-400"></span></p>
       </div>
 
-      <div class="grid grid-cols-3 gap-3 mb-6">
+      <div class="grid grid-cols-3 gap-3 mb-4">
         <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl text-center">
           <div class="text-[10px] font-bold uppercase text-slate-400">Trầm cảm</div>
           <div id="score-d" class="text-xl font-extrabold my-1">0</div>
@@ -201,7 +203,7 @@
         </div>
       </div>
 
-      <div class="bg-teal-50/80 dark:bg-teal-950/40 p-4 rounded-2xl mb-6 text-xs text-teal-900 dark:text-teal-200">
+      <div class="bg-teal-50/80 dark:bg-teal-950/40 p-4 rounded-2xl mb-4 text-xs text-teal-900 dark:text-teal-200">
         <div class="font-bold flex items-center mb-1"><i data-lucide="sparkles" class="w-4 h-4 mr-1 text-teal-600"></i>Gợi ý liệu pháp:</div>
         <p id="recommendation-text" class="text-slate-600 dark:text-slate-300">...</p>
       </div>
@@ -225,7 +227,7 @@
         </button>
       </div>
 
-      <div class="mt-5 flex justify-start">
+      <div class="mt-4 flex justify-start">
         <button id="btn-dass-result-back" type="button" class="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-teal-200 dark:border-slate-700 text-teal-800 dark:text-teal-200 text-xs font-semibold hover:bg-teal-50 dark:hover:bg-slate-800 transition-all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 pointer-events-none"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg><span>Quay lại câu hỏi</span></button>
       </div>
     </section>
@@ -262,7 +264,7 @@
             <button data-color="#f472b6" class="btn-palette w-6 h-6 rounded-full bg-pink-400 ring-2 ring-offset-1 ring-transparent focus:ring-teal-500"></button>
             <button data-color="#fbbf24" class="btn-palette w-6 h-6 rounded-full bg-amber-400 ring-2 ring-offset-1 ring-transparent focus:ring-teal-500"></button>
 
-            <button id="btn-open-custom-color" title="Tự pha màu" class="w-6 h-6 rounded-full border-2 border-dashed border-slate-300 dark:border-slate-600 flex items-center justify-center text-slate-400 hover:border-teal-400 hover:text-teal-500">
+            <button id="btn-open-custom-color" title="tự pha màu" class="w-6 h-6 rounded-full border-2 border-dashed border-slate-300 dark:border-slate-600 flex items-center justify-center text-slate-400 hover:border-teal-400 hover:text-teal-500">
               <i data-lucide="plus" class="w-3.5 h-3.5 pointer-events-none"></i>
             </button>
 
@@ -2699,7 +2701,7 @@
 
     const grid = result.querySelector('.btn-art-mode')?.parentElement;
     if (grid) {
-      grid.classList.remove('md:grid-cols-3'); grid.classList.add('md:grid-cols-2');
+      grid.classList.remove('md:grid-cols-3'); grid.classList.add('md:grid-cols-4');
       const card = document.createElement('button');
       card.type = 'button';
       card.className = 'p-4 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all';
@@ -3053,7 +3055,7 @@
     "Lời khuyên": "Tip", "Hãy từ từ chọn cọ hoặc thùng sơn tự động tô màu theo ý thích...": "Take your time to pick a brush or the paint bucket and color as you like...",
     "Hoàn thành": "Finish", "Nhận xét về tranh của bạn": "Feedback on your artwork", "🎨 Phong cách gần giống:": "🎨 Similar style:", "Tải dữ liệu về": "Download data",
     "Chúc bạn có một ngày tốt lành và hãy giữ tâm trạng mình thật tốt nhé !": "Wishing you a lovely day — please keep your spirits high!",
-    "Về trang đăng nhập": "Back to login page", "Đổi chế độ Sáng/Tối": "Toggle Light/Dark mode", "Tự pha màu": "Custom color", "Cọ vẽ": "Brush",
+    "Về trang đăng nhập": "Back to login page", "Đổi chế độ Sáng/Tối": "Toggle Light/Dark mode", "tự pha màu": "Custom color", "Cọ vẽ": "Brush",
     "Thùng sơn tự động tô": "Paint bucket", "Tẩy": "Eraser", "Xóa tất cả": "Clear all", "Lịch sử": "History", "Về dự án": "About",
     "Hoa Mây": "Cloud Flowers", "Xe Hoa": "Flower Car", "Biển Nắng": "Sunny Sea", "Nhà Đồng Quê": "Country House", "Đầu Sói": "Wolf Head", "Chuông gió": "Wind Chime",
     "Mặt Trời và Mặt Trăng": "Sun and Moon", "Kim Cương": "Diamond", "Cá Voi": "Whale", "Rùa Biển": "Sea Turtle", "Sóng": "Waves", "Ngôi Sao": "Star",
@@ -3160,7 +3162,302 @@
   });
   mo.observe(document.body, { childList: true, subtree: true, characterData: true });
   function init() { addButton(); apply(); setTimeout(function () { addButton(); apply(); }, 600); }
+  addButton(); apply();
   if (document.readyState === 'complete') init(); else window.addEventListener('load', init);
+})();
+</script>
+<script>
+(function () {
+  'use strict';
+  var SUPPORT = [
+    { n: '111', vi: 'Tổng đài quốc gia bảo vệ trẻ em: miễn phí, 24/7, có tư vấn tâm lý', en: 'National Child Protection Hotline: free, 24/7, includes psychological counseling' },
+    { n: '115', vi: 'Cấp cứu y tế (khi bạn hoặc ai đó đang nguy hiểm)', en: 'Medical emergency (when you or someone is in danger)' }
+  ];
+  var CH = [
+    ['Vẽ tâm trạng hôm nay như một thời tiết (nắng, mưa, sương mù...).', "Draw today's mood as weather (sunny, rainy, foggy...)."],
+    ['Tô một bức tranh chỉ bằng các màu lạnh.', 'Color a picture using only cool colors.'],
+    ['Vẽ 20 chấm tròn, mỗi chấm một kích thước khác nhau.', 'Draw 20 dots, each in a different size.'],
+    ['Tô màu mà không nghĩ gì, chỉ nhìn tay mình di chuyển.', 'Color without thinking, just watch your hand move.'],
+    ['Vẽ một nơi khiến bạn thấy bình yên.', 'Draw a place that makes you feel peaceful.'],
+    ['Tô một bức tranh bằng đúng 3 màu.', 'Color a picture with exactly 3 colors.'],
+    ['Vẽ những đường cong liên tục không nhấc tay.', 'Draw continuous curves without lifting your hand.'],
+    ['Vẽ thứ bạn biết ơn nhất hôm nay.', 'Draw what you are most grateful for today.'],
+    ['Tô màu theo cảm giác: màu nào hợp với hơi thở chậm?', 'Color by feeling: which color suits a slow breath?'],
+    ['Vẽ một con vật đáng yêu bằng những nét thật đơn giản.', 'Draw a cute animal with very simple strokes.'],
+    ['Tô một bức tranh Mandala từ ngoài vào trong.', 'Color a Mandala from the outside in.'],
+    ['Vẽ chuyển động của nhạc bạn đang nghe.', 'Draw the movement of the music you are listening to.'],
+    ['Vẽ một vòng tròn rồi biến nó thành bất cứ thứ gì bạn thích.', 'Draw a circle and turn it into anything you like.'],
+    ['Tô màu 5 phút rồi viết một câu về cảm giác của bạn.', 'Color for 5 minutes, then write one sentence about how you feel.']
+  ];
+  var PAL = {
+    stress: { l: ['Căng thẳng', 'Stressed'], c: ['#A8D5BA', '#7FB7BE', '#5C8EA6', '#C7E3E1', '#EAF4F4', '#3F6C7A'], t: ['Xanh lá và xanh dương dịu tạo cảm giác mát, chậm và an toàn khi đang căng thẳng.', 'Soft greens and blues feel cool, slow and safe when you are stressed.'] },
+    anx: { l: ['Lo âu', 'Anxious'], c: ['#CDB4DB', '#BDE0FE', '#A2D2FF', '#E7D8F0', '#F1F7FB', '#8E7DBE'], t: ['Tím lavender và xanh nhạt làm dịu những suy nghĩ chạy nhanh; tránh màu quá chói.', 'Lavender and pale blue calm racing thoughts; avoid very bright colors.'] },
+    sad: { l: ['Buồn', 'Sad'], c: ['#FFE1A8', '#F7B89C', '#F4A6A6', '#FFF3D6', '#FCD5CE', '#E5989B'], t: ['Vàng bơ và hồng đào mang lại cảm giác được che chở, nhẹ nhàng nâng đỡ tâm trạng.', 'Butter yellow and peach feel protective and gently lift your mood.'] },
+    tired: { l: ['Mệt mỏi', 'Tired'], c: ['#D8E2DC', '#B5C99A', '#CAD2C5', '#84A98C', '#F0EAD6', '#52796F'], t: ['Xanh rêu và be nhạt giống thiên nhiên, giúp mắt và đầu óc được nghỉ.', 'Moss green and soft beige resemble nature and rest your eyes and mind.'] },
+    happy: { l: ['Vui', 'Happy'], c: ['#FFD166', '#EF476F', '#06D6A0', '#118AB2', '#F78C6B', '#9B5DE0'], t: ['Bảng màu rực rỡ để bạn thoải mái tô theo cảm hứng.', 'A vivid palette so you can color freely.'] }
+  };
+  var SND = { rain: ['🌧️', 'Mưa', 'Rain'], sea: ['🌊', 'Sóng biển', 'Ocean'], forest: ['🌲', 'Rừng', 'Forest'], fire: ['🔥', 'Lửa trại', 'Campfire'] };
+  var TABS = [['snd', '🎧', 'Âm thanh', 'Sounds'], ['chal', '🎯', 'Thử thách', 'Challenge'], ['pal', '🎨', 'Màu sắc', 'Colors'], ['grat', '📓', 'Biết ơn', 'Gratitude'], ['rem', '🔔', 'Nhắc nhở', 'Reminder'], ['wk', '', 'Thời gian hoạt động', 'Activity time'], ['acc', '', 'Giao diện', 'Interface'], ['sup', '🤝', 'Hỗ trợ', 'Support']];
+  var cur = 'snd', palMood = null, toast = '', modal = null;
+
+  function isEn() { return !!(window.__lang && window.__lang() === 'en'); }
+  function t(v, e) { return isEn() ? e : v; }
+  function ls(k, d) { try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (_) { return d; } }
+  function sv(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} }
+  function pad(n) { return ('0' + n).slice(-2); }
+  function dstr(d) { d = d || new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function hist() { var h = ls('mindart_history', []); return Array.isArray(h) ? h : []; }
+
+  var st = document.createElement('style');
+  st.textContent = ':root{--mxb:clamp(16px,min(1.61vh - 2.8px,1.6vw + 3px),22px)}@media(max-width:767px){:root{--mxb:16px}}' +
+    'html[data-fs="1"]{font-size:calc(var(--mxb)*1.15)!important}html[data-fs="2"]{font-size:calc(var(--mxb)*1.3)!important}' +
+    'html[data-hc="1"]{filter:contrast(1.2)}' +
+    'html[data-rm="1"] *,html[data-rm="1"] *::before,html[data-rm="1"] *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}html[data-rm="1"] .reveal{opacity:1!important;transform:none!important}';
+  document.head.appendChild(st);
+  function applyA11y() {
+    var a = ls('mx_a11y', {}), r = document.documentElement;
+    a.fs ? r.setAttribute('data-fs', a.fs) : r.removeAttribute('data-fs');
+    a.hc ? r.setAttribute('data-hc', '1') : r.removeAttribute('data-hc');
+    a.rm ? r.setAttribute('data-rm', '1') : r.removeAttribute('data-rm');
+  }
+  applyA11y();
+
+  var AC = null, master = null, stopSnd = null, playing = null, vol = 0.5;
+  function ctx() {
+    if (!AC) { AC = new (window.AudioContext || window.webkitAudioContext)(); master = AC.createGain(); master.gain.value = vol; master.connect(AC.destination); }
+    if (AC.state === 'suspended') AC.resume();
+    return AC;
+  }
+  function noise(brown) {
+    var c = ctx(), n = c.sampleRate * 2, b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0), last = 0;
+    for (var i = 0; i < n; i++) { var w = Math.random() * 2 - 1; if (brown) { last = (last + 0.02 * w) / 1.02; d[i] = last * 3.5; } else d[i] = w; }
+    var s = c.createBufferSource(); s.buffer = b; s.loop = true; return s;
+  }
+  function chain(src, nodes) { var c = ctx(), p = src; nodes.forEach(function (n) { p.connect(n); p = n; }); p.connect(master); }
+  function filt(type, f, q) { var x = ctx().createBiquadFilter(); x.type = type; x.frequency.value = f; if (q) x.Q.value = q; return x; }
+  function gain(v) { var g = ctx().createGain(); g.gain.value = v; return g; }
+  function burst(freqA, freqB, dur, v, tp) {
+    var c = ctx(), o = c.createOscillator(), g = c.createGain(), now = c.currentTime;
+    o.type = tp || 'sine'; o.frequency.setValueAtTime(freqA, now); o.frequency.exponentialRampToValueAtTime(freqB, now + dur);
+    g.gain.setValueAtTime(0.0001, now); g.gain.exponentialRampToValueAtTime(v, now + dur * 0.2); g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+    o.connect(g); g.connect(master); o.start(now); o.stop(now + dur + 0.05);
+  }
+  var SOUNDS = {
+    rain: function () { var a = noise(), b = noise(true); chain(a, [filt('highpass', 800), filt('lowpass', 7000), gain(0.35)]); chain(b, [filt('lowpass', 400), gain(0.3)]); a.start(); b.start(); return function () { a.stop(); b.stop(); }; },
+    sea: function () {
+      var a = noise(true), g = gain(0.5), c = ctx(), lfo = c.createOscillator(), lg = gain(0.35);
+      lfo.frequency.value = 0.09; lfo.connect(lg); lg.connect(g.gain); chain(a, [filt('lowpass', 900), g]); a.start(); lfo.start();
+      return function () { a.stop(); lfo.stop(); };
+    },
+    forest: function () {
+      var a = noise(true); chain(a, [filt('lowpass', 500), gain(0.25)]); a.start();
+      var tm = setInterval(function () { if (Math.random() < 0.7) { var f = 2200 + Math.random() * 1800; burst(f, f * 1.3, 0.12 + Math.random() * 0.1, 0.05); if (Math.random() < 0.5) setTimeout(function () { burst(f * 1.1, f * 1.4, 0.1, 0.04); }, 160); } }, 1800);
+      return function () { a.stop(); clearInterval(tm); };
+    },
+    fire: function () {
+      var a = noise(true); chain(a, [filt('lowpass', 300), gain(0.35)]); a.start();
+      var live = true;
+      (function crack() {
+        if (!live) return;
+        var c = ctx(), s = noise(), g = c.createGain(), now = c.currentTime, d = 0.02 + Math.random() * 0.05;
+        g.gain.setValueAtTime(0.25 * Math.random() + 0.05, now); g.gain.exponentialRampToValueAtTime(0.0001, now + d);
+        var bp = filt('bandpass', 1500 + Math.random() * 3000, 1); s.connect(bp); bp.connect(g); g.connect(master); s.start(now); s.stop(now + d + 0.02);
+        setTimeout(crack, 80 + Math.random() * 450);
+      })();
+      return function () { live = false; a.stop(); };
+    }
+  };
+  function playSnd(k) {
+    if (stopSnd) { try { stopSnd(); } catch (_) {} stopSnd = null; }
+    if (playing === k) { playing = null; return; }
+    try { stopSnd = SOUNDS[k](); playing = k; } catch (_) { playing = null; toast = t('Trình duyệt chưa hỗ trợ âm thanh.', 'Audio is not supported in this browser.'); }
+  }
+
+  function chToday() { return CH[Math.floor(Date.now() / 86400000) % CH.length]; }
+  function chStats() {
+    var done = ls('mx_ch', []), set = {}, i, d = new Date(), streak = 0;
+    done.forEach(function (x) { set[x] = 1; });
+    if (!set[dstr(d)]) d.setDate(d.getDate() - 1);
+    while (set[dstr(d)]) { streak++; d.setDate(d.getDate() - 1); }
+    return { total: done.length, streak: streak, today: !!set[dstr()] };
+  }
+  function autoMood() {
+    var h = hist(), i, r = null;
+    for (i = h.length - 1; i >= 0; i--) if (h[i] && h[i].dass) { r = h[i].dass; break; }
+    if (!r) return null;
+    var s = [['stress', (r.s || 0) / 14], ['anx', (r.a || 0) / 7], ['sad', (r.d || 0) / 9]].sort(function (x, y) { return y[1] - x[1]; })[0];
+    return s[1] > 1 ? s[0] : 'happy';
+  }
+  function weekStats() {
+    var now = Date.now(), h = hist().filter(function (r) { return r && r.t && now - r.t < 7 * 864e5; }), days = {}, b = [], a = [], bars = [], i;
+    h.forEach(function (r) { days[dstr(new Date(r.t))] = (days[dstr(new Date(r.t))] || 0) + 1; if (r.before) b.push(r.before); if (r.after) a.push(r.after); });
+    for (i = 6; i >= 0; i--) { var d = new Date(); d.setDate(d.getDate() - i); bars.push([d.getDate(), days[dstr(d)] || 0]); }
+    var avg = function (x) { return x.length ? x.reduce(function (p, q) { return p + q; }, 0) / x.length : null; };
+    var g = ls('mx_grat', {}), gd = 0, cd = 0, chs = ls('mx_ch', []);
+    bars.forEach(function (_, k) { var d = new Date(); d.setDate(d.getDate() - (6 - k)); if (g[dstr(d)]) gd++; if (chs.indexOf(dstr(d)) >= 0) cd++; });
+    return { n: h.length, dd: Object.keys(days).length, bf: avg(b), af: avg(a), bars: bars, gd: gd, cd: cd };
+  }
+
+  var B = 'px-4 py-2 rounded-xl text-base font-semibold border border-slate-300 dark:border-slate-600 ';
+  function btn(act, label, on, extra) { return '<button type="button" data-act="' + act + '" class="' + B + (on ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-slate-100 dark:bg-slate-800') + ' ' + (extra || '') + '">' + label + '</button>'; }
+  var V = {
+    snd: function () {
+      var h = '<p class="text-base opacity-80 mb-3">' + t('Âm thanh tạo trực tiếp trên máy bạn, dùng được cả khi không có mạng.', 'Sounds are generated on your device and work offline.') + '</p><div class="flex flex-wrap gap-2 mb-4">';
+      Object.keys(SND).forEach(function (k) { h += btn('snd:' + k, SND[k][0] + ' ' + t(SND[k][1], SND[k][2]) + (playing === k ? ' ⏸' : ''), playing === k); });
+      return h + '</div><label class="text-base block">' + t('Âm lượng', 'Volume') + ' <input id="mx-vol" type="range" min="0" max="1" step="0.05" value="' + vol + '" class="w-full"></label>';
+    },
+    chal: function () {
+      var c = chToday(), s = chStats();
+      return '<p class="text-sm uppercase tracking-wider opacity-70 mb-1">' + t('Thử thách hôm nay', "Today's challenge") + '</p><p class="text-2xl font-bold mb-4">' + esc(t(c[0], c[1])) + '</p>' +
+        btn('chal', s.today ? t('Đã hoàn thành ✓', 'Completed ✓') : t('Mình đã làm xong!', 'I did it!'), s.today) +
+        '<p class="text-base mt-4">🔥 ' + t('Chuỗi hiện tại', 'Current streak') + ': <b>' + s.streak + '</b> · ' + t('Tổng cộng', 'Total') + ': <b>' + s.total + '</b></p>' +
+        '<p class="text-base opacity-80 mt-1">' + (s.total >= 30 ? t('🏅 Huy hiệu: Người bền bỉ (30 thử thách)', '🏅 Badge: Persistent (30 challenges)') : s.total >= 7 ? t('🥈 Huy hiệu: Kiên trì (7 thử thách). Tiếp tục đến 30 nhé!', '🥈 Badge: Steady (7 challenges). Keep going to 30!') : s.total >= 1 ? t('🥉 Huy hiệu: Khởi đầu. Còn ' + (7 - s.total) + ' thử thách nữa để lên huy hiệu tiếp theo.', '🥉 Badge: Getting started. ' + (7 - s.total) + ' more to the next badge.') : t('Hoàn thành thử thách đầu tiên để nhận huy hiệu.', 'Complete your first challenge to earn a badge.')) + '</p>';
+    },
+    pal: function () {
+      var m = palMood || autoMood() || 'stress', p = PAL[m], h = '<p class="text-base opacity-80 mb-3">' + t('Hôm nay bạn thấy thế nào? Chọn để xem bảng màu gợi ý.', 'How do you feel today? Pick one to see a suggested palette.') + '</p><div class="flex flex-wrap gap-2 mb-4">';
+      Object.keys(PAL).forEach(function (k) { h += btn('pal:' + k, t(PAL[k].l[0], PAL[k].l[1]), k === m); });
+      h += '</div><div class="grid grid-cols-6 gap-2 mb-3">';
+      p.c.forEach(function (c) { h += '<button type="button" data-act="copy:' + c + '" title="' + c + '" style="background:' + c + '" class="h-16 rounded-xl border border-slate-300 dark:border-slate-600"></button>'; });
+      return h + '</div><p class="text-base">' + esc(t(p.t[0], p.t[1])) + '</p><p class="text-sm opacity-70 mt-2">' + t('Bấm vào ô màu để sao chép mã màu, rồi dán vào ô tự pha màu khi tô.', 'Tap a swatch to copy its code, then paste it into the custom color box when coloring.') + '</p>';
+    },
+    grat: function () {
+      var g = ls('mx_grat', {}), td = g[dstr()] || ['', '', ''], h = '<p class="text-base opacity-80 mb-3">' + t('Hôm nay bạn biết ơn điều gì? Ba điều nhỏ cũng được.', 'What are you grateful for today? Three small things are enough.') + '</p>';
+      for (var i = 0; i < 3; i++) h += '<input id="mx-g' + i + '" maxlength="140" value="' + esc(td[i] || '') + '" placeholder="' + (i + 1) + '." class="w-full mb-2 px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">';
+      h += btn('gsave', t('Lưu', 'Save'), false);
+      var ks = Object.keys(g).sort().reverse().slice(0, 7);
+      if (ks.length) h += '<div class="mt-4 space-y-2 max-h-48 overflow-y-auto">' + ks.map(function (k) { return '<div class="text-base p-2 rounded-xl bg-slate-100 dark:bg-slate-800"><b>' + k + '</b> <button type="button" data-act="gdel:' + k + '" class="float-right text-sm opacity-70">✕</button><br>' + g[k].filter(Boolean).map(esc).join(' · ') + '</div>'; }).join('') + '</div>';
+      return h + '<p class="text-sm opacity-70 mt-3">' + t('Dữ liệu chỉ lưu trên thiết bị này.', 'Data is stored only on this device.') + '</p>';
+    },
+    rem: function () {
+      var r = ls('mx_rem', { on: false, time: '19:00' }), perm = ('Notification' in window) ? Notification.permission : 'unsupported';
+      return '<p class="text-base opacity-80 mb-3">' + t('Nhận một lời nhắc nhẹ mỗi ngày để dành vài phút vẽ. Lời nhắc hiện khi trang đang mở, hoặc khi bạn mở lại trang sau giờ đã hẹn (trình duyệt không cho trang web tự đánh thức khi đã đóng hoàn toàn).', 'Get a gentle daily reminder to draw for a few minutes. It shows while the page is open, or when you reopen the page after the set time (browsers do not let a closed website wake itself up).') + '</p>' +
+        '<label class="flex items-center gap-2 mb-3 text-base"><input id="mx-ron" type="checkbox"' + (r.on ? ' checked' : '') + '> ' + t('Bật nhắc nhở hằng ngày', 'Turn on daily reminder') + '</label>' +
+        '<label class="text-base block mb-3">' + t('Giờ nhắc', 'Reminder time') + ' <input id="mx-rt" type="time" value="' + esc(r.time) + '" class="ml-2 px-2 py-1 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800"></label>' +
+        btn('rtest', t('Gửi thử', 'Send test'), false) + '<p class="text-sm opacity-70 mt-3">' + t('Quyền thông báo', 'Notification permission') + ': ' + (perm === 'granted' ? t('đã cho phép', 'allowed') : perm === 'denied' ? t('đã chặn (hãy bật lại trong cài đặt trình duyệt)', 'blocked (re-enable it in browser settings)') : perm === 'unsupported' ? t('trình duyệt không hỗ trợ', 'not supported') : t('chưa cấp', 'not granted yet')) + '</p>';
+    },
+    wk: function () {
+      var w = weekStats(), mx = Math.max.apply(null, w.bars.map(function (x) { return x[1]; }).concat([1]));
+      var msg = !w.n ? t('Tuần này bạn chưa vẽ lần nào. Chỉ cần vài phút cũng đủ, bạn thử một thử thách nhé!', "You haven't drawn this week. A few minutes is enough, try a challenge!") : (w.bf != null && w.af != null && w.af > w.bf) ? t('Tâm trạng của bạn thường tốt hơn sau khi vẽ. Thật tuyệt!', 'Your mood is usually better after drawing. Wonderful!') : w.dd >= 4 ? t('Bạn vẽ khá đều trong tuần này. Hãy tự khen mình nhé!', 'You drew regularly this week. Give yourself some credit!') : t('Mỗi lần dừng lại để vẽ đều là một cách chăm sóc bản thân. Cố lên!', 'Each time you stop to draw is a way of caring for yourself. Keep going!');
+      var h = '<div class="grid grid-cols-3 gap-2 text-center mb-4"><div class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800"><div class="text-3xl font-bold">' + w.n + '</div><div class="text-sm">' + t('lần vẽ', 'drawings') + '</div></div><div class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800"><div class="text-3xl font-bold">' + w.dd + '/7</div><div class="text-sm">' + t('ngày có vẽ', 'days drawn') + '</div></div><div class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800"><div class="text-3xl font-bold">' + (w.bf != null && w.af != null ? (w.af - w.bf >= 0 ? '+' : '') + (w.af - w.bf).toFixed(1) : '–') + '</div><div class="text-sm">' + t('tâm trạng sau vẽ', 'mood change') + '</div></div></div><div class="flex items-end justify-between gap-1 h-20 mb-1">';
+      w.bars.forEach(function (x) { h += '<div class="flex-1 flex flex-col items-center justify-end h-full"><div style="height:' + Math.round(x[1] / mx * 100) + '%;min-height:' + (x[1] ? 4 : 0) + 'px" class="w-full rounded-t bg-emerald-500"></div><span class="text-xs opacity-70">' + x[0] + '</span></div>'; });
+      return h + '</div><p class="text-base mt-3">📓 ' + t('Ngày viết biết ơn', 'Gratitude days') + ': <b>' + w.gd + '</b> · 🎯 ' + t('Thử thách xong', 'Challenges done') + ': <b>' + w.cd + '</b></p><p class="text-base mt-3 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950">' + msg + '</p>';
+    },
+    acc: function () {
+      var a = ls('mx_a11y', {});
+      return '<p class="text-base opacity-80 mb-3">' + t('Chỉnh trang cho dễ nhìn và dễ dùng hơn.', 'Adjust the page to be easier to see and use.') + '</p><p class="text-base mb-1">' + t('Cỡ chữ', 'Text size') + '</p><div class="flex gap-2 mb-4">' + btn('fs:0', 'A', !a.fs) + btn('fs:1', 'A+', a.fs === 1) + btn('fs:2', 'A++', a.fs === 2) + '</div>' +
+        '<label class="flex items-center gap-2 mb-2 text-base"><input id="mx-hc" type="checkbox"' + (a.hc ? ' checked' : '') + '> ' + t('Tăng độ tương phản', 'Increase contrast') + '</label><label class="flex items-center gap-2 mb-4 text-base"><input id="mx-rm" type="checkbox"' + (a.rm ? ' checked' : '') + '> ' + t('Giảm hiệu ứng chuyển động', 'Reduce motion') + '</label>' + btn('accreset', t('Về mặc định', 'Reset'), false);
+    },
+    sup: function () {
+      var h = '<p class="text-base mb-3">' + t('Nếu bạn thấy quá tải, buồn hoặc lo lắng kéo dài, bạn không phải đi một mình. Hãy nói với một người bạn tin tưởng: ba mẹ, người thân, thầy cô hoặc cô thầy phụ trách tâm lý ở trường.', "If you feel overwhelmed, sad or anxious for a long time, you don't have to go through it alone. Talk to someone you trust: a parent, relative, teacher or the school counselor.") + '</p><div class="space-y-2 mb-3">';
+      SUPPORT.forEach(function (s) { h += '<a href="tel:' + s.n + '" class="block p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800"><span class="text-2xl font-bold">📞 ' + s.n + '</span><br><span class="text-base">' + esc(t(s.vi, s.en)) + '</span></a>'; });
+      return h + '</div><p class="text-sm opacity-70">' + t('Kết quả DASS chỉ mang tính tham khảo, không phải chẩn đoán. Nếu bạn thấy không an toàn ngay lúc này, hãy gọi 115 hoặc nhờ người lớn ở gần.', 'DASS results are for reference only, not a diagnosis. If you feel unsafe right now, call 115 or ask a nearby adult for help.') + '</p>';
+    }
+  };
+
+  function render() {
+    if (!modal) return;
+    var h = '<div class="flex items-center justify-between mb-3"><h2 class="text-2xl font-bold">' + t('Tính năng', 'Features') + '</h2><button type="button" data-act="close" aria-label="' + t('Đóng', 'Close') + '" class="text-3xl leading-none px-2">×</button></div><div class="flex flex-wrap gap-1.5 mb-4">';
+    TABS.forEach(function (x) { h += '<button type="button" data-act="tab:' + x[0] + '" class="px-3.5 py-2 rounded-xl text-sm font-semibold ' + (x[0] === cur ? 'bg-emerald-600 text-white' : 'bg-slate-100 dark:bg-slate-800') + '">' + t(x[2], x[3]) + '</button>'; });
+    h += '</div><div id="mx-body">' + V[cur]() + '</div>' + (toast ? '<p class="text-sm mt-3 text-emerald-600 dark:text-emerald-400">' + esc(toast) + '</p>' : '');
+    modal.firstChild.innerHTML = h;
+  }
+  function open(tab) {
+    if (tab) cur = tab;
+    if (!modal) {
+      modal = document.createElement('div'); modal.id = 'mx-modal';
+      modal.className = 'fixed inset-0 flex items-center justify-center p-3 bg-black/60'; modal.style.zIndex = 9999;
+      modal.innerHTML = '<div class="w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-3xl p-6 md:p-8 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 shadow-2xl"></div>';
+      document.body.appendChild(modal);
+      modal.addEventListener('click', onClick); modal.addEventListener('input', onInput); modal.addEventListener('change', onInput);
+    }
+    toast = ''; modal.style.display = 'flex'; render();
+  }
+  function close() { if (modal) modal.style.display = 'none'; }
+  function onClick(e) {
+    if (e.target === modal) return close();
+    var el = e.target.closest('[data-act]'); if (!el) return;
+    var a = el.getAttribute('data-act').split(':'), k = a[0], v = a[1];
+    toast = '';
+    if (k === 'close') return close();
+    if (k === 'tab') cur = v;
+    else if (k === 'snd') playSnd(v);
+    else if (k === 'chal') { var d = ls('mx_ch', []); if (d.indexOf(dstr()) < 0) { d.push(dstr()); sv('mx_ch', d.slice(-400)); } }
+    else if (k === 'pal') palMood = v;
+    else if (k === 'copy') { try { navigator.clipboard.writeText(v); toast = t('Đã sao chép ', 'Copied ') + v; } catch (_) { toast = v; } }
+    else if (k === 'gsave') { var g = ls('mx_grat', {}), arr = [0, 1, 2].map(function (i) { return (document.getElementById('mx-g' + i).value || '').trim(); }); if (arr.some(Boolean)) g[dstr()] = arr; else delete g[dstr()]; sv('mx_grat', g); toast = t('Đã lưu.', 'Saved.'); }
+    else if (k === 'gdel') { var g2 = ls('mx_grat', {}); delete g2[v]; sv('mx_grat', g2); }
+    else if (k === 'rtest') { notify(true); }
+    else if (k === 'fs') { var a1 = ls('mx_a11y', {}); a1.fs = +v; sv('mx_a11y', a1); applyA11y(); }
+    else if (k === 'accreset') { sv('mx_a11y', {}); applyA11y(); }
+    render();
+  }
+  function onInput(e) {
+    var id = e.target.id;
+    if (id === 'mx-vol') { vol = +e.target.value; if (master) master.gain.value = vol; }
+    else if (id === 'mx-hc' || id === 'mx-rm') { var a = ls('mx_a11y', {}); a.hc = document.getElementById('mx-hc').checked; a.rm = document.getElementById('mx-rm').checked; sv('mx_a11y', a); applyA11y(); }
+    else if (id === 'mx-ron' || id === 'mx-rt') {
+      var r = ls('mx_rem', { on: false, time: '19:00' }); r.on = document.getElementById('mx-ron').checked; r.time = document.getElementById('mx-rt').value || '19:00'; sv('mx_rem', r);
+      if (r.on && 'Notification' in window && Notification.permission === 'default' && e.type === 'change') Notification.requestPermission().then(render);
+    }
+  }
+  function notify(test) {
+    if (!('Notification' in window)) return;
+    var go = function () {
+      var title = t('Đến giờ vẽ rồi 🎨', 'Time to draw 🎨'), body = test ? t('Đây là lời nhắc thử. Chúc bạn một ngày dịu dàng!', 'This is a test reminder. Have a gentle day!') : t('Dành vài phút vẽ để thư giãn nhé.', 'Take a few minutes to draw and relax.');
+      if (navigator.serviceWorker && navigator.serviceWorker.ready) navigator.serviceWorker.ready.then(function (r) { r.showNotification(title, { body: body, icon: './icon-192.png' }); }).catch(function () { new Notification(title, { body: body }); });
+      else new Notification(title, { body: body });
+    };
+    if (Notification.permission === 'granted') go(); else if (Notification.permission === 'default') Notification.requestPermission().then(function (p) { if (p === 'granted') go(); render(); });
+  }
+  function remCheck() {
+    var r = ls('mx_rem', null); if (!r || !r.on || !('Notification' in window) || Notification.permission !== 'granted') return;
+    var n = new Date(), hm = pad(n.getHours()) + ':' + pad(n.getMinutes());
+    if (hm < r.time || r.last === dstr()) return;
+    var drew = hist().some(function (x) { return x && x.t && dstr(new Date(x.t)) === dstr(); });
+    r.last = dstr(); sv('mx_rem', r); if (!drew) notify(false);
+  }
+
+  var banner = null;
+  function bannerHtml() {
+    return '<div class="flex-1 min-w-[16rem]"><p class="font-bold text-sm">' + t('Bạn không đi một mình', "You're not alone") + '</p><p class="text-xs opacity-80">' + t('Điểm của bạn đang ở mức cao. Hãy chia sẻ với người bạn tin tưởng hoặc gọi ngay cho những số trong phần xem cách được hỗ trợ.', 'Your score is high. Please share with someone you trust or call the numbers in the Get support section right away.') + '</p></div><button type="button" data-open="sup" class="' + B + 'bg-white dark:bg-slate-800 whitespace-nowrap shrink-0">' + t('Xem cách được hỗ trợ', 'Get support') + '</button>';
+  }
+  function checkSevere() {
+    var scr = document.getElementById('screen-dass-result'); if (!scr) return;
+    var sev = ['label-d', 'label-a', 'label-s'].some(function (id) { var e = document.getElementById(id); return e && /nặng|severe/i.test(e.textContent); });
+    if (!banner) {
+      banner = document.createElement('div'); banner.id = 'mx-support';
+      banner.className = 'flex-wrap items-center justify-between gap-3 text-left mb-4 px-4 py-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950 text-slate-800 dark:text-slate-100 border border-emerald-200 dark:border-emerald-800';
+      banner.addEventListener('click', function (e) { if (e.target.closest('[data-open]')) open('sup'); });
+      var rec = document.getElementById('recommendation-text'), box = rec && rec.parentNode;
+      if (box && box.parentNode) box.parentNode.insertBefore(banner, box.nextSibling); else scr.appendChild(banner);
+    }
+    var l = isEn() ? 'en' : 'vi';
+    if (banner.getAttribute('data-l') !== l) { banner.setAttribute('data-l', l); banner.innerHTML = bannerHtml(); }
+    banner.style.display = (sev && !scr.classList.contains('hidden')) ? 'flex' : 'none';
+  }
+
+  function addButtons() {
+    var box = document.querySelector('header > div.flex.items-center.space-x-2'), lb = document.getElementById('btn-lang');
+    if (!box || document.getElementById('mx-open')) return;
+    var b = document.createElement('button'); b.id = 'mx-open'; b.type = 'button'; b.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="display:block;pointer-events:none"><path d="M12 5v14M5 12h14"/></svg>'; b.style.display = 'inline-flex'; b.style.alignItems = 'center'; b.style.justifyContent = 'center'; b.style.minWidth = '2.5rem'; b.setAttribute('aria-label', t('Tính năng', 'Features'));
+    b.className = lb ? lb.className : 'px-2.5 py-2 rounded-xl';
+    b.title = t('Tính năng', 'Features'); b.addEventListener('click', function () { open(); });
+    lb && lb.parentNode === box ? box.insertBefore(b, lb.nextSibling) : box.insertBefore(b, box.firstChild);
+  }
+  function early() {
+    addButtons();
+    var lb = document.getElementById('btn-lang');
+    if (lb) lb.addEventListener('click', function () { setTimeout(function () { var b = document.getElementById('mx-open'); if (b) { b.title = t('Tính năng', 'Features'); b.setAttribute('aria-label', b.title); } render(); checkSevere(); }, 80); });
+  }
+  function init() {
+    addButtons(); checkSevere(); remCheck();
+    var scr = document.getElementById('screen-dass-result');
+    if (scr) new MutationObserver(function () { checkSevere(); }).observe(scr, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['class'] });
+    setInterval(remCheck, 30000);
+  }
+  early();
+  if (document.readyState === 'complete') setTimeout(init, 300); else window.addEventListener('load', function () { setTimeout(init, 300); });
 })();
 </script>
 </body>
