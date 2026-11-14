@@ -373,7 +373,7 @@
       </div>
 
       <div class="mb-6 p-3 bg-teal-50 dark:bg-slate-800 rounded-xl text-xs">
-        <div class="font-bold text-teal-800 dark:text-teal-200 mb-1">🎨 Phong cách gần giống:</div>
+        <div class="font-bold text-teal-800 dark:text-teal-200 mb-1"> Phong cách gần giống:</div>
         <div id="ai-result-style-name" class="font-semibold text-slate-800 dark:text-slate-100 mb-1"></div>
         <div id="ai-result-style-desc" class="text-slate-600 dark:text-slate-300 leading-relaxed"></div>
       </div>
@@ -3196,8 +3196,8 @@
     tired: { l: ['Mệt mỏi', 'Tired'], c: ['#D8E2DC', '#B5C99A', '#CAD2C5', '#84A98C', '#F0EAD6', '#52796F'], t: ['Xanh rêu và be nhạt giống thiên nhiên, giúp mắt và đầu óc được nghỉ.', 'Moss green and soft beige resemble nature and rest your eyes and mind.'] },
     happy: { l: ['Vui', 'Happy'], c: ['#FFD166', '#EF476F', '#06D6A0', '#118AB2', '#F78C6B', '#9B5DE0'], t: ['Bảng màu rực rỡ để bạn thoải mái tô theo cảm hứng.', 'A vivid palette so you can color freely.'] }
   };
-  var SND = { rain: ['🌧️', 'Mưa', 'Rain'], sea: ['🌊', 'Sóng biển', 'Ocean'], forest: ['🌲', 'Rừng', 'Forest'], fire: ['🔥', 'Lửa trại', 'Campfire'] };
-  var TABS = [['snd', '🎧', 'Âm thanh', 'Sounds'], ['chal', '🎯', 'Thử thách', 'Challenge'], ['pal', '🎨', 'Màu sắc', 'Colors'], ['grat', '📓', 'Biết ơn', 'Gratitude'], ['rem', '🔔', 'Nhắc nhở', 'Reminder'], ['wk', '', 'Thời gian hoạt động', 'Activity time'], ['acc', '', 'Giao diện', 'Interface'], ['sup', '🤝', 'Hỗ trợ', 'Support']];
+  var SND = { rain: [ 'Mưa', 'Rain'], sea: [ 'Sóng biển', 'Ocean'], forest: [ 'Rừng', 'Forest'], fire: [ 'Lửa trại', 'Campfire'] };
+  var TABS = [['snd',  'Âm thanh', 'Sounds'], ['chal',  'Thử thách', 'Challenge'], ['pal',  'Màu sắc', 'Colors'], ['grat',  'Biết ơn', 'Gratitude'], ['rem',  'Nhắc nhở', 'Reminder'], ['wk', '', 'Thời gian hoạt động', 'Activity time'], ['acc', '', 'Giao diện', 'Interface'], ['sup', 'Hỗ trợ', 'Support']];
   var cur = 'snd', palMood = null, toast = '', modal = null;
 
   function isEn() { return !!(window.__lang && window.__lang() === 'en'); }
