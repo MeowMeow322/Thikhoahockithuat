@@ -227,6 +227,15 @@
         </button>
       </div>
 
+      <div class="mt-3">
+        <button id="mx-ai-open" type="button" class="w-full p-4 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-teal-600 mb-2 pointer-events-none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <div class="font-bold text-xs mb-1">AI hỗ trợ tâm lý</div>
+          <div class="text-[10px] text-slate-500">Trò chuyện với trợ lý AI để được lắng nghe và gợi ý cách thư giãn.</div>
+          <div class="text-[10px] mt-2 text-amber-700 dark:text-amber-400">Lưu ý: AI chỉ hỗ trợ một phần, không thể giải quyết mọi vấn đề, không chẩn đoán và không thay thế ba mẹ, thầy cô hay chuyên gia tâm lý.</div>
+        </button>
+      </div>
+
       <div class="mt-4 flex justify-start">
         <button id="btn-dass-result-back" type="button" class="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-teal-200 dark:border-slate-700 text-teal-800 dark:text-teal-200 text-xs font-semibold hover:bg-teal-50 dark:hover:bg-slate-800 transition-all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 pointer-events-none"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg><span>Quay lại câu hỏi</span></button>
       </div>
@@ -3086,6 +3095,7 @@
   var PRE = [['Đang tô: ','Coloring: '],['Màu đang chọn: ','Selected color: '],['Màu ','Color '],['Điểm DASS gần nhất (thang 0 đến 42): ','Latest DASS score (scale 0 to 42): ']];
   Object.assign(EN, {"Piano":"Piano","Cello":"Cello","Bass":"Bass"});
   RULES.unshift([/^Tranh ngày (.+)$/,'Drawing on $1'],[/^Người dùng: (.+) · Xuất ngày (.+)$/,'User: $1 · Exported on $2']);
+  Object.assign(EN, {"AI hỗ trợ tâm lý": "AI emotional support", "Trò chuyện với trợ lý AI để được lắng nghe và gợi ý cách thư giãn.": "Chat with an AI assistant to be listened to and get relaxation tips.", "Lưu ý: AI chỉ hỗ trợ một phần, không thể giải quyết mọi vấn đề, không chẩn đoán và không thay thế ba mẹ, thầy cô hay chuyên gia tâm lý.": "Note: the AI only helps in part. It cannot solve every problem, does not diagnose, and does not replace parents, teachers or a psychologist."});
   var NK = {}; Object.keys(EN).forEach(function(k){ NK[k.normalize('NFC').replace(/\s+/g,' ').trim()] = EN[k]; });
   var lang = 'vi';
   try { localStorage.removeItem(KEY); } catch (_) {}
@@ -3197,8 +3207,8 @@
     happy: { l: ['Vui', 'Happy'], c: ['#FFD166', '#EF476F', '#06D6A0', '#118AB2', '#F78C6B', '#9B5DE0'], t: ['Bảng màu rực rỡ để bạn thoải mái tô theo cảm hứng.', 'A vivid palette so you can color freely.'] }
   };
   var SND = { rain: ['Mưa', 'Rain'], sea: ['Sóng biển', 'Ocean'], forest: ['Rừng', 'Forest'], fire: ['Lửa trại', 'Campfire'] };
-  var TABS = [['chal', '🎯', 'Thử thách', 'Challenge'], ['chat', '', 'Trò chuyện', 'Chat'], ['pal', '🎨', 'Màu sắc', 'Colors'], ['grat', '📓', 'Biết ơn', 'Gratitude'], ['rem', '🔔', 'Nhắc nhở', 'Reminder'], ['wk', '', 'Thời gian hoạt động', 'Activity time'], ['acc', '', 'Giao diện', 'Interface'], ['sup', '🤝', 'Hỗ trợ', 'Support']];
-  var cur = 'chal', palMood = null, toast = '', modal = null;
+  var TABS = [['chal', '🎯', 'Thử thách', 'Challenge'], ['pal', '🎨', 'Màu sắc', 'Colors'], ['grat', '📓', 'Biết ơn', 'Gratitude'], ['rem', '🔔', 'Nhắc nhở', 'Reminder'], ['wk', '', 'Thời gian hoạt động', 'Activity time'], ['acc', '', 'Giao diện', 'Interface'], ['sup', '🤝', 'Hỗ trợ', 'Support']];
+  var cur = 'chal', solo = false, palMood = null, toast = '', modal = null;
 
   function isEn() { return !!(window.__lang && window.__lang() === 'en'); }
   function t(v, e) { return isEn() ? e : v; }
@@ -3361,7 +3371,7 @@
   function btn(act, label, on, extra) { return '<button type="button" data-act="' + act + '" class="' + B + (on ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-slate-100 dark:bg-slate-800') + ' ' + (extra || '') + '">' + label + '</button>'; }
   var V = {
     chat: function () {
-      var h = '<p class="text-sm opacity-80 mb-3">' + t('Đây là trợ lý AI, không phải chuyên gia và không thay thế ba mẹ, thầy cô hay chuyên gia tâm lý. Đừng chia sẻ thông tin cá nhân (họ tên, địa chỉ, số điện thoại). Tin nhắn được gửi đến dịch vụ AI để tạo câu trả lời.', 'This is an AI assistant, not a professional, and it does not replace parents, teachers or a psychologist. Do not share personal information (full name, address, phone number). Messages are sent to an AI service to generate replies.') + '</p>';
+      var h = '<div class="mb-3 p-3 rounded-2xl border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950 text-sm"><b>' + t('Lưu ý quan trọng', 'Important') + '</b><br>' + t('AI chỉ hỗ trợ một phần: lắng nghe, gợi ý thư giãn và giải thích chung về kết quả DASS. AI không thể giải quyết mọi vấn đề, không chẩn đoán và không thay thế ba mẹ, thầy cô hay chuyên gia tâm lý. Đừng chia sẻ thông tin cá nhân (họ tên, địa chỉ, số điện thoại). Tin nhắn được gửi đến dịch vụ AI để tạo câu trả lời. Khi cần giúp đỡ gấp, hãy gọi 111 hoặc 115.', 'The AI only helps in part: listening, suggesting ways to relax and explaining DASS results in general terms. It cannot solve every problem, does not diagnose, and does not replace parents, teachers or a psychologist. Do not share personal information (full name, address, phone number). Messages are sent to an AI service to generate replies. If you need urgent help, call 111 or 115.') + '</div>';
       h += '<div id="mx-chat-log" class="space-y-2 mb-3 max-h-[40vh] overflow-y-auto p-3 rounded-2xl bg-slate-50 dark:bg-slate-800">';
       if (!chatMsgs.length) h += '<p class="text-base opacity-60">' + t('Bạn đang cảm thấy thế nào? Hãy kể cho mình nghe nhé.', 'How are you feeling? Tell me about it.') + '</p>';
       chatMsgs.forEach(function (m) {
@@ -3425,9 +3435,9 @@
 
   function render() {
     if (!modal) return;
-    var h = '<div class="flex items-center justify-between mb-3"><h2 class="text-2xl font-bold">' + t('Tính năng', 'Features') + '</h2><button type="button" data-act="close" aria-label="' + t('Đóng', 'Close') + '" class="text-3xl leading-none px-2">×</button></div><div class="flex flex-wrap gap-1.5 mb-4">';
-    TABS.forEach(function (x) { h += '<button type="button" data-act="tab:' + x[0] + '" class="px-3.5 py-2 rounded-xl text-sm font-semibold ' + (x[0] === cur ? 'bg-emerald-600 text-white' : 'bg-slate-100 dark:bg-slate-800') + '">' + t(x[2], x[3]) + '</button>'; });
-    h += '</div><div id="mx-body">' + V[cur]() + '</div>' + (toast ? '<p class="text-sm mt-3 text-emerald-600 dark:text-emerald-400">' + esc(toast) + '</p>' : '');
+    var h = '<div class="flex items-center justify-between mb-3"><h2 class="text-2xl font-bold">' + (solo ? t('AI hỗ trợ tâm lý', 'AI emotional support') : t('Tính năng', 'Features')) + '</h2><button type="button" data-act="close" aria-label="' + t('Đóng', 'Close') + '" class="text-3xl leading-none px-2">×</button></div>' + (solo ? '' : '<div class="flex flex-wrap gap-1.5 mb-4">');
+    if (!solo) TABS.forEach(function (x) { h += '<button type="button" data-act="tab:' + x[0] + '" class="px-3.5 py-2 rounded-xl text-sm font-semibold ' + (x[0] === cur ? 'bg-emerald-600 text-white' : 'bg-slate-100 dark:bg-slate-800') + '">' + t(x[2], x[3]) + '</button>'; });
+    h += (solo ? '' : '</div>') + '<div id="mx-body">' + V[cur]() + '</div>' + (toast ? '<p class="text-sm mt-3 text-emerald-600 dark:text-emerald-400">' + esc(toast) + '</p>' : '');
     modal.firstChild.innerHTML = h;
     if (cur === 'chat') {
       var lg = document.getElementById('mx-chat-log'); if (lg) lg.scrollTop = lg.scrollHeight;
@@ -3436,8 +3446,9 @@
       chatFocus = false;
     }
   }
-  function open(tab) {
+  function open(tab, opts) {
     if (tab) cur = tab;
+    solo = !!(opts && opts.solo);
     if (!modal) {
       modal = document.createElement('div'); modal.id = 'mx-modal';
       modal.className = 'fixed inset-0 flex items-center justify-center p-3 bg-black/60'; modal.style.zIndex = 9999;
@@ -3522,6 +3533,7 @@
   }
   function early() {
     addButtons(); mountSounds();
+    var ai = document.getElementById('mx-ai-open'); if (ai) ai.addEventListener('click', function () { open('chat', { solo: true }); });
     var lb = document.getElementById('btn-lang');
     if (lb) lb.addEventListener('click', function () { setTimeout(function () { var b = document.getElementById('mx-open'); if (b) { b.title = t('Tính năng', 'Features'); b.setAttribute('aria-label', b.title); } render(); renderSnd(); checkSevere(); }, 80); });
   }

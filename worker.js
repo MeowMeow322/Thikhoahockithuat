@@ -64,7 +64,7 @@ export default {
     };
 
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
-    if (request.method === "GET") return new Response("Backend AI da san sang!", { status: 200, headers: cors });
+    if (request.method === "GET") return new Response("Backend AI da san sang! | GEMINI_API_KEY: " + (env.GEMINI_API_KEY ? "OK" : "MISSING") + " | MODEL: " + (env.MODEL_NAME || DEFAULT_MODEL), { status: 200, headers: cors });
     if (request.method !== "POST") return json({ error: "Method not allowed" }, 405, cors);
     if (!allowed) return json({ error: "Forbidden" }, 403, cors);
 
