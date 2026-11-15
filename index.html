@@ -48,7 +48,7 @@
   
     html { scroll-behavior: smooth; }
     html header > div:last-child > button { width: 2.5rem; height: 2.5rem; padding: 0; flex: none; display: inline-flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 700; line-height: 1; }
-    html header > div:last-child > button svg { width: 1.25rem; height: 1.25rem; display: block; }
+    html header > div:last-child > button svg { width: 1.25rem; height: 1.25rem; }
     html { font-size: clamp(16px, min(1.61vh - 2.8px, 1.6vw + 3px), 22px); }
     @media (max-width: 767px) { html { font-size: 16px; } }
     html .text-\[10px\] { font-size: 0.625rem; }
@@ -102,8 +102,8 @@
 
     <div class="flex items-center space-x-2">
       <button id="btn-theme-toggle" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-amber-400" title="Đổi chế độ Sáng/Tối">
-        <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
-        <i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i>
+        <i data-lucide="sun" class="w-4 h-4 block dark:hidden"></i>
+        <i data-lucide="moon" class="w-4 h-4 hidden dark:block"></i>
       </button>
     </div>
   </header>
@@ -373,7 +373,7 @@
       </div>
 
       <div class="mb-6 p-3 bg-teal-50 dark:bg-slate-800 rounded-xl text-xs">
-        <div class="font-bold text-teal-800 dark:text-teal-200 mb-1">🎨 Phong cách gần giống:</div>
+        <div class="font-bold text-teal-800 dark:text-teal-200 mb-1">Phong cách gần giống:</div>
         <div id="ai-result-style-name" class="font-semibold text-slate-800 dark:text-slate-100 mb-1"></div>
         <div id="ai-result-style-desc" class="text-slate-600 dark:text-slate-300 leading-relaxed"></div>
       </div>
@@ -2096,7 +2096,7 @@
         ['Bức tranh đầu tiên', 'Hoàn thành một bức tranh', all.length >= 1],
         ['Vẽ 5 bức tranh', 'Hoàn thành 5 bức tranh', all.length >= 5],
         ['Ba ngày liên tiếp', 'Vẽ 3 ngày liên tiếp', best >= 3],
-        ['Thử cả 3 phương pháp', 'Chấm trame, vẽ tự do và tô màu', modes.size >= 3],
+        ['Thử 3 phương pháp', 'Dùng ít nhất 3 trong 4 phương pháp', modes.size >= 3],
         ['Tâm trạng tốt hơn', 'Tâm trạng tăng sau khi vẽ', all.some(r => r.before && r.after && r.after > r.before)]
       ];
       return `<div class="flex justify-between items-baseline mb-2"><span class="text-xs font-semibold">Huy hiệu (${list.filter(b => b[2]).length}/${list.length})</span><span class="text-[11px] text-slate-500 dark:text-slate-400">Chuỗi hiện tại: ${cur} ngày</span></div>
@@ -2203,7 +2203,7 @@
       <p class="text-sm leading-relaxed mb-3">Trang web dự thi Khoa học kỹ thuật của học sinh, giúp giảm căng thẳng bằng nghệ thuật.</p>
       <ul class="text-xs leading-relaxed list-disc pl-4 space-y-1 mb-4">
         <li>Đánh giá sơ bộ bằng thang DASS-21 hoặc DASS-42 (Lovibond &amp; Lovibond, 1995).</li>
-        <li>Ba phương pháp vẽ: chấm trame, vẽ tự do và tô màu.</li>
+        <li>Bốn phương pháp vẽ: chấm trame, vẽ tự do, tô màu và vẽ ra nhạc.</li>
         <li>Theo dõi tâm trạng trước và sau khi vẽ.</li>
         <li>Kết quả chỉ mang tính tham khảo, không thay thế đánh giá của chuyên gia.</li>
       </ul>
@@ -3053,7 +3053,7 @@
     "Ước tính từ thời gian & nhịp thao tác của bạn — chỉ để tham khảo, không phải đánh giá tâm lý/y khoa.": "Estimated from your time & pace of actions — for reference only, not a psychological/medical assessment.",
     "Số thao tác tô màu": "Coloring actions", "0 thao tác": "0 actions", "Nhịp độ": "Pace", "Đang ghi nhận...": "Recording...",
     "Lời khuyên": "Tip", "Hãy từ từ chọn cọ hoặc thùng sơn tự động tô màu theo ý thích...": "Take your time to pick a brush or the paint bucket and color as you like...",
-    "Hoàn thành": "Finish", "Nhận xét về tranh của bạn": "Feedback on your artwork", "🎨 Phong cách gần giống:": "🎨 Similar style:", "Tải dữ liệu về": "Download data",
+    "Hoàn thành": "Finish", "Nhận xét về tranh của bạn": "Feedback on your artwork", "Phong cách gần giống:": "Similar style:", "Tải dữ liệu về": "Download data",
     "Chúc bạn có một ngày tốt lành và hãy giữ tâm trạng mình thật tốt nhé !": "Wishing you a lovely day — please keep your spirits high!",
     "Về trang đăng nhập": "Back to login page", "Đổi chế độ Sáng/Tối": "Toggle Light/Dark mode", "tự pha màu": "Custom color", "Cọ vẽ": "Brush",
     "Thùng sơn tự động tô": "Paint bucket", "Tẩy": "Eraser", "Xóa tất cả": "Clear all", "Lịch sử": "History", "Về dự án": "About",
@@ -3075,10 +3075,10 @@
     "Tôi nghe thấy tiếng tim đập dù không vận động (mạch nhanh/bỏ nhịp)": "I was aware of the action of my heart in the absence of physical exertion",
     "Tôi vô cớ cảm thấy sợ hãi": "I felt scared without any good reason", "Tôi thấy cuộc sống vô nghĩa": "I felt that life was meaningless"
   };
-  var EN2 = {"Không đúng với tôi chút nào cả": "Did not apply to me at all", "Đúng phần nào, hoặc thỉnh thoảng mới đúng": "Applied to me to some degree, or some of the time", "Đúng phần nhiều, hoặc phần lớn thời gian là đúng": "Applied to me to a considerable degree or a good part of the time", "Hoàn toàn đúng, hoặc hầu hết thời gian là đúng": "Applied to me very much or most of the time", "Câu trước": "Previous", "Tiếp": "Next", "Bỏ qua": "Skip", "Bỏ qua và bắt đầu vẽ": "Skip and start drawing", "Bắt đầu Đánh giá Tâm lý": "Start", "Đóng": "Close", "Hoàn tác": "Undo", "Xóa hết": "Clear all", "Rất tệ": "Very bad", "Tệ": "Bad", "Tốt": "Good", "Rất tốt": "Very good", "Sau khi vẽ": "After drawing", "Trước khi vẽ": "Before drawing", "Hiện tại bạn đang cảm thấy thế nào?": "How are you feeling right now?", "Sau khi vẽ, bạn cảm thấy thế nào?": "How do you feel after drawing?", "Nhật ký một dòng (không bắt buộc)": "One-line journal (optional)", "Hôm nay mình cảm thấy...": "Today I feel...", "Xem lại quá trình vẽ": "Replay my drawing", "Chia sẻ tranh": "Share artwork", "Xuất báo cáo (lưu thành PDF)": "Export report (save as PDF)", "Mới bắt đầu": "Just started", "Đang tập trung": "Focused", "Gắn kết lâu dài": "Long engagement", "Hãy chạm từng chấm nhỏ thật chậm và đều tay, mỗi chấm là một nhịp thở.": "Touch each small dot slowly and steadily — every dot is a breath.", "Hãy chọn một màu bạn thích rồi tô từ từ, từng mảng nhỏ bằng cọ hoặc thùng sơn.": "Pick a color you like and fill in small areas slowly with the brush or paint bucket.", "Hãy để tay đi theo cảm xúc, không cần vẽ đẹp, cứ tự do vẽ những nét bạn muốn.": "Let your hand follow your feelings — no need to draw beautifully, just draw the lines you want.", "Khoảng trắng cũng là một phần của bức tranh, bạn đang tạo nhịp điệu riêng của mình.": "White space is part of the picture too — you are creating your own rhythm.", "Mức độ Căng thẳng của bạn khá cao. Phương pháp Vẽ Chấm Trame sẽ giúp bạn định tâm, hạ nhiệt cảm xúc.": "Your Stress level is quite high. Trame Dot Drawing will help you center yourself and calm your emotions.", "Bạn đang có dấu hiệu Lo âu. Hãy dùng Vẽ Tự Do để phóng thích những suy nghĩ miên man ra giấy.": "You show signs of Anxiety. Use Free Drawing to release wandering thoughts onto paper.", "Chỉ số Trầm cảm cần sự vỗ về. Tô màu Mandala với các gam màu ấm áp sẽ giúp bạn cân bằng tâm trạng.": "Your Depression score needs some comfort. Mandala coloring with warm colors can help balance your mood.", "Tâm trạng của bạn đang ở trạng thái cân bằng! Bạn có thể tự do trải nghiệm bất kỳ phương pháp nghệ thuật nào.": "Your mood is balanced! You are free to try any art method you like.", "Rất tốt! Bạn đang thả lỏng và gửi cảm xúc của mình vào từng nét vẽ.": "Very good! You are relaxing and pouring your feelings into every stroke.", "Rất tốt! Chọn màu và tô từng ô đang giúp bạn tập trung và bình tĩnh hơn.": "Very good! Choosing colors and filling each area helps you focus and calm down.", "Rất tốt! Nhịp chấm đều đặn đang giúp tâm trí bạn tĩnh lại.": "Very good! A steady rhythm of dots is quieting your mind.", "Tuyệt vời! Bạn đã dành khoảng thời gian dài để sáng tạo tự do cho chính mình.": "Wonderful! You spent a long time creating freely for yourself.", "Tuyệt vời! Bạn đã kiên nhẫn chấm từng điểm, rất tốt cho sự tập trung.": "Wonderful! You patiently placed each dot — great for concentration.", "Tuyệt vời! Bạn đã tỉ mỉ tô màu trong một khoảng thời gian đáng kể.": "Wonderful! You colored carefully for a considerable time.", "Tuyệt vời! Sự kiên nhẫn và sáng tạo của bạn thể hiện rõ trong từng chi tiết.": "Wonderful! Your patience and creativity show in every detail.", "Thật sự ấn tượng! Bức tranh tràn đầy năng lượng và cảm xúc.": "Truly impressive! The picture is full of energy and emotion.", "Bạn mới bắt đầu thôi, nhưng từng nét đã cho thấy sự chăm chú rồi đấy.": "You've just started, but every stroke already shows your focus.", "Bạn đã biến khoảng trắng thành một tác phẩm sống động — rất đáng tự hào.": "You turned empty space into a vivid artwork — something to be proud of.", "Bức tranh đang dần có nhịp điệu riêng, rất thú vị!": "Your picture is gradually finding its own rhythm — very nice!", "Một khởi đầu nhẹ nhàng — cứ từ từ, không cần vội.": "A gentle start — take it slowly, no need to rush.", "Một bức tranh dang dở vẫn là một bức tranh đáng trân trọng.": "An unfinished picture is still a picture worth cherishing.", "Mỗi nét cọ nhẹ nhàng là một hơi thở chậm lại.": "Every gentle brushstroke is a slower breath.", "Sai một nét cũng không sao, đổi màu là có một nét mới.": "A wrong stroke is fine — change the color and you have a new one.", "Không cần vẽ đẹp, chỉ cần vẽ bằng sự bình yên.": "No need to draw beautifully, just draw with peace.", "Cách bạn phối màu khá hài hoà, có thể thấy sự tập trung trong từng lựa chọn.": "Your color combinations are quite harmonious, and the focus in each choice shows.", "Có thể cảm nhận được sự thư thái trong từng nét vẽ của bạn.": "A sense of calm can be felt in each of your strokes.", "Màu sắc bạn chọn hôm nay nói lên điều bạn đang cần.": "The colors you chose today say what you need.", "Chủ nghĩa Chấm hoạ (Pointillism)": "Pointillism", "Chủ nghĩa Dã Thú (Fauvism)": "Fauvism", "Trường phái Ấn tượng (Impressionism)": "Impressionism", "Tranh mực Thuỷ Mặc (Sumi-e)": "Sumi-e ink painting", "Trừu tượng Biểu hiện (Abstract Expressionism)": "Abstract Expressionism", "Từng chấm màu kiên nhẫn ghép lại gợi nhớ kỹ thuật chấm màu tỉ mỉ của Georges Seurat và Paul Signac.": "Patient dots of color joined together recall the meticulous dotting technique of Georges Seurat and Paul Signac.", "Sắc màu êm dịu, mộng mơ phảng phất tinh thần của Claude Monet.": "Soft, dreamy colors reminiscent of the spirit of Claude Monet.", "Bảng màu rực rỡ, táo bạo — gợi nhớ tới tranh của Henri Matisse.": "A bold, vivid palette — reminiscent of the paintings of Henri Matisse.", "Những nét vẽ bản năng, tự do gợi nhớ tinh thần ngẫu hứng của Jackson Pollock.": "Instinctive, free strokes recall the improvisational spirit of Jackson Pollock.", "Phóng khoáng, nhiều màu sắc và tự do — có chút gì đó của phong cách vẽ đường phố Keith Haring.": "Free-spirited, colorful and bold — with a touch of Keith Haring's street-art style.", "Tối giản mà sâu lắng, giữ tinh thần thiền định như hội hoạ truyền thống Nhật Bản.": "Minimal yet deep, keeping the meditative spirit of traditional Japanese painting.", "Đối xứng, tỉ mỉ và mang tính chiêm nghiệm, giống các hoạ tiết Mandala Mật Tông hay hoa văn Hồi giáo cổ.": "Symmetrical, meticulous and contemplative, like Tantric mandalas or Islamic patterns.", "Bình yên bắt đầu từ một hơi thở sâu.": "Peace begins with one deep breath.", "Hít thở cùng vòng tròn": "Breathe with the circle", "Hít vào 4 giây, thở ra 6 giây, lặp lại 3 lần": "Breathe in 4 seconds, out 6 seconds, repeat 3 times", "Chậm lại một chút, thế giới vẫn đang chờ bạn.": "Slow down a little — the world is still waiting for you.", "Hãy đối xử với bản thân như cách bạn đối xử với người bạn thân.": "Treat yourself the way you would treat a close friend.", "Cảm xúc nào cũng được phép có mặt, và cũng sẽ qua đi.": "Every emotion is allowed to be here, and it will pass.", "Hôm nay khó khăn không có nghĩa là ngày mai cũng vậy.": "A hard day today doesn't mean tomorrow will be too.", "Mỗi ngày nhỏ bé đều có một điều đáng biết ơn.": "Every small day holds something to be grateful for.", "Nghỉ ngơi cũng là một cách tiến về phía trước.": "Rest is also a way of moving forward.", "Bạn đã cố gắng nhiều hơn bạn nghĩ.": "You have tried harder than you think.", "Bạn không cô đơn, luôn có người sẵn sàng lắng nghe.": "You are not alone — someone is always ready to listen.", "Câu nói hôm nay:": "Quote of the day:", "Lịch sử của bạn": "Your history", "Tranh đã vẽ": "Drawings", "Tâm trạng": "Mood", "Số lần vẽ": "Drawings", "Số ngày vẽ": "Days drawn", "Chuỗi ngày dài nhất": "Longest streak", "Theo dõi tiến bộ": "Track progress", "Chưa có dữ liệu. Hãy hoàn thành một bài vẽ để bắt đầu theo dõi.": "No data yet. Finish a drawing to start tracking.", "Người dùng": "Users", "Tất cả": "All", "Tâm trạng qua các lần vẽ (thang 1 đến 5)": "Mood across drawings (scale 1 to 5)", "Tâm trạng trung bình (trước → sau)": "Average mood (before → after)", "Tâm trạng tăng sau khi vẽ', all.some(r =": "Mood rose after drawing", "Tâm trạng tốt hơn', 'Tâm trạng tăng sau khi vẽ', all.some(r =": "Better mood", "Điểm DASS theo các lần vẽ": "DASS scores across drawings", "Nhật ký các lần vẽ gần đây": "Recent drawing log", "Một số bức tranh đã vẽ": "Some of your drawings", "Ba ngày liên tiếp', 'Vẽ 3 ngày liên tiếp', best": "Three days in a row", "Hoàn thành một bức tranh', all.length": "Finish one drawing", "Hoàn thành 5 bức tranh', all.length": "Finish 5 drawings", "Vẽ 3 ngày liên tiếp', best": "Draw 3 days in a row", "Vẽ 5 bức tranh', 'Hoàn thành 5 bức tranh', all.length": "Draw 5 pictures", "Bức tranh đầu tiên', 'Hoàn thành một bức tranh', all.length": "First picture", "Theo dõi tâm trạng trước và sau khi vẽ.": "Track your mood before and after drawing.", "Dữ liệu chỉ lưu trên thiết bị này, không gửi đi đâu cả.": "Data is stored only on this device and is never sent anywhere.", "Chào mừng bạn": "Welcome", "Đánh giá sức khỏe tinh thần": "Mental health assessment", "Chấm trame, vẽ tự do và tô màu', modes.size": "Trame dots, free drawing and coloring", "Vẽ Ra Nhạc": "Draw to Music", "4. Vẽ Ra Nhạc": "4. Draw to Music", "Nhập tên, làm bài đánh giá ngắn để biết mức căng thẳng của mình, rồi chọn cách vẽ phù hợp.": "Enter your name, take a short assessment to learn your stress level, then pick a drawing method.", "Ba phương pháp vẽ: chấm trame, vẽ tự do và tô màu.": "Three drawing methods: trame dots, free drawing and coloring.", "Thử cả 3 phương pháp', 'Chấm trame, vẽ tự do và tô màu', modes.size": "Try all 3 methods", "Xem hướng dẫn": "View guide", "Nút đồng hồ ở góc trên bên phải lưu lịch sử, biểu đồ tâm trạng, tranh đã vẽ và huy hiệu của bạn.": "The clock button at the top right stores your history, mood chart, drawings and badges.", "Có nhiều tranh mẫu để tô màu. Bạn cũng có thể bấm \"Tải ảnh lên\" để tô ảnh của riêng mình.": "There are many sample pictures to color. You can also tap \"Upload image\" to color your own.", "Kết quả chỉ mang tính tham khảo, không thay thế đánh giá của chuyên gia.": "Results are for reference only and do not replace a professional assessment.", "Tải ảnh lên": "Upload image", "Ảnh của bạn": "Your image", "Chọn tranh hoặc tải ảnh của bạn": "Choose a picture or upload your own", "Phóng to để tô chi tiết": "Zoom in to color details", "Thu nhỏ": "Zoom out", "Về vừa khung": "Fit to frame", "Tẩy nét": "Erase strokes", "Màu đang chọn:": "Selected color:", "Màu": "Color", "Bút vẽ": "Pen", "Ghi chú": "Notes", "Thêm": "Add", "Phương pháp": "Method", "Đối xứng": "Symmetry", "Tốc độ": "Speed", "Âm lượng": "Volume", "Phát": "Play", "Dừng": "Pause", "Tạm dừng": "Pause", "Phát lại": "Replay", "Tải video": "Download video", "Nghe nhạc khi vẽ": "Listen to music while drawing", "Nhạc nền": "Background music", "Đang tải...": "Loading...", "Đang tải": "Loading", "Đang tạo...": "Creating...", "Đã lưu ảnh về máy": "Image saved to your device", "Trượt liên tục": "Continuous slide", "Quay về trang đăng nhập? Bức tranh đang vẽ sẽ không được lưu.": "Return to the login page? The drawing in progress will not be saved.", "Kéo tranh (hoặc giữ phím Space rồi kéo)": "Drag the picture (or hold Space and drag)", "Chưa có nét vẽ nào để xem lại.": "No strokes to replay yet.", "Quá trình vẽ của bạn": "Your drawing process", "Bắt đầu": "Start", "Thở ra": "Breathe out", "Tâm trạng tăng sau khi vẽ": "Mood rose after drawing", "Tâm trạng tốt hơn": "Better mood", "Xóa lịch sử người này": "Delete this person's history", "Quay lại": "Back", "Đổi ảnh khác": "Change picture"};
+  var EN2 = {"Không đúng với tôi chút nào cả": "Did not apply to me at all", "Đúng phần nào, hoặc thỉnh thoảng mới đúng": "Applied to me to some degree, or some of the time", "Đúng phần nhiều, hoặc phần lớn thời gian là đúng": "Applied to me to a considerable degree or a good part of the time", "Hoàn toàn đúng, hoặc hầu hết thời gian là đúng": "Applied to me very much or most of the time", "Câu trước": "Previous", "Tiếp": "Next", "Bỏ qua": "Skip", "Bỏ qua và bắt đầu vẽ": "Skip and start drawing", "Bắt đầu Đánh giá Tâm lý": "Start", "Đóng": "Close", "Hoàn tác": "Undo", "Xóa hết": "Clear all", "Rất tệ": "Very bad", "Tệ": "Bad", "Tốt": "Good", "Rất tốt": "Very good", "Sau khi vẽ": "After drawing", "Trước khi vẽ": "Before drawing", "Hiện tại bạn đang cảm thấy thế nào?": "How are you feeling right now?", "Sau khi vẽ, bạn cảm thấy thế nào?": "How do you feel after drawing?", "Nhật ký một dòng (không bắt buộc)": "One-line journal (optional)", "Hôm nay mình cảm thấy...": "Today I feel...", "Xem lại quá trình vẽ": "Replay my drawing", "Chia sẻ tranh": "Share artwork", "Xuất báo cáo (lưu thành PDF)": "Export report (save as PDF)", "Mới bắt đầu": "Just started", "Đang tập trung": "Focused", "Gắn kết lâu dài": "Long engagement", "Hãy chạm từng chấm nhỏ thật chậm và đều tay, mỗi chấm là một nhịp thở.": "Touch each small dot slowly and steadily — every dot is a breath.", "Hãy chọn một màu bạn thích rồi tô từ từ, từng mảng nhỏ bằng cọ hoặc thùng sơn.": "Pick a color you like and fill in small areas slowly with the brush or paint bucket.", "Hãy để tay đi theo cảm xúc, không cần vẽ đẹp, cứ tự do vẽ những nét bạn muốn.": "Let your hand follow your feelings — no need to draw beautifully, just draw the lines you want.", "Khoảng trắng cũng là một phần của bức tranh, bạn đang tạo nhịp điệu riêng của mình.": "White space is part of the picture too — you are creating your own rhythm.", "Mức độ Căng thẳng của bạn khá cao. Phương pháp Vẽ Chấm Trame sẽ giúp bạn định tâm, hạ nhiệt cảm xúc.": "Your Stress level is quite high. Trame Dot Drawing will help you center yourself and calm your emotions.", "Bạn đang có dấu hiệu Lo âu. Hãy dùng Vẽ Tự Do để phóng thích những suy nghĩ miên man ra giấy.": "You show signs of Anxiety. Use Free Drawing to release wandering thoughts onto paper.", "Chỉ số Trầm cảm cần sự vỗ về. Tô màu Mandala với các gam màu ấm áp sẽ giúp bạn cân bằng tâm trạng.": "Your Depression score needs some comfort. Mandala coloring with warm colors can help balance your mood.", "Tâm trạng của bạn đang ở trạng thái cân bằng! Bạn có thể tự do trải nghiệm bất kỳ phương pháp nghệ thuật nào.": "Your mood is balanced! You are free to try any art method you like.", "Rất tốt! Bạn đang thả lỏng và gửi cảm xúc của mình vào từng nét vẽ.": "Very good! You are relaxing and pouring your feelings into every stroke.", "Rất tốt! Chọn màu và tô từng ô đang giúp bạn tập trung và bình tĩnh hơn.": "Very good! Choosing colors and filling each area helps you focus and calm down.", "Rất tốt! Nhịp chấm đều đặn đang giúp tâm trí bạn tĩnh lại.": "Very good! A steady rhythm of dots is quieting your mind.", "Tuyệt vời! Bạn đã dành khoảng thời gian dài để sáng tạo tự do cho chính mình.": "Wonderful! You spent a long time creating freely for yourself.", "Tuyệt vời! Bạn đã kiên nhẫn chấm từng điểm, rất tốt cho sự tập trung.": "Wonderful! You patiently placed each dot — great for concentration.", "Tuyệt vời! Bạn đã tỉ mỉ tô màu trong một khoảng thời gian đáng kể.": "Wonderful! You colored carefully for a considerable time.", "Tuyệt vời! Sự kiên nhẫn và sáng tạo của bạn thể hiện rõ trong từng chi tiết.": "Wonderful! Your patience and creativity show in every detail.", "Thật sự ấn tượng! Bức tranh tràn đầy năng lượng và cảm xúc.": "Truly impressive! The picture is full of energy and emotion.", "Bạn mới bắt đầu thôi, nhưng từng nét đã cho thấy sự chăm chú rồi đấy.": "You've just started, but every stroke already shows your focus.", "Bạn đã biến khoảng trắng thành một tác phẩm sống động — rất đáng tự hào.": "You turned empty space into a vivid artwork — something to be proud of.", "Bức tranh đang dần có nhịp điệu riêng, rất thú vị!": "Your picture is gradually finding its own rhythm — very nice!", "Một khởi đầu nhẹ nhàng — cứ từ từ, không cần vội.": "A gentle start — take it slowly, no need to rush.", "Một bức tranh dang dở vẫn là một bức tranh đáng trân trọng.": "An unfinished picture is still a picture worth cherishing.", "Mỗi nét cọ nhẹ nhàng là một hơi thở chậm lại.": "Every gentle brushstroke is a slower breath.", "Sai một nét cũng không sao, đổi màu là có một nét mới.": "A wrong stroke is fine — change the color and you have a new one.", "Không cần vẽ đẹp, chỉ cần vẽ bằng sự bình yên.": "No need to draw beautifully, just draw with peace.", "Cách bạn phối màu khá hài hoà, có thể thấy sự tập trung trong từng lựa chọn.": "Your color combinations are quite harmonious, and the focus in each choice shows.", "Có thể cảm nhận được sự thư thái trong từng nét vẽ của bạn.": "A sense of calm can be felt in each of your strokes.", "Màu sắc bạn chọn hôm nay nói lên điều bạn đang cần.": "The colors you chose today say what you need.", "Chủ nghĩa Chấm hoạ (Pointillism)": "Pointillism", "Chủ nghĩa Dã Thú (Fauvism)": "Fauvism", "Trường phái Ấn tượng (Impressionism)": "Impressionism", "Tranh mực Thuỷ Mặc (Sumi-e)": "Sumi-e ink painting", "Trừu tượng Biểu hiện (Abstract Expressionism)": "Abstract Expressionism", "Từng chấm màu kiên nhẫn ghép lại gợi nhớ kỹ thuật chấm màu tỉ mỉ của Georges Seurat và Paul Signac.": "Patient dots of color joined together recall the meticulous dotting technique of Georges Seurat and Paul Signac.", "Sắc màu êm dịu, mộng mơ phảng phất tinh thần của Claude Monet.": "Soft, dreamy colors reminiscent of the spirit of Claude Monet.", "Bảng màu rực rỡ, táo bạo — gợi nhớ tới tranh của Henri Matisse.": "A bold, vivid palette — reminiscent of the paintings of Henri Matisse.", "Những nét vẽ bản năng, tự do gợi nhớ tinh thần ngẫu hứng của Jackson Pollock.": "Instinctive, free strokes recall the improvisational spirit of Jackson Pollock.", "Phóng khoáng, nhiều màu sắc và tự do — có chút gì đó của phong cách vẽ đường phố Keith Haring.": "Free-spirited, colorful and bold — with a touch of Keith Haring's street-art style.", "Tối giản mà sâu lắng, giữ tinh thần thiền định như hội hoạ truyền thống Nhật Bản.": "Minimal yet deep, keeping the meditative spirit of traditional Japanese painting.", "Đối xứng, tỉ mỉ và mang tính chiêm nghiệm, giống các hoạ tiết Mandala Mật Tông hay hoa văn Hồi giáo cổ.": "Symmetrical, meticulous and contemplative, like Tantric mandalas or Islamic patterns.", "Bình yên bắt đầu từ một hơi thở sâu.": "Peace begins with one deep breath.", "Hít thở cùng vòng tròn": "Breathe with the circle", "Hít vào 4 giây, thở ra 6 giây, lặp lại 3 lần": "Breathe in 4 seconds, out 6 seconds, repeat 3 times", "Chậm lại một chút, thế giới vẫn đang chờ bạn.": "Slow down a little — the world is still waiting for you.", "Hãy đối xử với bản thân như cách bạn đối xử với người bạn thân.": "Treat yourself the way you would treat a close friend.", "Cảm xúc nào cũng được phép có mặt, và cũng sẽ qua đi.": "Every emotion is allowed to be here, and it will pass.", "Hôm nay khó khăn không có nghĩa là ngày mai cũng vậy.": "A hard day today doesn't mean tomorrow will be too.", "Mỗi ngày nhỏ bé đều có một điều đáng biết ơn.": "Every small day holds something to be grateful for.", "Nghỉ ngơi cũng là một cách tiến về phía trước.": "Rest is also a way of moving forward.", "Bạn đã cố gắng nhiều hơn bạn nghĩ.": "You have tried harder than you think.", "Bạn không cô đơn, luôn có người sẵn sàng lắng nghe.": "You are not alone — someone is always ready to listen.", "Câu nói hôm nay:": "Quote of the day:", "Lịch sử của bạn": "Your history", "Tranh đã vẽ": "Drawings", "Tâm trạng": "Mood", "Số lần vẽ": "Drawings", "Số ngày vẽ": "Days drawn", "Chuỗi ngày dài nhất": "Longest streak", "Theo dõi tiến bộ": "Track progress", "Chưa có dữ liệu. Hãy hoàn thành một bài vẽ để bắt đầu theo dõi.": "No data yet. Finish a drawing to start tracking.", "Người dùng": "Users", "Tất cả": "All", "Tâm trạng qua các lần vẽ (thang 1 đến 5)": "Mood across drawings (scale 1 to 5)", "Tâm trạng trung bình (trước → sau)": "Average mood (before → after)", "Tâm trạng tăng sau khi vẽ', all.some(r =": "Mood rose after drawing", "Tâm trạng tốt hơn', 'Tâm trạng tăng sau khi vẽ', all.some(r =": "Better mood", "Điểm DASS theo các lần vẽ": "DASS scores across drawings", "Nhật ký các lần vẽ gần đây": "Recent drawing log", "Một số bức tranh đã vẽ": "Some of your drawings", "Ba ngày liên tiếp', 'Vẽ 3 ngày liên tiếp', best": "Three days in a row", "Hoàn thành một bức tranh', all.length": "Finish one drawing", "Hoàn thành 5 bức tranh', all.length": "Finish 5 drawings", "Vẽ 3 ngày liên tiếp', best": "Draw 3 days in a row", "Vẽ 5 bức tranh', 'Hoàn thành 5 bức tranh', all.length": "Draw 5 pictures", "Bức tranh đầu tiên', 'Hoàn thành một bức tranh', all.length": "First picture", "Theo dõi tâm trạng trước và sau khi vẽ.": "Track your mood before and after drawing.", "Dữ liệu chỉ lưu trên thiết bị này, không gửi đi đâu cả.": "Data is stored only on this device and is never sent anywhere.", "Chào mừng bạn": "Welcome", "Đánh giá sức khỏe tinh thần": "Mental health assessment", "Dùng ít nhất 3 trong 4 phương pháp', modes.size": "Use at least 3 of the 4 methods", "Vẽ Ra Nhạc": "Draw to Music", "4. Vẽ Ra Nhạc": "4. Draw to Music", "Nhập tên, làm bài đánh giá ngắn để biết mức căng thẳng của mình, rồi chọn cách vẽ phù hợp.": "Enter your name, take a short assessment to learn your stress level, then pick a drawing method.", "Bốn phương pháp vẽ: chấm trame, vẽ tự do, tô màu và vẽ ra nhạc.": "Four drawing methods: trame dots, free drawing, coloring and drawing to music.", "Thử 3 phương pháp', 'Dùng ít nhất 3 trong 4 phương pháp', modes.size": "Try 3 methods", "Xem hướng dẫn": "View guide", "Nút đồng hồ ở góc trên bên phải lưu lịch sử, biểu đồ tâm trạng, tranh đã vẽ và huy hiệu của bạn.": "The clock button at the top right stores your history, mood chart, drawings and badges.", "Có nhiều tranh mẫu để tô màu. Bạn cũng có thể bấm \"Tải ảnh lên\" để tô ảnh của riêng mình.": "There are many sample pictures to color. You can also tap \"Upload image\" to color your own.", "Kết quả chỉ mang tính tham khảo, không thay thế đánh giá của chuyên gia.": "Results are for reference only and do not replace a professional assessment.", "Tải ảnh lên": "Upload image", "Ảnh của bạn": "Your image", "Chọn tranh hoặc tải ảnh của bạn": "Choose a picture or upload your own", "Phóng to để tô chi tiết": "Zoom in to color details", "Thu nhỏ": "Zoom out", "Về vừa khung": "Fit to frame", "Tẩy nét": "Erase strokes", "Màu đang chọn:": "Selected color:", "Màu": "Color", "Bút vẽ": "Pen", "Ghi chú": "Notes", "Thêm": "Add", "Phương pháp": "Method", "Đối xứng": "Symmetry", "Tốc độ": "Speed", "Âm lượng": "Volume", "Phát": "Play", "Dừng": "Pause", "Tạm dừng": "Pause", "Phát lại": "Replay", "Tải video": "Download video", "Nghe nhạc khi vẽ": "Listen to music while drawing", "Nhạc nền": "Background music", "Đang tải...": "Loading...", "Đang tải": "Loading", "Đang tạo...": "Creating...", "Đã lưu ảnh về máy": "Image saved to your device", "Trượt liên tục": "Continuous slide", "Quay về trang đăng nhập? Bức tranh đang vẽ sẽ không được lưu.": "Return to the login page? The drawing in progress will not be saved.", "Kéo tranh (hoặc giữ phím Space rồi kéo)": "Drag the picture (or hold Space and drag)", "Chưa có nét vẽ nào để xem lại.": "No strokes to replay yet.", "Quá trình vẽ của bạn": "Your drawing process", "Bắt đầu": "Start", "Thở ra": "Breathe out", "Tâm trạng tăng sau khi vẽ": "Mood rose after drawing", "Tâm trạng tốt hơn": "Better mood", "Xóa lịch sử người này": "Delete this person's history", "Quay lại": "Back", "Đổi ảnh khác": "Change picture"};
   var RULES = [[new RegExp("^Thang DASS-(\\d+)$"),"DASS-$1 Scale"],[new RegExp("^Kết Quả Đánh Giá Tâm Lý DASS-(\\d+)$"),"DASS-$1 Assessment Results"],[new RegExp("^Đang tô: (.+)$"),"Coloring: $1"],[new RegExp("^(\\d+) thao tác$"),"$1 actions"],[new RegExp("^Chuỗi hiện tại: (\\d+) ngày$"),"Current streak: $1 days"],[new RegExp("^Vòng (\\d+)/3$"),"Round $1/3"],[new RegExp("^Tâm trạng của bạn tăng từ (\\d+) lên (\\d+) sau khi vẽ\\.$"),"Your mood rose from $1 to $2 after drawing."],[new RegExp("^Tâm trạng của bạn giảm từ (\\d+) xuống (\\d+)\\. Không sao cả, hãy nghỉ ngơi và thử lại vào lúc khác nhé\\.$"),"Your mood dropped from $1 to $2. That's okay — rest and try again another time."],[new RegExp("^Tâm trạng của bạn giữ ở mức (\\d+)/5 sau khi vẽ\\.$"),"Your mood stayed at $1/5 after drawing."],[new RegExp("^Đã ghi lại tâm trạng của bạn: (\\d+)/5\\.$"),"Your mood has been recorded: $1/5."],[new RegExp("^Bạn đã vẽ khoảng (\\d+) phút rồi\\. Uống chút nước và nhìn ra xa vài giây nhé\\.$"),"You've been drawing for about $1 minutes. Have some water and look into the distance for a few seconds."],[new RegExp("^Câu (\\d+)$"),"Question $1"]];
   Object.keys(EN).forEach(function(k){EN2[k]=EN[k];}); EN = EN2;
-  Object.assign(EN, {"Trang web dự thi Khoa học kỹ thuật của học sinh, giúp giảm căng thẳng bằng nghệ thuật.": "A science and engineering contest website by students, helping reduce stress through art.", "Đánh giá sơ bộ bằng thang DASS-21 hoặc DASS-42 (Lovibond & Lovibond, 1995).": "Preliminary assessment using the DASS-21 or DASS-42 scale (Lovibond & Lovibond, 1995).", "Bức tranh đầu tiên": "First picture", "Hoàn thành một bức tranh": "Finish one drawing", "Vẽ 5 bức tranh": "Draw 5 pictures", "Hoàn thành 5 bức tranh": "Finish 5 drawings", "Ba ngày liên tiếp": "Three days in a row", "Vẽ 3 ngày liên tiếp": "Draw 3 days in a row", "Thử cả 3 phương pháp": "Try all 3 methods", "Chấm trame, vẽ tự do và tô màu": "Trame dots, free drawing and coloring", "Tâm trạng tốt hơn": "Better mood", "Tâm trạng tăng sau khi vẽ": "Mood rose after drawing", "Huy hiệu": "Badges", "Xem hướng dẫn": "View guide", "Đóng": "Close", "Về dự án": "About"});
+  Object.assign(EN, {"Trang web dự thi Khoa học kỹ thuật của học sinh, giúp giảm căng thẳng bằng nghệ thuật.": "A science and engineering contest website by students, helping reduce stress through art.", "Đánh giá sơ bộ bằng thang DASS-21 hoặc DASS-42 (Lovibond & Lovibond, 1995).": "Preliminary assessment using the DASS-21 or DASS-42 scale (Lovibond & Lovibond, 1995).", "Bức tranh đầu tiên": "First picture", "Hoàn thành một bức tranh": "Finish one drawing", "Vẽ 5 bức tranh": "Draw 5 pictures", "Hoàn thành 5 bức tranh": "Finish 5 drawings", "Ba ngày liên tiếp": "Three days in a row", "Vẽ 3 ngày liên tiếp": "Draw 3 days in a row", "Thử 3 phương pháp": "Try 3 methods", "Dùng ít nhất 3 trong 4 phương pháp": "Use at least 3 of the 4 methods", "Tâm trạng tốt hơn": "Better mood", "Tâm trạng tăng sau khi vẽ": "Mood rose after drawing", "Huy hiệu": "Badges", "Xem hướng dẫn": "View guide", "Đóng": "Close", "Về dự án": "About"});
   RULES.unshift([/^Chuỗi hiện tại: 1 ngày$/,'Current streak: 1 day'],[/^Huy hiệu \((\d+)\/(\d+)\)$/,'Badges ($1/$2)']);
   Object.assign(EN, {"Chấm trame":"Trame dots","Vẽ tự do":"Free drawing","Tô màu":"Coloring"});
   RULES.unshift([/^Tâm trạng: (.+?) → (.+?)\s*·\s*Trầm cảm (\d+), Lo âu (\d+), Căng thẳng (\d+)$/,'Mood: $1 → $2 · Depression $3, Anxiety $4, Stress $5'],[/^Tâm trạng: (.+?) → (.+)$/,'Mood: $1 → $2']);
@@ -3196,9 +3196,9 @@
     tired: { l: ['Mệt mỏi', 'Tired'], c: ['#D8E2DC', '#B5C99A', '#CAD2C5', '#84A98C', '#F0EAD6', '#52796F'], t: ['Xanh rêu và be nhạt giống thiên nhiên, giúp mắt và đầu óc được nghỉ.', 'Moss green and soft beige resemble nature and rest your eyes and mind.'] },
     happy: { l: ['Vui', 'Happy'], c: ['#FFD166', '#EF476F', '#06D6A0', '#118AB2', '#F78C6B', '#9B5DE0'], t: ['Bảng màu rực rỡ để bạn thoải mái tô theo cảm hứng.', 'A vivid palette so you can color freely.'] }
   };
-  var SND = { rain: ['🌧️', 'Mưa', 'Rain'], sea: ['🌊', 'Sóng biển', 'Ocean'], forest: ['🌲', 'Rừng', 'Forest'], fire: ['🔥', 'Lửa trại', 'Campfire'] };
-  var TABS = [['snd', '🎧', 'Âm thanh', 'Sounds'], ['chal', '🎯', 'Thử thách', 'Challenge'], ['pal', '🎨', 'Màu sắc', 'Colors'], ['grat', '📓', 'Biết ơn', 'Gratitude'], ['rem', '🔔', 'Nhắc nhở', 'Reminder'], ['wk', '', 'Thời gian hoạt động', 'Activity time'], ['acc', '', 'Giao diện', 'Interface'], ['sup', '🤝', 'Hỗ trợ', 'Support']];
-  var cur = 'snd', palMood = null, toast = '', modal = null;
+  var SND = { rain: ['Mưa', 'Rain'], sea: ['Sóng biển', 'Ocean'], forest: ['Rừng', 'Forest'], fire: ['Lửa trại', 'Campfire'] };
+  var TABS = [['chal', '🎯', 'Thử thách', 'Challenge'], ['pal', '🎨', 'Màu sắc', 'Colors'], ['grat', '📓', 'Biết ơn', 'Gratitude'], ['rem', '🔔', 'Nhắc nhở', 'Reminder'], ['wk', '', 'Thời gian hoạt động', 'Activity time'], ['acc', '', 'Giao diện', 'Interface'], ['sup', '🤝', 'Hỗ trợ', 'Support']];
+  var cur = 'chal', palMood = null, toast = '', modal = null;
 
   function isEn() { return !!(window.__lang && window.__lang() === 'en'); }
   function t(v, e) { return isEn() ? e : v; }
@@ -3223,55 +3223,100 @@
   }
   applyA11y();
 
-  var AC = null, master = null, stopSnd = null, playing = null, vol = 0.5;
-  function ctx() {
-    if (!AC) { AC = new (window.AudioContext || window.webkitAudioContext)(); master = AC.createGain(); master.gain.value = vol; master.connect(AC.destination); }
-    if (AC.state === 'suspended') AC.resume();
-    return AC;
+  var sndMsg = '', sndBox = null, AUD = {}, playing = null, vol = 0.5, SC = 'mindart-sounds', saved = {}, dls = {}, SZ = { rain: 15, sea: 14, forest: 13, fire: 17 };
+  function sUrl(k) { return new URL('sounds/' + k + '.mp3', location.href).href; }
+  function canStore() { return !!(window.caches && window.isSecureContext); }
+  function refreshSaved() {
+    if (!canStore()) return Promise.resolve();
+    return caches.open(SC).then(function (c) {
+      return Promise.all(Object.keys(SND).map(function (k) { return c.match(sUrl(k)).then(function (r) { saved[k] = !!r; }); }));
+    }).catch(function () {});
   }
-  function noise(brown) {
-    var c = ctx(), n = c.sampleRate * 2, b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0), last = 0;
-    for (var i = 0; i < n; i++) { var w = Math.random() * 2 - 1; if (brown) { last = (last + 0.02 * w) / 1.02; d[i] = last * 3.5; } else d[i] = w; }
-    var s = c.createBufferSource(); s.buffer = b; s.loop = true; return s;
+  function dropAudio(k) { var a = AUD[k]; if (a) { a.pause(); if (a.__obj) URL.revokeObjectURL(a.__obj); delete AUD[k]; if (playing === k) playing = null; } }
+  function failPlay() { playing = null; sndMsg = t('Không phát được âm thanh. Hãy tải lại âm thanh rồi thử lại.', "Can't play the sound. Please download it again and retry."); renderSnd(); }
+  function startAudio(k) {
+    var a = AUD[k];
+    if (a) { a.volume = vol; var p0 = a.play(); if (p0 && p0.catch) p0.catch(failPlay); return; }
+    a = AUD[k] = new Audio(); a.preload = 'none'; a.loop = true; a.volume = vol;
+    var go = function () { var p = a.play(); if (p && p.catch) p.catch(failPlay); };
+    if (saved[k] && canStore()) {
+      caches.open(SC).then(function (c) { return c.match(sUrl(k)); }).then(function (r) { return r ? r.blob() : Promise.reject(); })
+        .then(function (bl) { a.__obj = URL.createObjectURL(bl); a.src = a.__obj; go(); })
+        .catch(function () { a.src = 'sounds/' + k + '.mp3'; go(); });
+    } else { a.src = 'sounds/' + k + '.mp3'; go(); }
   }
-  function chain(src, nodes) { var c = ctx(), p = src; nodes.forEach(function (n) { p.connect(n); p = n; }); p.connect(master); }
-  function filt(type, f, q) { var x = ctx().createBiquadFilter(); x.type = type; x.frequency.value = f; if (q) x.Q.value = q; return x; }
-  function gain(v) { var g = ctx().createGain(); g.gain.value = v; return g; }
-  function burst(freqA, freqB, dur, v, tp) {
-    var c = ctx(), o = c.createOscillator(), g = c.createGain(), now = c.currentTime;
-    o.type = tp || 'sine'; o.frequency.setValueAtTime(freqA, now); o.frequency.exponentialRampToValueAtTime(freqB, now + dur);
-    g.gain.setValueAtTime(0.0001, now); g.gain.exponentialRampToValueAtTime(v, now + dur * 0.2); g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
-    o.connect(g); g.connect(master); o.start(now); o.stop(now + dur + 0.05);
-  }
-  var SOUNDS = {
-    rain: function () { var a = noise(), b = noise(true); chain(a, [filt('highpass', 800), filt('lowpass', 7000), gain(0.35)]); chain(b, [filt('lowpass', 400), gain(0.3)]); a.start(); b.start(); return function () { a.stop(); b.stop(); }; },
-    sea: function () {
-      var a = noise(true), g = gain(0.5), c = ctx(), lfo = c.createOscillator(), lg = gain(0.35);
-      lfo.frequency.value = 0.09; lfo.connect(lg); lg.connect(g.gain); chain(a, [filt('lowpass', 900), g]); a.start(); lfo.start();
-      return function () { a.stop(); lfo.stop(); };
-    },
-    forest: function () {
-      var a = noise(true); chain(a, [filt('lowpass', 500), gain(0.25)]); a.start();
-      var tm = setInterval(function () { if (Math.random() < 0.7) { var f = 2200 + Math.random() * 1800; burst(f, f * 1.3, 0.12 + Math.random() * 0.1, 0.05); if (Math.random() < 0.5) setTimeout(function () { burst(f * 1.1, f * 1.4, 0.1, 0.04); }, 160); } }, 1800);
-      return function () { a.stop(); clearInterval(tm); };
-    },
-    fire: function () {
-      var a = noise(true); chain(a, [filt('lowpass', 300), gain(0.35)]); a.start();
-      var live = true;
-      (function crack() {
-        if (!live) return;
-        var c = ctx(), s = noise(), g = c.createGain(), now = c.currentTime, d = 0.02 + Math.random() * 0.05;
-        g.gain.setValueAtTime(0.25 * Math.random() + 0.05, now); g.gain.exponentialRampToValueAtTime(0.0001, now + d);
-        var bp = filt('bandpass', 1500 + Math.random() * 3000, 1); s.connect(bp); bp.connect(g); g.connect(master); s.start(now); s.stop(now + d + 0.02);
-        setTimeout(crack, 80 + Math.random() * 450);
-      })();
-      return function () { live = false; a.stop(); };
-    }
-  };
   function playSnd(k) {
-    if (stopSnd) { try { stopSnd(); } catch (_) {} stopSnd = null; }
-    if (playing === k) { playing = null; return; }
-    try { stopSnd = SOUNDS[k](); playing = k; } catch (_) { playing = null; toast = t('Trình duyệt chưa hỗ trợ âm thanh.', 'Audio is not supported in this browser.'); }
+    var prev = playing;
+    if (prev && AUD[prev]) { AUD[prev].pause(); AUD[prev].currentTime = 0; }
+    playing = null;
+    if (prev === k) return;
+    playing = k; startAudio(k);
+  }
+  function dlSnd(k) {
+    if (!canStore() || dls[k] != null) return;
+    var url = sUrl(k); dls[k] = 0; renderSnd();
+    var put = function (blob) { return caches.open(SC).then(function (c) { return c.put(url, new Response(blob, { headers: { 'Content-Type': 'audio/mpeg' } })); }); };
+    fetch(url).then(function (r) {
+      if (!r.ok) throw new Error('http');
+      if (!r.body || !r.body.getReader) return r.blob().then(put);
+      var total = +r.headers.get('Content-Length') || 0, got = 0, parts = [], rd = r.body.getReader();
+      var pump = function () {
+        return rd.read().then(function (x) {
+          if (x.done) return;
+          parts.push(x.value); got += x.value.length;
+          var el = document.getElementById('mx-dls-' + k); if (el && total) el.textContent = Math.round(got / total * 100) + '%';
+          return pump();
+        });
+      };
+      return pump().then(function () { return put(new Blob(parts, { type: 'audio/mpeg' })); });
+    }).then(function () { saved[k] = true; var was = playing === k; dropAudio(k); if (was) playing = null; })
+      .catch(function () { sndMsg = t('Không tải được. Hãy kiểm tra mạng và dung lượng trống rồi thử lại.', 'Could not download. Check your connection and free storage, then try again.'); })
+      .then(function () { delete dls[k]; renderSnd(); });
+  }
+  function rmSnd(k) { if (!canStore()) return; dropAudio(k); caches.open(SC).then(function (c) { return c.delete(sUrl(k)); }).then(function () { saved[k] = false; renderSnd(); }); }
+
+  var SBTN = 'px-2 py-1.5 rounded-lg text-xs font-semibold border ';
+  function renderSnd() {
+    if (!sndBox) return;
+    var keys = Object.keys(SND), have = keys.filter(function (k) { return saved[k]; });
+    var h = '<h4 class="font-bold text-sm text-teal-950 dark:text-teal-100 mb-2">' + t('Âm thanh thư giãn', 'Relaxing sounds') + '</h4>';
+    if (have.length) {
+      h += '<div class="grid grid-cols-2 gap-1.5 mb-2">';
+      have.forEach(function (k) { h += '<button type="button" data-sact="snd:' + k + '" class="' + SBTN + (playing === k ? 'bg-teal-600 text-white border-teal-600' : 'bg-teal-50 dark:bg-slate-800 text-teal-800 dark:text-teal-200 border-slate-200 dark:border-slate-600') + '">' + t(SND[k][0], SND[k][1]) + '</button>'; });
+      h += '</div>' + (playing ? '<p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">' + t('Đang phát', 'Now playing') + ': <b>' + t(SND[playing][0], SND[playing][1]) + '</b> · ' + t('bấm lại để dừng', 'tap again to stop') + '</p>' : '') +
+        '<label class="text-[11px] text-slate-500 dark:text-slate-400 block mb-2">' + t('Âm lượng', 'Volume') + ' <input id="mx-vol" type="range" min="0" max="1" step="0.05" value="' + vol + '" class="w-full"></label>';
+    } else {
+      h += '<p class="text-[11px] text-slate-400 mb-2">' + t('Tải một âm thanh bên dưới, âm thanh đó sẽ hiện ở đây để bạn nghe.', 'Download a sound below and it will appear here for you to play.') + '</p>';
+    }
+    if (sndMsg) h += '<p class="text-[11px] text-rose-500 mb-2">' + esc(sndMsg) + '</p>';
+    h += '<p class="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">' + t('Tải âm thanh', 'Download sounds') + '</p>';
+    if (!canStore()) h += '<p class="text-[11px] text-slate-400">' + t('Cần mở trang qua địa chỉ https (không mở trực tiếp file) mới tải được âm thanh.', 'Open the page via https (not directly from a file) to download sounds.') + '</p>';
+    else {
+      h += '<p class="text-[11px] text-slate-400 mb-1">' + t('Tải về thiết bị để nghe, kể cả khi không có mạng (mỗi bài khoảng 13–17 MB, nên dùng Wi-Fi).', 'Download to your device to listen, even offline (about 13–17 MB each, use Wi-Fi).') + '</p>';
+      keys.forEach(function (k) {
+        h += '<div class="flex items-center justify-between gap-2 py-1 text-[11px] text-slate-600 dark:text-slate-300"><span>' + t(SND[k][0], SND[k][1]) + ' <span class="opacity-60">(~' + SZ[k] + ' MB)</span></span>' +
+          (dls[k] != null ? '<span id="mx-dls-' + k + '">' + t('Đang tải...', 'Downloading...') + '</span>' : saved[k] ? '<span><span class="text-emerald-600 dark:text-emerald-400">' + t('Đã tải', 'Downloaded') + '</span> <button type="button" data-sact="rm:' + k + '" class="ml-1 underline">' + t('Xóa', 'Remove') + '</button></span>' : '<button type="button" data-sact="dl:' + k + '" class="px-2 py-0.5 rounded-md border border-slate-300 dark:border-slate-600">' + t('Tải', 'Download') + '</button>') + '</div>';
+      });
+    }
+    sndBox.innerHTML = h;
+  }
+  function mountSounds() {
+    var panel = document.getElementById('music-panel');
+    if (!panel || sndBox) return;
+    sndBox = document.createElement('div'); sndBox.id = 'mx-sounds';
+    sndBox.className = 'mt-4 pt-4 border-t border-slate-200 dark:border-slate-700';
+    panel.appendChild(sndBox);
+    sndBox.addEventListener('click', function (e) {
+      var el = e.target.closest('[data-sact]'); if (!el) return;
+      var a = el.getAttribute('data-sact').split(':'); sndMsg = '';
+      if (a[0] === 'snd') { playSnd(a[1]); renderSnd(); }
+      else if (a[0] === 'dl') dlSnd(a[1]);
+      else if (a[0] === 'rm') rmSnd(a[1]);
+    });
+    sndBox.addEventListener('input', function (e) { if (e.target.id === 'mx-vol') { vol = +e.target.value; if (playing && AUD[playing]) AUD[playing].volume = vol; } });
+    var tg = document.getElementById('music-toggle-btn');
+    if (tg) tg.addEventListener('click', function () { refreshSaved().then(renderSnd); });
+    renderSnd();
   }
 
   function chToday() { return CH[Math.floor(Date.now() / 86400000) % CH.length]; }
@@ -3302,11 +3347,6 @@
   var B = 'px-4 py-2 rounded-xl text-base font-semibold border border-slate-300 dark:border-slate-600 ';
   function btn(act, label, on, extra) { return '<button type="button" data-act="' + act + '" class="' + B + (on ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-slate-100 dark:bg-slate-800') + ' ' + (extra || '') + '">' + label + '</button>'; }
   var V = {
-    snd: function () {
-      var h = '<p class="text-base opacity-80 mb-3">' + t('Âm thanh tạo trực tiếp trên máy bạn, dùng được cả khi không có mạng.', 'Sounds are generated on your device and work offline.') + '</p><div class="flex flex-wrap gap-2 mb-4">';
-      Object.keys(SND).forEach(function (k) { h += btn('snd:' + k, SND[k][0] + ' ' + t(SND[k][1], SND[k][2]) + (playing === k ? ' ⏸' : ''), playing === k); });
-      return h + '</div><label class="text-base block">' + t('Âm lượng', 'Volume') + ' <input id="mx-vol" type="range" min="0" max="1" step="0.05" value="' + vol + '" class="w-full"></label>';
-    },
     chal: function () {
       var c = chToday(), s = chStats();
       return '<p class="text-sm uppercase tracking-wider opacity-70 mb-1">' + t('Thử thách hôm nay', "Today's challenge") + '</p><p class="text-2xl font-bold mb-4">' + esc(t(c[0], c[1])) + '</p>' +
@@ -3371,7 +3411,7 @@
       document.body.appendChild(modal);
       modal.addEventListener('click', onClick); modal.addEventListener('input', onInput); modal.addEventListener('change', onInput);
     }
-    toast = ''; modal.style.display = 'flex'; render();
+    toast = ''; modal.style.display = 'flex'; render(); refreshSaved().then(function () { if (modal.style.display !== 'none') render(); });
   }
   function close() { if (modal) modal.style.display = 'none'; }
   function onClick(e) {
@@ -3381,7 +3421,6 @@
     toast = '';
     if (k === 'close') return close();
     if (k === 'tab') cur = v;
-    else if (k === 'snd') playSnd(v);
     else if (k === 'chal') { var d = ls('mx_ch', []); if (d.indexOf(dstr()) < 0) { d.push(dstr()); sv('mx_ch', d.slice(-400)); } }
     else if (k === 'pal') palMood = v;
     else if (k === 'copy') { try { navigator.clipboard.writeText(v); toast = t('Đã sao chép ', 'Copied ') + v; } catch (_) { toast = v; } }
@@ -3394,7 +3433,7 @@
   }
   function onInput(e) {
     var id = e.target.id;
-    if (id === 'mx-vol') { vol = +e.target.value; if (master) master.gain.value = vol; }
+    if (id === 'mx-vol') { vol = +e.target.value; if (playing && AUD[playing]) AUD[playing].volume = vol; }
     else if (id === 'mx-hc' || id === 'mx-rm') { var a = ls('mx_a11y', {}); a.hc = document.getElementById('mx-hc').checked; a.rm = document.getElementById('mx-rm').checked; sv('mx_a11y', a); applyA11y(); }
     else if (id === 'mx-ron' || id === 'mx-rt') {
       var r = ls('mx_rem', { on: false, time: '19:00' }); r.on = document.getElementById('mx-ron').checked; r.time = document.getElementById('mx-rt').value || '19:00'; sv('mx_rem', r);
@@ -3446,12 +3485,12 @@
     lb && lb.parentNode === box ? box.insertBefore(b, lb.nextSibling) : box.insertBefore(b, box.firstChild);
   }
   function early() {
-    addButtons();
+    addButtons(); mountSounds();
     var lb = document.getElementById('btn-lang');
-    if (lb) lb.addEventListener('click', function () { setTimeout(function () { var b = document.getElementById('mx-open'); if (b) { b.title = t('Tính năng', 'Features'); b.setAttribute('aria-label', b.title); } render(); checkSevere(); }, 80); });
+    if (lb) lb.addEventListener('click', function () { setTimeout(function () { var b = document.getElementById('mx-open'); if (b) { b.title = t('Tính năng', 'Features'); b.setAttribute('aria-label', b.title); } render(); renderSnd(); checkSevere(); }, 80); });
   }
   function init() {
-    addButtons(); checkSevere(); remCheck();
+    addButtons(); mountSounds(); refreshSaved().then(renderSnd); checkSevere(); remCheck();
     var scr = document.getElementById('screen-dass-result');
     if (scr) new MutationObserver(function () { checkSevere(); }).observe(scr, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['class'] });
     setInterval(remCheck, 30000);
