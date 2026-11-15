@@ -107,8 +107,11 @@ export default {
         body: JSON.stringify({ contents, generationConfig: { temperature: 0.7, maxOutputTokens: 400 } }),
       });
       if (!res.ok) {
-        console.log("Upstream error", res.status, (await res.text()).slice(0, 500));
-        return json({ error: "Trợ lý đang bận, bạn thử lại sau nhé." }, 502, cors);
+        const raw = (await res.text()).slice(0, 800);
+        console.log("Upstream error", res.status, raw);
+        let code = String(res.status);
+        try { const e = JSON.parse(raw).error; if (e && e.status) code += " " + e.status; } catch (_) {}
+        return json({ error: "Trợ lý đang bận, bạn thử lại sau nhé. (mã lỗi: " + code + ")" }, 502, cors);
       }
       const data = await res.json();
       const reply = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || "").join("").trim();
@@ -116,7 +119,7 @@ export default {
       return json({ reply }, 200, cors);
     } catch (err) {
       console.log("Worker error", String(err));
-      return json({ error: "Trợ lý đang bận, bạn thử lại sau nhé." }, 500, cors);
+      return json({ error: "Trợ lý đang bận, bạn thử lại sau nhé. (mã lỗi: network)" }, 500, cors);
     }
   },
 };
