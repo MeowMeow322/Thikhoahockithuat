@@ -39,7 +39,7 @@ function hasCrisis(text) {
 }
 
 function getCorsHeaders(request) {
-  const origin = request.headers.get("Origin") || "";
+JSON.stringify({ error: "Tên biến hiện có: [" + Object.keys(env).join(", ") + "]" }),
   const isAllowed =
     ALLOWED_ORIGINS.includes(origin) ||
     origin.startsWith("http://localhost") ||
