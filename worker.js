@@ -30,156 +30,93 @@ const hits = new Map();
 function plain(s) {
   return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "d").toLowerCase();
 }
-function hasCrisis(text) {
-  const normalized = plain(String(text || ""));
-  return CRISIS_WORDS.some((word) => {
-    const pattern = new RegExp(`(^|[^a-z0-9])${word}([^a-z0-9]|$)`);
-    return pattern.test(normalized);
-  });
-}
-const apiKey = (env.GEMINI_API_KEY || "").trim();
-if (!apiKey) {
-  return new Response(
-    JSON.stringify({ error: "Cloudflare đang thấy biến: [" + Object.keys(env).join(", ") + "]" }),
-    { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-  );
+
+function isCrisis(text) {
+  const p = plain(text);
+  return CRISIS_WORDS.some((w) => p.includes(w));
 }
 
-const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${DEFAULT_MODEL}:generateContent`;
-
-const response = await fetch(apiUrl, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "x-goog-api-key": apiKey,
-  },
-  body: JSON.stringify({ contents }),
-});
-function isRateLimited(ip) {
+function limited(ip) {
   const now = Date.now();
-  const timestamps = (hits.get(ip) || []).filter((t) => now - t < RATE_WINDOW_MS);
-  if (timestamps.length >= RATE_LIMIT) {
-    hits.set(ip, timestamps);
-    return true;
-  }
-  timestamps.push(now);
-  hits.set(ip, timestamps);
-  return false;
+  const list = (hits.get(ip) || []).filter((t) => now - t < RATE_WINDOW_MS);
+  list.push(now);
+  hits.set(ip, list);
+  if (hits.size > 2000) hits.clear();
+  return list.length > RATE_LIMIT;
+}
+
+function json(body, status, cors) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...cors, "Content-Type": "application/json; charset=utf-8" },
+  });
 }
 
 export default {
   async fetch(request, env) {
-    const corsHeaders = getCorsHeaders(request);
+    const origin = request.headers.get("Origin") || "";
+    const allowed = ALLOWED_ORIGINS.includes(origin);
+    const cors = {
+      "Access-Control-Allow-Origin": allowed ? origin : ALLOWED_ORIGINS[0],
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Vary": "Origin",
+    };
 
-    if (request.method === "OPTIONS") {
-      return new Response(null, { headers: corsHeaders });
+    if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
+    if (request.method === "GET") return new Response("Backend AI da san sang!", { status: 200, headers: cors });
+    if (request.method !== "POST") return json({ error: "Method not allowed" }, 405, cors);
+    if (!allowed) return json({ error: "Forbidden" }, 403, cors);
+
+    const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+    if (limited(ip)) return json({ error: "Bạn gửi hơi nhanh, hãy chờ một chút rồi thử lại nhé." }, 429, cors);
+
+    let body;
+    try {
+      body = await request.json();
+    } catch (_) {
+      return json({ error: "Dữ liệu không hợp lệ." }, 400, cors);
     }
 
-    if (request.method !== "POST") {
-      return new Response("Worker AI Gemma đang hoạt động.", {
-        status: 200,
-        headers: corsHeaders,
-      });
-    }
+    const message = typeof body.message === "string" ? body.message.trim() : "";
+    const lang = body.lang === "en" ? "en" : "vi";
+    if (!message) return json({ error: "Thiếu nội dung tin nhắn." }, 400, cors);
+    if (message.length > MAX_MESSAGE) return json({ error: "Tin nhắn quá dài, hãy gửi ngắn hơn nhé." }, 400, cors);
 
-    const clientIp = request.headers.get("CF-Connecting-IP") || "unknown";
-    if (isRateLimited(clientIp)) {
-      return new Response(
-        JSON.stringify({ error: "Bạn gửi tin nhắn hơi nhanh, vui lòng đợi một lát nhé." }),
-        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
+    const history = (Array.isArray(body.history) ? body.history : [])
+      .filter((h) => h && (h.role === "user" || h.role === "model") && typeof h.text === "string" && h.text.length <= MAX_MESSAGE * 2)
+      .slice(-MAX_HISTORY);
+
+    const userTexts = history.filter((h) => h.role === "user").map((h) => h.text).concat(message);
+    if (userTexts.some(isCrisis)) return json({ reply: CRISIS_REPLY[lang], crisis: true }, 200, cors);
+
+    if (!env.GEMINI_API_KEY) return json({ error: "Máy chủ chưa được cấu hình." }, 500, cors);
+    const model = env.MODEL_NAME || DEFAULT_MODEL;
+
+    const contents = [
+      { role: "user", parts: [{ text: SYSTEM_PROMPT + "\n\nHãy tuân thủ nghiêm ngặt các nguyên tắc trên." }] },
+      { role: "model", parts: [{ text: "Mình hiểu rõ vai trò và sẽ tuân thủ các nguyên tắc này." }] },
+      ...history.map((h) => ({ role: h.role, parts: [{ text: h.text }] })),
+      { role: "user", parts: [{ text: message }] },
+    ];
 
     try {
-      const body = await request.json();
-      const rawMessage = String(body.message || body.prompt || "").trim();
-
-      if (!rawMessage) {
-        return new Response(JSON.stringify({ error: "Tin nhắn trống." }), {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-
-      const message = rawMessage.slice(0, MAX_MESSAGE);
-      const lang = body.lang === "en" ? "en" : "vi";
-
-      // Chỉ kiểm tra từ khóa khẩn cấp trên tin nhắn hiện tại, không quét lại lịch sử cũ
-      if (hasCrisis(message)) {
-        return new Response(
-          JSON.stringify({ reply: CRISIS_REPLY[lang], crisis: true }),
-          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-
-      // Chuẩn hóa lịch sử hội thoại (giới hạn theo MAX_HISTORY)
-      const safeHistory = Array.isArray(body.history)
-        ? body.history
-            .slice(-MAX_HISTORY)
-            .map((item) => {
-              const role = item.role === "assistant" || item.role === "model" ? "model" : "user";
-              const text = item.parts?.[0]?.text || item.text || item.content || "";
-              return text ? { role, parts: [{ text: String(text).slice(0, MAX_MESSAGE) }] } : null;
-            })
-            .filter(Boolean)
-        : [];
-
-      const contents = [
-        {
-          role: "user",
-          parts: [{ text: `Tuân thủ nghiêm ngặt hướng dẫn hệ thống sau:\n${SYSTEM_PROMPT}` }],
-        },
-        {
-          role: "model",
-          parts: [{ text: "Mình đã hiểu rõ và sẽ tuân thủ đầy đủ các nguyên tắc trên." }],
-        },
-        ...safeHistory,
-        {
-          role: "user",
-          parts: [{ text: message }],
-        },
-      ];
-
-if (!env.GEMINI_API_KEY) {
-  return new Response(
-    JSON.stringify({ error: "Cloudflare chưa nhận được biến GEMINI_API_KEY!" }),
-    { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-  );
-}
-
-const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${DEFAULT_MODEL}:generateContent`;
-
-const response = await fetch(apiUrl, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "x-goog-api-key": env.GEMINI_API_KEY.trim(),
-  },
-  body: JSON.stringify({ contents }),
-});
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        return new Response(
-          JSON.stringify({ error: data?.error?.message || "Lỗi kết nối mô hình AI." }),
-          { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-
-      const reply =
-        data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-        "Mình đang lắng nghe bạn đây, bạn có thể chia sẻ thêm một chút được không?";
-
-      return new Response(JSON.stringify({ reply }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
+        body: JSON.stringify({ contents, generationConfig: { temperature: 0.7, maxOutputTokens: 400 } }),
       });
+      if (!res.ok) {
+        console.log("Upstream error", res.status, (await res.text()).slice(0, 500));
+        return json({ error: "Trợ lý đang bận, bạn thử lại sau nhé." }, 502, cors);
+      }
+      const data = await res.json();
+      const reply = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || "").join("").trim();
+      if (!reply) return json({ error: "Mình chưa thể phản hồi lúc này, bạn thử lại nhé." }, 502, cors);
+      return json({ reply }, 200, cors);
     } catch (err) {
-      return new Response(JSON.stringify({ error: "Lỗi xử lý máy chủ: " + err.message }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      console.log("Worker error", String(err));
+      return json({ error: "Trợ lý đang bận, bạn thử lại sau nhé." }, 500, cors);
     }
   },
 };

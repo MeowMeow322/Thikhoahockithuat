@@ -1,7 +1,5 @@
 {
   "name": "thikhoahockithuat",
   "main": "worker.js",
-  "compatibility_date": "2026-11-14",
-  "keep_vars": true
+  "compatibility_date": "2026-11-14"
 }
-
