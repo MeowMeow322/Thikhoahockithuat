@@ -1,5 +1,6 @@
 const ALLOWED_ORIGINS = ["https://meowmeow322.github.io"];
 const DEFAULT_MODEL = "gemma-4-31b-it";
+const DEFAULT_FALLBACK = "gemma-4-26b-a4b-it";
 const MAX_MESSAGE = 500;
 const MAX_HISTORY = 6;
 const RATE_LIMIT = 8;
@@ -100,26 +101,40 @@ export default {
       { role: "user", parts: [{ text: message }] },
     ];
 
-    try {
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
-        body: JSON.stringify({ contents, generationConfig: { temperature: 0.7, maxOutputTokens: 400 } }),
-      });
-      if (!res.ok) {
-        const raw = (await res.text()).slice(0, 800);
-        console.log("Upstream error", res.status, raw);
-        let code = String(res.status);
-        try { const e = JSON.parse(raw).error; if (e && e.status) code += " " + e.status; } catch (_) {}
-        return json({ error: "Trợ lý đang bận, bạn thử lại sau nhé. (mã lỗi: " + code + ")" }, 502, cors);
+    const fallback = env.FALLBACK_MODEL || DEFAULT_FALLBACK;
+    const models = fallback && fallback !== model ? [model, fallback] : [model];
+    let lastCode = "network";
+
+    for (const m of models) {
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(m)}:generateContent`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
+            body: JSON.stringify({ contents, generationConfig: { temperature: 0.7, maxOutputTokens: 400 } }),
+          });
+          if (res.ok) {
+            const data = await res.json();
+            const reply = data?.candidates?.[0]?.content?.parts?.filter((p) => !p.thought).map((p) => p.text || "").join("").trim();
+            if (reply) return json({ reply }, 200, cors);
+            lastCode = "empty";
+            break;
+          }
+          const raw = (await res.text()).slice(0, 800);
+          console.log("Upstream error", m, res.status, raw);
+          lastCode = String(res.status);
+          try { const e = JSON.parse(raw).error; if (e && e.status) lastCode += " " + e.status; } catch (_) {}
+          if (res.status === 500 || res.status === 503) {
+            if (attempt === 0) { await new Promise((r) => setTimeout(r, 700)); continue; }
+          }
+          break;
+        } catch (err) {
+          console.log("Worker error", m, String(err));
+          lastCode = "network";
+          if (attempt === 0) { await new Promise((r) => setTimeout(r, 700)); continue; }
+        }
       }
-      const data = await res.json();
-      const reply = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || "").join("").trim();
-      if (!reply) return json({ error: "Mình chưa thể phản hồi lúc này, bạn thử lại nhé." }, 502, cors);
-      return json({ reply }, 200, cors);
-    } catch (err) {
-      console.log("Worker error", String(err));
-      return json({ error: "Trợ lý đang bận, bạn thử lại sau nhé. (mã lỗi: network)" }, 500, cors);
     }
+    return json({ error: "Trợ lý đang bận, bạn thử lại sau nhé. (mã lỗi: " + lastCode + ")" }, 502, cors);
   },
 };
