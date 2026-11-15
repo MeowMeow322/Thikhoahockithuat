@@ -3197,7 +3197,7 @@
     happy: { l: ['Vui', 'Happy'], c: ['#FFD166', '#EF476F', '#06D6A0', '#118AB2', '#F78C6B', '#9B5DE0'], t: ['Bảng màu rực rỡ để bạn thoải mái tô theo cảm hứng.', 'A vivid palette so you can color freely.'] }
   };
   var SND = { rain: ['Mưa', 'Rain'], sea: ['Sóng biển', 'Ocean'], forest: ['Rừng', 'Forest'], fire: ['Lửa trại', 'Campfire'] };
-  var TABS = [['chal', '🎯', 'Thử thách', 'Challenge'], ['pal', '🎨', 'Màu sắc', 'Colors'], ['grat', '📓', 'Biết ơn', 'Gratitude'], ['rem', '🔔', 'Nhắc nhở', 'Reminder'], ['wk', '', 'Thời gian hoạt động', 'Activity time'], ['acc', '', 'Giao diện', 'Interface'], ['sup', '🤝', 'Hỗ trợ', 'Support']];
+  var TABS = [['chal', '🎯', 'Thử thách', 'Challenge'], ['chat', '', 'Trò chuyện', 'Chat'], ['pal', '🎨', 'Màu sắc', 'Colors'], ['grat', '📓', 'Biết ơn', 'Gratitude'], ['rem', '🔔', 'Nhắc nhở', 'Reminder'], ['wk', '', 'Thời gian hoạt động', 'Activity time'], ['acc', '', 'Giao diện', 'Interface'], ['sup', '🤝', 'Hỗ trợ', 'Support']];
   var cur = 'chal', palMood = null, toast = '', modal = null;
 
   function isEn() { return !!(window.__lang && window.__lang() === 'en'); }
@@ -3319,6 +3319,19 @@
     renderSnd();
   }
 
+  var CHAT_URL = 'https://thikhoahockithuat.lexuandang0302.workers.dev', chatMsgs = [], chatBusy = false, chatErr = '', chatDraft = '', chatFocus = false;
+  function chatSend() {
+    var inp = document.getElementById('mx-chat-in'); if (!inp || chatBusy) return;
+    var m = (inp.value || '').trim().slice(0, 500); if (!m) return;
+    var hist = chatMsgs.slice(-6).map(function (x) { return { role: x.role, text: x.text }; });
+    chatMsgs.push({ role: 'user', text: m }); chatBusy = true; chatErr = ''; chatDraft = ''; chatFocus = true; render();
+    var fail = function (msg) { chatMsgs.pop(); chatDraft = m; chatErr = msg; };
+    fetch(CHAT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: m, history: hist, lang: isEn() ? 'en' : 'vi' }) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (x) { if (x.ok && x.d.reply) chatMsgs.push({ role: 'model', text: x.d.reply, crisis: !!x.d.crisis }); else fail((x.d && x.d.error) || t('Trợ lý đang bận, bạn thử lại sau nhé.', 'The assistant is busy, please try again later.')); })
+      .catch(function () { fail(t('Không kết nối được. Hãy kiểm tra mạng rồi thử lại.', 'Could not connect. Check your connection and try again.')); })
+      .then(function () { chatBusy = false; chatFocus = true; render(); });
+  }
   function chToday() { return CH[Math.floor(Date.now() / 86400000) % CH.length]; }
   function chStats() {
     var done = ls('mx_ch', []), set = {}, i, d = new Date(), streak = 0;
@@ -3347,6 +3360,21 @@
   var B = 'px-4 py-2 rounded-xl text-base font-semibold border border-slate-300 dark:border-slate-600 ';
   function btn(act, label, on, extra) { return '<button type="button" data-act="' + act + '" class="' + B + (on ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-slate-100 dark:bg-slate-800') + ' ' + (extra || '') + '">' + label + '</button>'; }
   var V = {
+    chat: function () {
+      var h = '<p class="text-sm opacity-80 mb-3">' + t('Đây là trợ lý AI, không phải chuyên gia và không thay thế ba mẹ, thầy cô hay chuyên gia tâm lý. Đừng chia sẻ thông tin cá nhân (họ tên, địa chỉ, số điện thoại). Tin nhắn được gửi đến dịch vụ AI để tạo câu trả lời.', 'This is an AI assistant, not a professional, and it does not replace parents, teachers or a psychologist. Do not share personal information (full name, address, phone number). Messages are sent to an AI service to generate replies.') + '</p>';
+      h += '<div id="mx-chat-log" class="space-y-2 mb-3 max-h-[40vh] overflow-y-auto p-3 rounded-2xl bg-slate-50 dark:bg-slate-800">';
+      if (!chatMsgs.length) h += '<p class="text-base opacity-60">' + t('Bạn đang cảm thấy thế nào? Hãy kể cho mình nghe nhé.', 'How are you feeling? Tell me about it.') + '</p>';
+      chatMsgs.forEach(function (m) {
+        var me = m.role === 'user', body = esc(m.text).replace(/\n/g, '<br>');
+        h += '<div class="flex ' + (me ? 'justify-end' : 'justify-start') + '"><div class="max-w-[85%] px-3 py-2 rounded-2xl text-base ' + (me ? 'bg-emerald-600 text-white' : 'bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600') + '">' + body +
+          (m.crisis ? '<div class="mt-2">' + btn('tab:sup', t('Xem cách được hỗ trợ', 'Get support'), false) + '</div>' : '') + '</div></div>';
+      });
+      if (chatBusy) h += '<div class="flex justify-start"><div class="px-3 py-2 rounded-2xl text-base bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 opacity-70">' + t('Đang trả lời...', 'Typing...') + '</div></div>';
+      h += '</div>';
+      if (chatErr) h += '<p class="text-sm text-rose-500 mb-2">' + esc(chatErr) + '</p>';
+      h += '<textarea id="mx-chat-in" rows="2" maxlength="500" placeholder="' + t('Nhập tin nhắn (Enter để gửi)...', 'Type a message (Enter to send)...') + '" class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-base mb-2"></textarea>';
+      return h + '<div class="flex gap-2">' + btn('chatsend', chatBusy ? t('Đang gửi...', 'Sending...') : t('Gửi', 'Send'), true) + (chatMsgs.length ? btn('chatnew', t('Cuộc trò chuyện mới', 'New chat'), false) : '') + '</div>';
+    },
     chal: function () {
       var c = chToday(), s = chStats();
       return '<p class="text-sm uppercase tracking-wider opacity-70 mb-1">' + t('Thử thách hôm nay', "Today's challenge") + '</p><p class="text-2xl font-bold mb-4">' + esc(t(c[0], c[1])) + '</p>' +
@@ -3401,6 +3429,12 @@
     TABS.forEach(function (x) { h += '<button type="button" data-act="tab:' + x[0] + '" class="px-3.5 py-2 rounded-xl text-sm font-semibold ' + (x[0] === cur ? 'bg-emerald-600 text-white' : 'bg-slate-100 dark:bg-slate-800') + '">' + t(x[2], x[3]) + '</button>'; });
     h += '</div><div id="mx-body">' + V[cur]() + '</div>' + (toast ? '<p class="text-sm mt-3 text-emerald-600 dark:text-emerald-400">' + esc(toast) + '</p>' : '');
     modal.firstChild.innerHTML = h;
+    if (cur === 'chat') {
+      var lg = document.getElementById('mx-chat-log'); if (lg) lg.scrollTop = lg.scrollHeight;
+      var ci = document.getElementById('mx-chat-in');
+      if (ci) { ci.value = chatDraft; if (chatFocus && !chatBusy) ci.focus(); }
+      chatFocus = false;
+    }
   }
   function open(tab) {
     if (tab) cur = tab;
@@ -3409,7 +3443,7 @@
       modal.className = 'fixed inset-0 flex items-center justify-center p-3 bg-black/60'; modal.style.zIndex = 9999;
       modal.innerHTML = '<div class="w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-3xl p-6 md:p-8 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 shadow-2xl"></div>';
       document.body.appendChild(modal);
-      modal.addEventListener('click', onClick); modal.addEventListener('input', onInput); modal.addEventListener('change', onInput);
+      modal.addEventListener('click', onClick); modal.addEventListener('keydown', function (e) { if (e.target.id === 'mx-chat-in' && e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); chatSend(); } }); modal.addEventListener('input', onInput); modal.addEventListener('change', onInput);
     }
     toast = ''; modal.style.display = 'flex'; render(); refreshSaved().then(function () { if (modal.style.display !== 'none') render(); });
   }
@@ -3423,6 +3457,8 @@
     if (k === 'tab') cur = v;
     else if (k === 'chal') { var d = ls('mx_ch', []); if (d.indexOf(dstr()) < 0) { d.push(dstr()); sv('mx_ch', d.slice(-400)); } }
     else if (k === 'pal') palMood = v;
+    else if (k === 'chatsend') { chatSend(); return; }
+    else if (k === 'chatnew') { chatMsgs = []; chatErr = ''; chatDraft = ''; }
     else if (k === 'copy') { try { navigator.clipboard.writeText(v); toast = t('Đã sao chép ', 'Copied ') + v; } catch (_) { toast = v; } }
     else if (k === 'gsave') { var g = ls('mx_grat', {}), arr = [0, 1, 2].map(function (i) { return (document.getElementById('mx-g' + i).value || '').trim(); }); if (arr.some(Boolean)) g[dstr()] = arr; else delete g[dstr()]; sv('mx_grat', g); toast = t('Đã lưu.', 'Saved.'); }
     else if (k === 'gdel') { var g2 = ls('mx_grat', {}); delete g2[v]; sv('mx_grat', g2); }
