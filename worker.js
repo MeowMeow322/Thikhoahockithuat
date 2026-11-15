@@ -37,21 +37,24 @@ function hasCrisis(text) {
     return pattern.test(normalized);
   });
 }
-
-function getCorsHeaders(request) {
-JSON.stringify({ error: "Tên biến hiện có: [" + Object.keys(env).join(", ") + "]" }),
-  const isAllowed =
-    ALLOWED_ORIGINS.includes(origin) ||
-    origin.startsWith("http://localhost") ||
-    origin.startsWith("http://127.0.0.1");
-
-  return {
-    "Access-Control-Allow-Origin": isAllowed ? origin : ALLOWED_ORIGINS[0],
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-  };
+const apiKey = (env.GEMINI_API_KEY || "").trim();
+if (!apiKey) {
+  return new Response(
+    JSON.stringify({ error: "Cloudflare đang thấy biến: [" + Object.keys(env).join(", ") + "]" }),
+    { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+  );
 }
 
+const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${DEFAULT_MODEL}:generateContent`;
+
+const response = await fetch(apiUrl, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "x-goog-api-key": apiKey,
+  },
+  body: JSON.stringify({ contents }),
+});
 function isRateLimited(ip) {
   const now = Date.now();
   const timestamps = (hits.get(ip) || []).filter((t) => now - t < RATE_WINDOW_MS);
