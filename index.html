@@ -3241,7 +3241,7 @@
   }
   applyA11y();
 
-  var sndMsg = '', sndBox = null, AUD = {}, playing = null, vol = 0.5, SC = 'mindart-sounds', saved = {}, dls = {}, SZ = { rain: 15, sea: 14, forest: 13, fire: 17 };
+  var sndMsg = '', sndBuf = null, sndBox = null, AUD = {}, playing = null, vol = 0.5, SC = 'mindart-sounds', saved = {}, dls = {}, SZ = { rain: 15, sea: 14, forest: 13, fire: 17 };
   function sUrl(k) { return new URL('sounds/' + k + '.mp3', location.href).href; }
   function canStore() { return !!(window.caches && window.isSecureContext); }
   function refreshSaved() {
@@ -3251,22 +3251,22 @@
     }).catch(function () {});
   }
   function dropAudio(k) { var a = AUD[k]; if (a) { a.pause(); if (a.__obj) URL.revokeObjectURL(a.__obj); delete AUD[k]; if (playing === k) playing = null; } }
-  function failPlay() { playing = null; sndMsg = t('Không phát được âm thanh. Hãy tải lại âm thanh rồi thử lại.', "Can't play the sound. Please download it again and retry."); renderSnd(); }
+  function failPlay() { var k = playing; if (k) dropAudio(k); playing = null; sndBuf = null; sndMsg = t('Không phát được âm thanh. Hãy kiểm tra mạng rồi thử lại.', "Can't play the sound. Check your connection and try again."); renderSnd(); }
   function startAudio(k) {
     var a = AUD[k];
     if (a) { a.volume = vol; var p0 = a.play(); if (p0 && p0.catch) p0.catch(failPlay); return; }
-    a = AUD[k] = new Audio(); a.preload = 'none'; a.loop = true; a.volume = vol;
-    var go = function () { var p = a.play(); if (p && p.catch) p.catch(failPlay); };
-    if (saved[k] && canStore()) {
-      caches.open(SC).then(function (c) { return c.match(sUrl(k)); }).then(function (r) { return r ? r.blob() : Promise.reject(); })
-        .then(function (bl) { a.__obj = URL.createObjectURL(bl); a.src = a.__obj; go(); })
-        .catch(function () { a.src = 'sounds/' + k + '.mp3'; go(); });
-    } else { a.src = 'sounds/' + k + '.mp3'; go(); }
+    a = AUD[k] = new Audio(); a.preload = 'auto'; a.loop = true; a.volume = vol;
+    sndBuf = k; renderSnd();
+    a.addEventListener('playing', function () { if (sndBuf === k) { sndBuf = null; renderSnd(); } });
+    a.addEventListener('waiting', function () { if (playing === k) { sndBuf = k; renderSnd(); } });
+    a.addEventListener('error', function () { if (playing === k) failPlay(); });
+    a.src = 'sounds/' + k + '.mp3';
+    var p = a.play(); if (p && p.catch) p.catch(failPlay);
   }
   function playSnd(k) {
     var prev = playing;
     if (prev && AUD[prev]) { AUD[prev].pause(); AUD[prev].currentTime = 0; }
-    playing = null;
+    playing = null; sndBuf = null;
     if (prev === k) return;
     playing = k; startAudio(k);
   }
@@ -3296,26 +3296,15 @@
   var SBTN = 'px-2 py-1.5 rounded-lg text-xs font-semibold border ';
   function renderSnd() {
     if (!sndBox) return;
-    var keys = Object.keys(SND), have = keys.filter(function (k) { return saved[k]; });
+    var keys = Object.keys(SND);
     var h = '<h4 class="font-bold text-sm text-teal-950 dark:text-teal-100 mb-2">' + t('Âm thanh thư giãn', 'Relaxing sounds') + '</h4>';
-    if (have.length) {
-      h += '<div class="grid grid-cols-2 gap-1.5 mb-2">';
-      have.forEach(function (k) { h += '<button type="button" data-sact="snd:' + k + '" class="' + SBTN + (playing === k ? 'bg-teal-600 text-white border-teal-600' : 'bg-teal-50 dark:bg-slate-800 text-teal-800 dark:text-teal-200 border-slate-200 dark:border-slate-600') + '">' + t(SND[k][0], SND[k][1]) + '</button>'; });
-      h += '</div>' + (playing ? '<p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">' + t('Đang phát', 'Now playing') + ': <b>' + t(SND[playing][0], SND[playing][1]) + '</b> · ' + t('bấm lại để dừng', 'tap again to stop') + '</p>' : '') +
-        '<label class="text-[11px] text-slate-500 dark:text-slate-400 block mb-2">' + t('Âm lượng', 'Volume') + ' <input id="mx-vol" type="range" min="0" max="1" step="0.05" value="' + vol + '" class="w-full"></label>';
-    } else {
-      h += '<p class="text-[11px] text-slate-400 mb-2">' + t('Tải một âm thanh bên dưới, âm thanh đó sẽ hiện ở đây để bạn nghe.', 'Download a sound below and it will appear here for you to play.') + '</p>';
-    }
+    h += '<p class="text-[11px] text-slate-400 mb-2">' + t('Bấm một âm thanh để nghe trực tiếp, không cần tải về.', 'Tap a sound to listen right away, no download needed.') + '</p>';
+    h += '<div class="grid grid-cols-2 gap-1.5 mb-2">';
+    keys.forEach(function (k) { h += '<button type="button" data-sact="snd:' + k + '" class="' + SBTN + (playing === k ? 'bg-teal-600 text-white border-teal-600' : 'bg-teal-50 dark:bg-slate-800 text-teal-800 dark:text-teal-200 border-slate-200 dark:border-slate-600') + '">' + t(SND[k][0], SND[k][1]) + '</button>'; });
+    h += '</div>';
+    if (playing) h += '<p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">' + (sndBuf === playing ? t('Đang tải âm thanh...', 'Loading sound...') : t('Đang phát', 'Now playing') + ': <b>' + t(SND[playing][0], SND[playing][1]) + '</b> · ' + t('bấm lại để dừng', 'tap again to stop')) + '</p>';
+    h += '<label class="text-[11px] text-slate-500 dark:text-slate-400 block mb-2">' + t('Âm lượng', 'Volume') + ' <input id="mx-vol" type="range" min="0" max="1" step="0.05" value="' + vol + '" class="w-full"></label>';
     if (sndMsg) h += '<p class="text-[11px] text-rose-500 mb-2">' + esc(sndMsg) + '</p>';
-    h += '<p class="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">' + t('Tải âm thanh', 'Download sounds') + '</p>';
-    if (!canStore()) h += '<p class="text-[11px] text-slate-400">' + t('Cần mở trang qua địa chỉ https (không mở trực tiếp file) mới tải được âm thanh.', 'Open the page via https (not directly from a file) to download sounds.') + '</p>';
-    else {
-      h += '<p class="text-[11px] text-slate-400 mb-1">' + t('Tải về thiết bị để nghe, kể cả khi không có mạng (mỗi bài khoảng 13–17 MB, nên dùng Wi-Fi).', 'Download to your device to listen, even offline (about 13–17 MB each, use Wi-Fi).') + '</p>';
-      keys.forEach(function (k) {
-        h += '<div class="flex items-center justify-between gap-2 py-1 text-[11px] text-slate-600 dark:text-slate-300"><span>' + t(SND[k][0], SND[k][1]) + ' <span class="opacity-60">(~' + SZ[k] + ' MB)</span></span>' +
-          (dls[k] != null ? '<span id="mx-dls-' + k + '">' + t('Đang tải...', 'Downloading...') + '</span>' : saved[k] ? '<span><span class="text-emerald-600 dark:text-emerald-400">' + t('Đã tải', 'Downloaded') + '</span> <button type="button" data-sact="rm:' + k + '" class="ml-1 underline">' + t('Xóa', 'Remove') + '</button></span>' : '<button type="button" data-sact="dl:' + k + '" class="px-2 py-0.5 rounded-md border border-slate-300 dark:border-slate-600">' + t('Tải', 'Download') + '</button>') + '</div>';
-      });
-    }
     sndBox.innerHTML = h;
   }
   function mountSounds() {
