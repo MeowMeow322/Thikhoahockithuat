@@ -3241,7 +3241,7 @@
   }
   applyA11y();
 
-  var sndMsg = '', sndBuf = null, sndBox = null, AUD = {}, playing = null, vol = 0.5, SC = 'mindart-sounds', saved = {}, dls = {}, SZ = { rain: 15, sea: 14, forest: 13, fire: 17 };
+  var sndMsg = '', sndWhy = '', sndBuf = null, sndBox = null, AUD = {}, playing = null, vol = 0.5, SC = 'mindart-sounds', saved = {}, dls = {}, SZ = { rain: 15, sea: 14, forest: 13, fire: 17 };
   function sUrl(k) { return new URL(k + '.mp3', location.href).href; }
   function canStore() { return !!(window.caches && window.isSecureContext); }
   function refreshSaved() {
@@ -3297,7 +3297,7 @@
     try { o.g.disconnect(); } catch (_) {}
     delete SYN[k];
   }
-  function failPlay() { var k = playing; if (k) dropAudio(k); sndBuf = null; playing = k; if (k && startSynth(k)) { sndMsg = ''; renderSnd(); return; } playing = null; sndMsg = t('Không phát được âm thanh. Hãy kiểm tra mạng rồi thử lại.', "Can't play the sound. Check your connection and try again."); renderSnd(); }
+  function failPlay() { var k = playing; var why = sndWhy ? ' (' + sndWhy + ')' : ''; if (k) dropAudio(k); sndBuf = null; playing = k; if (k && startSynth(k)) { sndMsg = ''; renderSnd(); return; } playing = null; sndMsg = t('Không phát được âm thanh. Hãy kiểm tra mạng rồi thử lại.', "Can't play the sound. Check your connection and try again.") + why; renderSnd(); }
   function startAudio(k) {
     var a = AUD[k];
     if (a) { a.volume = vol; var p0 = a.play(); if (p0 && p0.catch) p0.catch(function (e) { if (!(e && e.name === 'AbortError') && playing === k && AUD[k] === a) failPlay(); }); return; }
@@ -3305,7 +3305,7 @@
     sndBuf = k; renderSnd();
     a.addEventListener('playing', function () { if (sndBuf === k) { sndBuf = null; renderSnd(); } });
     a.addEventListener('waiting', function () { if (playing === k) { sndBuf = k; renderSnd(); } });
-    var bad = function (e) { if (e && e.name === 'AbortError') return; if (playing === k && AUD[k] === a) failPlay(); };
+    var bad = function (e) { if (e && e.name === 'AbortError') return; sndWhy = e && e.name ? e.name : (a.error ? 'media-' + a.error.code : 'error'); if (playing === k && AUD[k] === a) failPlay(); };
     a.addEventListener('error', function () { bad(); });
     a.src = k + '.mp3';
     var p = a.play(); if (p && p.catch) p.catch(bad);

@@ -1,4 +1,4 @@
-const CACHE = 'mindart-v46';
+const CACHE = 'mindart-v47';
 const CORE = ['./', './index.html', './manifest.webmanifest', './favicon.png', './icon-192.png', './icon-512.png'];
 const SKIP = /youtube\.com|youtu\.be|googlevideo\.com|ytimg\.com|\/sounds\/|\.mp3(\?|$)/;
 
@@ -11,13 +11,20 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const r = e.request;
   if (r.method !== 'GET' || !r.url.startsWith('http') || SKIP.test(r.url)) return;
+  if (r.mode === 'navigate') {
+    e.respondWith(fetch(r).then((res) => {
+      if (res && res.ok) caches.open(CACHE).then((c) => c.put(r, res.clone())).catch(() => {});
+      return res;
+    }).catch(() => caches.open(CACHE).then(async (c) => (await c.match(r, { ignoreSearch: true })) || c.match('./index.html'))));
+    return;
+  }
   e.respondWith(caches.open(CACHE).then(async (cache) => {
-    const hit = await cache.match(r, { ignoreSearch: r.mode === 'navigate' });
+    const hit = await cache.match(r);
     const net = fetch(r).then((res) => {
       if (res && (res.ok || res.type === 'opaque') && res.status !== 206) cache.put(r, res.clone()).catch(() => {});
       return res;
     }).catch(() => null);
     if (hit) { e.waitUntil(net); return hit; }
-    return (await net) || (r.mode === 'navigate' ? cache.match('./index.html') : Response.error());
+    return (await net) || Response.error();
   }));
 });
