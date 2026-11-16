@@ -3214,7 +3214,7 @@
     happy: { l: ['Vui', 'Happy'], c: ['#FFD166', '#EF476F', '#06D6A0', '#118AB2', '#F78C6B', '#9B5DE0'], t: ['Bảng màu rực rỡ để bạn thoải mái tô theo cảm hứng.', 'A vivid palette so you can color freely.'] }
   };
   var SND = { rain: ['Mưa', 'Rain'], sea: ['Sóng biển', 'Ocean'], forest: ['Rừng', 'Forest'], fire: ['Lửa trại', 'Campfire'] };
-  var TABS = [['chal', '🎯', 'Thử thách', 'Challenge'], ['pal', '🎨', 'Màu sắc', 'Colors'], ['grat', '📓', 'Biết ơn', 'Gratitude'], ['rem', '🔔', 'Nhắc nhở', 'Reminder'], ['wk', '', 'Thời gian hoạt động', 'Activity time'], ['acc', '', 'Giao diện', 'Interface'], ['sup', '🤝', 'Hỗ trợ', 'Support']];
+  var TABS = [['chal', '🎯', 'Thử thách', 'Challenge'], ['pal', '🎨', 'Màu sắc', 'Colors'], ['grat', '📓', 'Nhật ký', 'Diary'], ['rem', '🔔', 'Nhắc nhở', 'Reminder'], ['wk', '', 'Thời gian hoạt động', 'Activity time'], ['acc', '', 'Giao diện', 'Interface'], ['sup', '🤝', 'Hỗ trợ', 'Support']];
   var cur = 'chal', solo = false, palMood = null, toast = '', modal = null;
 
   function isEn() { return !!(window.__lang && window.__lang() === 'en'); }
@@ -3407,8 +3407,8 @@
     h.forEach(function (r) { days[dstr(new Date(r.t))] = (days[dstr(new Date(r.t))] || 0) + 1; if (r.before) b.push(r.before); if (r.after) a.push(r.after); });
     for (i = 6; i >= 0; i--) { var d = new Date(); d.setDate(d.getDate() - i); bars.push([d.getDate(), days[dstr(d)] || 0]); }
     var avg = function (x) { return x.length ? x.reduce(function (p, q) { return p + q; }, 0) / x.length : null; };
-    var g = ls('mx_grat', {}), gd = 0, cd = 0, chs = ls('mx_ch', []);
-    bars.forEach(function (_, k) { var d = new Date(); d.setDate(d.getDate() - (6 - k)); if (g[dstr(d)]) gd++; if (chs.indexOf(dstr(d)) >= 0) cd++; });
+    var g = ls('mx_grat', {}), dy = ls('mx_diary', {}), gd = 0, cd = 0, chs = ls('mx_ch', []);
+    bars.forEach(function (_, k) { var d = new Date(); d.setDate(d.getDate() - (6 - k)); if (g[dstr(d)] || (dy[dstr(d)] && dy[dstr(d)].length)) gd++; if (chs.indexOf(dstr(d)) >= 0) cd++; });
     return { n: h.length, dd: Object.keys(days).length, bf: avg(b), af: avg(a), bars: bars, gd: gd, cd: cd };
   }
 
@@ -3445,11 +3445,22 @@
       return h + '</div><p class="text-base">' + esc(t(p.t[0], p.t[1])) + '</p><p class="text-sm opacity-70 mt-2">' + t('Bấm vào ô màu để sao chép mã màu, rồi dán vào ô tự pha màu khi tô.', 'Tap a swatch to copy its code, then paste it into the custom color box when coloring.') + '</p>';
     },
     grat: function () {
-      var g = ls('mx_grat', {}), td = g[dstr()] || ['', '', ''], h = '<p class="text-base opacity-80 mb-3">' + t('Hôm nay bạn biết ơn điều gì? Ba điều nhỏ cũng được.', 'What are you grateful for today? Three small things are enough.') + '</p>';
-      for (var i = 0; i < 3; i++) h += '<input id="mx-g' + i + '" maxlength="140" value="' + esc(td[i] || '') + '" placeholder="' + (i + 1) + '." class="w-full mb-2 px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">';
-      h += btn('gsave', t('Lưu', 'Save'), false);
-      var ks = Object.keys(g).sort().reverse().slice(0, 7);
-      if (ks.length) h += '<div class="mt-4 space-y-2 max-h-48 overflow-y-auto">' + ks.map(function (k) { return '<div class="text-base p-2 rounded-xl bg-slate-100 dark:bg-slate-800"><b>' + k + '</b> <button type="button" data-act="gdel:' + k + '" class="float-right text-sm opacity-70">✕</button><br>' + g[k].filter(Boolean).map(esc).join(' · ') + '</div>'; }).join('') + '</div>';
+      var dr = ls('mx_diary', {}), tk = dstr(), IN = 'w-full mb-2 px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800';
+      var MO = [['', 'Không chọn', 'Not set'], ['vg', 'Rất tốt', 'Very good'], ['g', 'Tốt', 'Good'], ['n', 'Bình thường', 'Okay'], ['b', 'Chưa ổn', 'Not great'], ['vb', 'Rất tệ', 'Very bad']];
+      var h = '<p class="text-base opacity-80 mb-3">' + t('Hôm nay của bạn thế nào? Viết lại điều bạn muốn ghi nhớ.', 'How is your day going? Write down what you want to remember.') + '</p>';
+      h += '<label for="mx-dm" class="block text-sm opacity-80 mb-1">' + t('Tâm trạng lúc này', 'Mood right now') + '</label>';
+      h += '<select id="mx-dm" class="' + IN + '">' + MO.map(function (o) { return '<option value="' + o[0] + '">' + t(o[1], o[2]) + '</option>'; }).join('') + '</select>';
+      h += '<textarea id="mx-dt" rows="4" maxlength="500" placeholder="' + t('Viết vài dòng về ngày hôm nay...', 'Write a few lines about today...') + '" class="' + IN + ' resize-none"></textarea>';
+      h += btn('dsave', t('Lưu vào nhật ký', 'Add to diary'), false);
+      var ds = Object.keys(dr).filter(function (k) { return dr[k] && dr[k].length; }).sort().reverse().slice(0, 7);
+      if (ds.length) h += '<div class="mt-4 space-y-3 max-h-64 overflow-y-auto">' + ds.map(function (d) {
+        var rows = '';
+        for (var i = dr[d].length - 1; i >= 0; i--) {
+          var e = dr[d][i], mo = MO.filter(function (o) { return o[0] === e.m && o[0]; })[0];
+          rows += '<div class="text-base p-2 rounded-xl bg-slate-100 dark:bg-slate-800"><b>' + esc(e.t || '') + '</b>' + (mo ? ' · <span class="opacity-80">' + t(mo[1], mo[2]) + '</span>' : '') + ' <button type="button" data-act="ddel:' + d + '|' + i + '" class="float-right text-sm opacity-70">' + t('Xóa', 'Delete') + '</button><br>' + esc(e.x || '').replace(/\n/g, '<br>') + '</div>';
+        }
+        return '<div><p class="text-sm font-bold opacity-80 mb-1">' + (d === tk ? t('Hôm nay', 'Today') + ' · ' : '') + d + '</p><div class="space-y-2">' + rows + '</div></div>';
+      }).join('') + '</div>';
       return h + '<p class="text-sm opacity-70 mt-3">' + t('Dữ liệu chỉ lưu trên thiết bị này.', 'Data is stored only on this device.') + '</p>';
     },
     rem: function () {
@@ -3464,7 +3475,7 @@
       var msg = !w.n ? t('Tuần này bạn chưa vẽ lần nào. Chỉ cần vài phút cũng đủ, bạn thử một thử thách nhé!', "You haven't drawn this week. A few minutes is enough, try a challenge!") : (w.bf != null && w.af != null && w.af > w.bf) ? t('Tâm trạng của bạn thường tốt hơn sau khi vẽ. Thật tuyệt!', 'Your mood is usually better after drawing. Wonderful!') : w.dd >= 4 ? t('Bạn vẽ khá đều trong tuần này. Hãy tự khen mình nhé!', 'You drew regularly this week. Give yourself some credit!') : t('Mỗi lần dừng lại để vẽ đều là một cách chăm sóc bản thân. Cố lên!', 'Each time you stop to draw is a way of caring for yourself. Keep going!');
       var h = '<div class="grid grid-cols-3 gap-2 text-center mb-4"><div class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800"><div class="text-3xl font-bold">' + w.n + '</div><div class="text-sm">' + t('lần vẽ', 'drawings') + '</div></div><div class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800"><div class="text-3xl font-bold">' + w.dd + '/7</div><div class="text-sm">' + t('ngày có vẽ', 'days drawn') + '</div></div><div class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800"><div class="text-3xl font-bold">' + (w.bf != null && w.af != null ? (w.af - w.bf >= 0 ? '+' : '') + (w.af - w.bf).toFixed(1) : '–') + '</div><div class="text-sm">' + t('tâm trạng sau vẽ', 'mood change') + '</div></div></div><div class="flex items-end justify-between gap-1 h-20 mb-1">';
       w.bars.forEach(function (x) { h += '<div class="flex-1 flex flex-col items-center justify-end h-full"><div style="height:' + Math.round(x[1] / mx * 100) + '%;min-height:' + (x[1] ? 4 : 0) + 'px" class="w-full rounded-t bg-emerald-500"></div><span class="text-xs opacity-70">' + x[0] + '</span></div>'; });
-      return h + '</div><p class="text-base mt-3">📓 ' + t('Ngày viết biết ơn', 'Gratitude days') + ': <b>' + w.gd + '</b> · 🎯 ' + t('Thử thách xong', 'Challenges done') + ': <b>' + w.cd + '</b></p><p class="text-base mt-3 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950">' + msg + '</p>';
+      return h + '</div><p class="text-base mt-3">📓 ' + t('Ngày viết nhật ký', 'Diary days') + ': <b>' + w.gd + '</b> · 🎯 ' + t('Thử thách xong', 'Challenges done') + ': <b>' + w.cd + '</b></p><p class="text-base mt-3 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950">' + msg + '</p>';
     },
     acc: function () {
       var a = ls('mx_a11y', {});
@@ -3516,8 +3527,8 @@
     else if (k === 'chatsend') { chatSend(); return; }
     else if (k === 'chatnew') { chatMsgs = []; chatErr = ''; chatDraft = ''; }
     else if (k === 'copy') { try { navigator.clipboard.writeText(v); toast = t('Đã sao chép ', 'Copied ') + v; } catch (_) { toast = v; } }
-    else if (k === 'gsave') { var g = ls('mx_grat', {}), arr = [0, 1, 2].map(function (i) { return (document.getElementById('mx-g' + i).value || '').trim(); }); if (arr.some(Boolean)) g[dstr()] = arr; else delete g[dstr()]; sv('mx_grat', g); toast = t('Đã lưu.', 'Saved.'); }
-    else if (k === 'gdel') { var g2 = ls('mx_grat', {}); delete g2[v]; sv('mx_grat', g2); }
+    else if (k === 'dsave') { var dtx = (document.getElementById('mx-dt').value || '').trim(); if (!dtx) toast = t('Hãy viết vài dòng nhé.', 'Please write a few lines.'); else { var dry = ls('mx_diary', {}), dtk = dstr(), dnw = new Date(); (dry[dtk] = dry[dtk] || []).push({ t: pad(dnw.getHours()) + ':' + pad(dnw.getMinutes()), m: document.getElementById('mx-dm').value, x: dtx }); sv('mx_diary', dry); toast = t('Đã lưu.', 'Saved.'); } }
+    else if (k === 'ddel') { var ddp = (v || '').split('|'), dry2 = ls('mx_diary', {}); if (dry2[ddp[0]]) { dry2[ddp[0]].splice(+ddp[1], 1); if (!dry2[ddp[0]].length) delete dry2[ddp[0]]; sv('mx_diary', dry2); } }
     else if (k === 'rtest') { notify(true); }
     else if (k === 'fs') { var a1 = ls('mx_a11y', {}); a1.fs = +v; sv('mx_a11y', a1); applyA11y(); }
     else if (k === 'accreset') { sv('mx_a11y', {}); applyA11y(); }
