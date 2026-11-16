@@ -3214,7 +3214,7 @@
     happy: { l: ['Vui', 'Happy'], c: ['#FFD166', '#EF476F', '#06D6A0', '#118AB2', '#F78C6B', '#9B5DE0'], t: ['Bảng màu rực rỡ để bạn thoải mái tô theo cảm hứng.', 'A vivid palette so you can color freely.'] }
   };
   var SND = { rain: ['Mưa', 'Rain'], sea: ['Sóng biển', 'Ocean'], forest: ['Rừng', 'Forest'], fire: ['Lửa trại', 'Campfire'] };
-  var TABS = [['chal', '🎯', 'Thử thách', 'Challenge'], ['pal', '🎨', 'Màu sắc', 'Colors'], ['grat', '📓', 'Nhật ký', 'Diary'], ['rem', '🔔', 'Nhắc nhở', 'Reminder'], ['wk', '', 'Thời gian hoạt động', 'Activity time'], ['acc', '', 'Giao diện', 'Interface'], ['sup', '🤝', 'Hỗ trợ', 'Support']];
+  var TABS = [['chal', '', 'Thử thách', 'Challenge'], ['pal', '', 'Màu sắc', 'Colors'], ['grat', '', 'Nhật ký', 'Diary'], ['rem', '', 'Nhắc nhở', 'Reminder'], ['wk', '', 'Thời gian hoạt động', 'Activity time'], ['acc', '', 'Giao diện', 'Interface'], ['sup', '', 'Hỗ trợ', 'Support']];
   var cur = 'chal', solo = false, palMood = null, toast = '', modal = null;
 
   function isEn() { return !!(window.__lang && window.__lang() === 'en'); }
@@ -3433,9 +3433,9 @@
     chal: function () {
       var c = chToday(), s = chStats();
       return '<p class="text-sm uppercase tracking-wider opacity-70 mb-1">' + t('Thử thách hôm nay', "Today's challenge") + '</p><p class="text-2xl font-bold mb-4">' + esc(t(c[0], c[1])) + '</p>' +
-        btn('chal', s.today ? t('Đã hoàn thành ✓', 'Completed ✓') : t('Mình đã làm xong!', 'I did it!'), s.today) +
-        '<p class="text-base mt-4">🔥 ' + t('Chuỗi hiện tại', 'Current streak') + ': <b>' + s.streak + '</b> · ' + t('Tổng cộng', 'Total') + ': <b>' + s.total + '</b></p>' +
-        '<p class="text-base opacity-80 mt-1">' + (s.total >= 30 ? t('🏅 Huy hiệu: Người bền bỉ (30 thử thách)', '🏅 Badge: Persistent (30 challenges)') : s.total >= 7 ? t('🥈 Huy hiệu: Kiên trì (7 thử thách). Tiếp tục đến 30 nhé!', '🥈 Badge: Steady (7 challenges). Keep going to 30!') : s.total >= 1 ? t('🥉 Huy hiệu: Khởi đầu. Còn ' + (7 - s.total) + ' thử thách nữa để lên huy hiệu tiếp theo.', '🥉 Badge: Getting started. ' + (7 - s.total) + ' more to the next badge.') : t('Hoàn thành thử thách đầu tiên để nhận huy hiệu.', 'Complete your first challenge to earn a badge.')) + '</p>';
+        btn('chal', s.today ? t('Đã hoàn thành', 'Completed') : t('Mình đã làm xong!', 'I did it!'), s.today) +
+        '<p class="text-base mt-4">' + t('Chuỗi hiện tại', 'Current streak') + ': <b>' + s.streak + '</b> · ' + t('Tổng cộng', 'Total') + ': <b>' + s.total + '</b></p>' +
+        '<p class="text-base opacity-80 mt-1">' + (s.total >= 30 ? t('Huy hiệu: Người bền bỉ (30 thử thách)', 'Badge: Persistent (30 challenges)') : s.total >= 7 ? t('Huy hiệu: Kiên trì (7 thử thách). Tiếp tục đến 30 nhé!', 'Badge: Steady (7 challenges). Keep going to 30!') : s.total >= 1 ? t('Huy hiệu: Khởi đầu. Còn ' + (7 - s.total) + ' thử thách nữa để lên huy hiệu tiếp theo.', 'Badge: Getting started. ' + (7 - s.total) + ' more to the next badge.') : t('Hoàn thành thử thách đầu tiên để nhận huy hiệu.', 'Complete your first challenge to earn a badge.')) + '</p>';
     },
     pal: function () {
       var m = palMood || autoMood() || 'stress', p = PAL[m], h = '<p class="text-base opacity-80 mb-3">' + t('Hôm nay bạn thấy thế nào? Chọn để xem bảng màu gợi ý.', 'How do you feel today? Pick one to see a suggested palette.') + '</p><div class="flex flex-wrap gap-2 mb-4">';
@@ -3475,7 +3475,7 @@
       var msg = !w.n ? t('Tuần này bạn chưa vẽ lần nào. Chỉ cần vài phút cũng đủ, bạn thử một thử thách nhé!', "You haven't drawn this week. A few minutes is enough, try a challenge!") : (w.bf != null && w.af != null && w.af > w.bf) ? t('Tâm trạng của bạn thường tốt hơn sau khi vẽ. Thật tuyệt!', 'Your mood is usually better after drawing. Wonderful!') : w.dd >= 4 ? t('Bạn vẽ khá đều trong tuần này. Hãy tự khen mình nhé!', 'You drew regularly this week. Give yourself some credit!') : t('Mỗi lần dừng lại để vẽ đều là một cách chăm sóc bản thân. Cố lên!', 'Each time you stop to draw is a way of caring for yourself. Keep going!');
       var h = '<div class="grid grid-cols-3 gap-2 text-center mb-4"><div class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800"><div class="text-3xl font-bold">' + w.n + '</div><div class="text-sm">' + t('lần vẽ', 'drawings') + '</div></div><div class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800"><div class="text-3xl font-bold">' + w.dd + '/7</div><div class="text-sm">' + t('ngày có vẽ', 'days drawn') + '</div></div><div class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800"><div class="text-3xl font-bold">' + (w.bf != null && w.af != null ? (w.af - w.bf >= 0 ? '+' : '') + (w.af - w.bf).toFixed(1) : '–') + '</div><div class="text-sm">' + t('tâm trạng sau vẽ', 'mood change') + '</div></div></div><div class="flex items-end justify-between gap-1 h-20 mb-1">';
       w.bars.forEach(function (x) { h += '<div class="flex-1 flex flex-col items-center justify-end h-full"><div style="height:' + Math.round(x[1] / mx * 100) + '%;min-height:' + (x[1] ? 4 : 0) + 'px" class="w-full rounded-t bg-emerald-500"></div><span class="text-xs opacity-70">' + x[0] + '</span></div>'; });
-      return h + '</div><p class="text-base mt-3">📓 ' + t('Ngày viết nhật ký', 'Diary days') + ': <b>' + w.gd + '</b> · 🎯 ' + t('Thử thách xong', 'Challenges done') + ': <b>' + w.cd + '</b></p><p class="text-base mt-3 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950">' + msg + '</p>';
+      return h + '</div><p class="text-base mt-3">' + t('Ngày viết nhật ký', 'Diary days') + ': <b>' + w.gd + '</b> · ' + t('Thử thách xong', 'Challenges done') + ': <b>' + w.cd + '</b></p><p class="text-base mt-3 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950">' + msg + '</p>';
     },
     acc: function () {
       var a = ls('mx_a11y', {});
@@ -3484,7 +3484,7 @@
     },
     sup: function () {
       var h = '<p class="text-base mb-3">' + t('Nếu bạn thấy quá tải, buồn hoặc lo lắng kéo dài, bạn không phải đi một mình. Hãy nói với một người bạn tin tưởng: ba mẹ, người thân, thầy cô hoặc cô thầy phụ trách tâm lý ở trường.', "If you feel overwhelmed, sad or anxious for a long time, you don't have to go through it alone. Talk to someone you trust: a parent, relative, teacher or the school counselor.") + '</p><div class="space-y-2 mb-3">';
-      SUPPORT.forEach(function (s) { h += '<a href="tel:' + s.n + '" class="block p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800"><span class="text-2xl font-bold">📞 ' + s.n + '</span><br><span class="text-base">' + esc(t(s.vi, s.en)) + '</span></a>'; });
+      SUPPORT.forEach(function (s) { h += '<a href="tel:' + s.n + '" class="block p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800"><span class="text-2xl font-bold">' + s.n + '</span><br><span class="text-base">' + esc(t(s.vi, s.en)) + '</span></a>'; });
       return h + '</div><p class="text-sm opacity-70">' + t('Kết quả DASS chỉ mang tính tham khảo, không phải chẩn đoán. Nếu bạn thấy không an toàn ngay lúc này, hãy gọi 115 hoặc nhờ người lớn ở gần.', 'DASS results are for reference only, not a diagnosis. If you feel unsafe right now, call 115 or ask a nearby adult for help.') + '</p>';
     }
   };
@@ -3546,7 +3546,7 @@
   function notify(test) {
     if (!('Notification' in window)) return;
     var go = function () {
-      var title = t('Đến giờ vẽ rồi 🎨', 'Time to draw 🎨'), body = test ? t('Đây là lời nhắc thử. Chúc bạn một ngày dịu dàng!', 'This is a test reminder. Have a gentle day!') : t('Dành vài phút vẽ để thư giãn nhé.', 'Take a few minutes to draw and relax.');
+      var title = t('Đến giờ vẽ rồi', 'Time to draw'), body = test ? t('Đây là lời nhắc thử. Chúc bạn một ngày dịu dàng!', 'This is a test reminder. Have a gentle day!') : t('Dành vài phút vẽ để thư giãn nhé.', 'Take a few minutes to draw and relax.');
       if (navigator.serviceWorker && navigator.serviceWorker.ready) navigator.serviceWorker.ready.then(function (r) { r.showNotification(title, { body: body, icon: './icon-192.png' }); }).catch(function () { new Notification(title, { body: body }); });
       else new Notification(title, { body: body });
     };
