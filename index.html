@@ -3561,7 +3561,7 @@
   function early() {
     bindSkip();
     addButtons(); mountSounds();
-    var ai = document.getElementById('mx-ai-open'); if (ai) ai.addEventListener('click', function () { open('chat', { solo: true }); });
+    var ai = document.getElementById('mx-ai-open'); if (ai) ai.addEventListener('click', function () { if (window.mxChat) window.mxChat.open(); else open('chat', { solo: true }); });
     var lb = document.getElementById('btn-lang');
     if (lb) lb.addEventListener('click', function () { setTimeout(function () { var b = document.getElementById('mx-open'); if (b) { b.title = t('Tính năng', 'Features'); b.setAttribute('aria-label', b.title); } render(); renderSnd(); checkSevere(); }, 80); });
   }
@@ -3575,5 +3575,131 @@
   if (document.readyState === 'complete') setTimeout(init, 300); else window.addEventListener('load', function () { setTimeout(init, 300); });
 })();
 </script>
+<script>
+/* Khung chat AI toàn màn hình (nằm trong trang, mở từ nút "AI hỗ trợ tâm lý") */
+(function () {
+  'use strict';
+  var CHAT_URL = 'https://thikhoahockithuat.lexuandang0302.workers.dev', KEY = 'mindart_ai_chat';
+  var msgs = [], busy = false, err = '', root, log, input, sendBtn, count, errEl, prevFocus;
+  function en() { return !!(window.__lang && window.__lang() === 'en'); }
+  function T(v, e) { return en() ? e : v; }
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function fmt(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>'); }
+  try { var sv = JSON.parse(localStorage.getItem(KEY)); if (Array.isArray(sv)) msgs = sv.slice(-40); } catch (_) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(msgs.slice(-40))); } catch (_) {} }
+  var SUG = [
+    ['😮‍💨', 'Dạo này mình thấy căng thẳng vì học tập', "I've been stressed about school lately"],
+    ['🌬️', 'Hướng dẫn mình hít thở chậm để bình tĩnh', 'Guide me through slow breathing to calm down'],
+    ['🎨', 'Gợi ý hoạt động vẽ để thư giãn', 'Suggest a relaxing drawing activity'],
+    ['😴', 'Mình khó ngủ và hay suy nghĩ lung tung', "I can't sleep and my mind keeps racing"]
+  ];
+
+  function build() {
+    if (root) return;
+    var st = document.createElement('style');
+    st.textContent = '@keyframes mxcb{0%,80%,100%{opacity:.25;transform:none}40%{opacity:1;transform:translateY(-3px)}}@keyframes mxcr{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}' +
+      '#mx-chat .mxd span{display:inline-block;width:7px;height:7px;margin:0 2px;border-radius:9999px;background:currentColor;animation:mxcb 1.2s infinite}#mx-chat .mxd span:nth-child(2){animation-delay:.2s}#mx-chat .mxd span:nth-child(3){animation-delay:.4s}#mx-chat .mxm{animation:mxcr .25s ease both}' +
+      '#mx-chat{height:100dvh}html[data-rm="1"] #mx-chat *{animation:none!important}';
+    document.head.appendChild(st);
+    root = document.createElement('div');
+    root.id = 'mx-chat'; root.setAttribute('role', 'dialog'); root.setAttribute('aria-modal', 'true');
+    root.className = 'hidden fixed inset-0 z-[70] bg-black/40 flex items-stretch sm:items-center justify-center sm:p-4';
+    root.innerHTML =
+      '<div class="flex flex-col w-full sm:max-w-3xl sm:h-[92vh] sm:rounded-3xl overflow-hidden bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 sm:border border-teal-200 dark:border-slate-700 shadow-2xl">' +
+        '<div class="flex items-center gap-2 px-3 py-3 border-b border-teal-100 dark:border-slate-800">' +
+          '<button type="button" data-c="close" class="p-2 rounded-xl hover:bg-teal-50 dark:hover:bg-slate-800" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 pointer-events-none"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg></button>' +
+          '<img src="favicon.png" alt="" class="w-8 h-8 rounded-xl">' +
+          '<div class="flex-1 min-w-0"><div class="font-bold text-sm leading-tight" data-t="ai"></div><div class="text-[11px] text-slate-500" data-t="sub"></div></div>' +
+          '<button type="button" data-c="sup" class="px-2.5 py-1.5 rounded-lg border border-teal-200 dark:border-slate-700 text-xs font-semibold hover:bg-teal-50 dark:hover:bg-slate-800">📞 <span data-t="help"></span></button>' +
+          '<button type="button" data-c="new" class="px-2.5 py-1.5 rounded-lg bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold" data-t="new"></button>' +
+        '</div>' +
+        '<div id="mx-chat-sc" class="flex-1 overflow-y-auto"><div id="mx-chat-log" class="px-4 py-5 space-y-4"></div></div>' +
+        '<div class="px-3 pt-2 border-t border-teal-100 dark:border-slate-800" style="padding-bottom:max(12px,env(safe-area-inset-bottom))">' +
+          '<p id="mx-chat-err" class="hidden text-sm text-rose-500 mb-2"></p>' +
+          '<div class="flex items-end gap-2 rounded-3xl border border-teal-200 dark:border-slate-700 bg-teal-50/50 dark:bg-slate-800 px-3 py-2 focus-within:border-teal-500">' +
+            '<textarea id="mx-chat-input" rows="1" maxlength="500" class="flex-1 resize-none bg-transparent outline-none text-base py-1.5 max-h-36"></textarea>' +
+            '<button type="button" id="mx-chat-send" data-c="send" class="shrink-0 w-10 h-10 rounded-full bg-teal-700 hover:bg-teal-800 disabled:opacity-40 text-white flex items-center justify-center" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 pointer-events-none"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></button>' +
+          '</div>' +
+          '<div class="flex justify-between gap-2 text-[11px] text-slate-400 mt-1.5 px-2"><span data-t="note"></span><span id="mx-chat-count" class="shrink-0">0/500</span></div>' +
+        '</div>' +
+      '</div>' +
+      '<div id="mx-chat-sup" class="hidden absolute inset-0 bg-black/50 flex items-center justify-center p-4"><div class="bg-white dark:bg-slate-900 rounded-2xl p-5 max-w-sm w-full shadow-xl">' +
+        '<h3 class="font-bold mb-2" data-t="supT"></h3><p class="text-sm mb-3 text-slate-600 dark:text-slate-300" data-t="supP"></p>' +
+        '<a href="tel:111" class="block p-3 mb-2 rounded-xl bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800"><b class="text-xl">📞 111</b><br><span class="text-sm" data-t="s111"></span></a>' +
+        '<a href="tel:115" class="block p-3 mb-3 rounded-xl bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800"><b class="text-xl">📞 115</b><br><span class="text-sm" data-t="s115"></span></a>' +
+        '<button type="button" data-c="supx" class="w-full py-2 rounded-xl border border-teal-200 dark:border-slate-700 text-sm font-semibold" data-t="close"></button></div></div>';
+    document.body.appendChild(root);
+    log = document.getElementById('mx-chat-log'); input = document.getElementById('mx-chat-input');
+    sendBtn = document.getElementById('mx-chat-send'); count = document.getElementById('mx-chat-count'); errEl = document.getElementById('mx-chat-err');
+    input.addEventListener('input', sync);
+    input.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); send(); } });
+    root.addEventListener('mousedown', function (e) { if (e.target === root) close(); });
+    root.addEventListener('click', function (e) {
+      var el = e.target.closest('[data-c],[data-sug],[data-copy]'); if (!el) return;
+      var c = el.getAttribute('data-c');
+      if (c === 'close') close();
+      else if (c === 'new') { if (!busy) { msgs = []; err = ''; save(); render(); input.focus(); } }
+      else if (c === 'send') send();
+      else if (c === 'sup') sup(true); else if (c === 'supx') sup(false);
+      else if (el.hasAttribute('data-sug')) { var q = SUG[+el.getAttribute('data-sug')]; send(T(q[1], q[2])); }
+      else if (el.hasAttribute('data-copy')) { try { navigator.clipboard.writeText(msgs[+el.getAttribute('data-copy')].text); el.textContent = '✓ ' + T('Đã chép', 'Copied'); setTimeout(render, 1200); } catch (_) {} }
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && root && !root.classList.contains('hidden')) { var s = document.getElementById('mx-chat-sup'); if (!s.classList.contains('hidden')) sup(false); else close(); } });
+    var lb = document.getElementById('btn-lang');
+    if (lb) lb.addEventListener('click', function () { setTimeout(function () { if (!root.classList.contains('hidden')) texts(), render(); }, 120); });
+  }
+
+  function texts() {
+    var D = {
+      ai: ['Trợ lý AI đồng hành', 'AI companion'], sub: ['Lắng nghe và gợi ý cách thư giãn', 'Listens and suggests ways to relax'],
+      help: ['Hỗ trợ', 'Help'], 'new': ['Cuộc trò chuyện mới', 'New chat'], close: ['Đóng', 'Close'],
+      note: ['AI chỉ hỗ trợ một phần, không chẩn đoán và không thay thế ba mẹ, thầy cô hay chuyên gia tâm lý.', 'AI offers partial support only. It does not diagnose and cannot replace parents, teachers or professionals.'],
+      supT: ['Cần được hỗ trợ?', 'Need support?'], supP: ['Hãy nói với người bạn tin tưởng: ba mẹ, thầy cô hoặc cô thầy phụ trách tâm lý của trường.', 'Talk to someone you trust: a parent, teacher or the school counselor.'],
+      s111: ['Tổng đài quốc gia bảo vệ trẻ em: miễn phí, 24/7, có tư vấn tâm lý', 'National Child Protection Hotline: free, 24/7, with counseling'],
+      s115: ['Cấp cứu y tế (khi bạn hoặc ai đó đang nguy hiểm)', 'Medical emergency (when you or someone is in danger)']
+    };
+    root.querySelectorAll('[data-t]').forEach(function (e) { var d = D[e.getAttribute('data-t')]; if (d) e.textContent = T(d[0], d[1]); });
+    input.placeholder = T('Nhập tin nhắn...', 'Type a message...');
+  }
+
+  function bubble(m, i) {
+    if (m.role === 'user') return '<div class="mxm flex justify-end"><div class="max-w-[85%] px-4 py-2.5 rounded-3xl rounded-br-lg bg-teal-700 text-white text-[15px] leading-relaxed">' + fmt(m.text) + '</div></div>';
+    return '<div class="mxm flex gap-2.5"><img src="favicon.png" alt="" class="w-8 h-8 rounded-xl shrink-0 mt-0.5"><div class="min-w-0 flex-1"><div class="inline-block max-w-full px-4 py-2.5 rounded-3xl rounded-tl-lg bg-teal-50 dark:bg-slate-800 border border-teal-100 dark:border-slate-700 text-[15px] leading-relaxed">' + fmt(m.text) + '</div>' +
+      (m.crisis ? '<div><button type="button" data-c="sup" class="mt-2 px-3 py-1.5 rounded-lg bg-rose-600 text-white text-sm font-semibold">📞 ' + T('Xem cách được hỗ trợ', 'Get support') + '</button></div>' : '') +
+      '<div class="mt-1"><button type="button" data-copy="' + i + '" class="px-2 py-1 rounded-md text-xs text-slate-400 hover:bg-teal-50 dark:hover:bg-slate-800">⧉ ' + T('Sao chép', 'Copy') + '</button></div></div></div>';
+  }
+  function render() {
+    var h = '';
+    if (!msgs.length) {
+      h = '<div class="text-center pt-6 pb-2"><img src="icon-192.png" alt="" class="w-16 h-16 rounded-2xl mx-auto mb-3"><h2 class="text-xl font-bold mb-1">' + T('Bạn đang cảm thấy thế nào?', 'How are you feeling?') + '</h2>' +
+        '<p class="text-sm text-slate-500 mb-5">' + T('Mình ở đây để lắng nghe bạn.', "I'm here to listen to you.") + '</p><div class="grid sm:grid-cols-2 gap-2 text-left">';
+      SUG.forEach(function (s, i) { h += '<button type="button" data-sug="' + i + '" class="px-4 py-3 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 hover:bg-teal-50 dark:hover:bg-slate-800 text-sm">' + s[0] + ' ' + esc(T(s[1], s[2])) + '</button>'; });
+      h += '</div></div>';
+    } else msgs.forEach(function (m, i) { h += bubble(m, i); });
+    if (busy) h += '<div class="mxm flex gap-2.5"><img src="favicon.png" alt="" class="w-8 h-8 rounded-xl shrink-0"><div class="mxd text-slate-500 pt-2.5"><span></span><span></span><span></span></div></div>';
+    log.innerHTML = h;
+    errEl.textContent = err; errEl.classList.toggle('hidden', !err);
+    var s = document.getElementById('mx-chat-sc'); s.scrollTop = s.scrollHeight; sync();
+  }
+  function sync() { count.textContent = input.value.length + '/500'; sendBtn.disabled = busy || !input.value.trim(); input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 144) + 'px'; }
+
+  function send(text) {
+    var m = (text != null ? text : input.value).trim().slice(0, 500); if (!m || busy) return;
+    var hist = msgs.slice(-6).map(function (x) { return { role: x.role, text: x.text }; });
+    msgs.push({ role: 'user', text: m }); input.value = ''; busy = true; err = ''; save(); render();
+    var fail = function (e) { msgs.pop(); input.value = m; err = e; };
+    fetch(CHAT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: m, history: hist, lang: en() ? 'en' : 'vi' }) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (x) { if (x.ok && x.d.reply) msgs.push({ role: 'model', text: x.d.reply, crisis: !!x.d.crisis }); else fail((x.d && x.d.error) || T('Trợ lý đang bận, bạn thử lại sau nhé.', 'The assistant is busy, please try again later.')); })
+      .catch(function () { fail(T('Không kết nối được. Hãy kiểm tra mạng rồi thử lại.', 'Could not connect. Check your connection and try again.')); })
+      .then(function () { busy = false; save(); render(); input.focus(); });
+  }
+  function sup(on) { document.getElementById('mx-chat-sup').classList.toggle('hidden', !on); }
+  function open() { build(); prevFocus = document.activeElement; texts(); root.classList.remove('hidden'); document.body.style.overflow = 'hidden'; render(); setTimeout(function () { input.focus(); }, 50); }
+  function close() { root.classList.add('hidden'); sup(false); document.body.style.overflow = ''; if (prevFocus && prevFocus.focus) prevFocus.focus(); }
+  window.mxChat = { open: open, close: close };
+})();
+</script>
+
 </body>
 </html>
