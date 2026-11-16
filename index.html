@@ -3350,7 +3350,7 @@
     h += '<div class="grid grid-cols-2 gap-1.5 mb-2">';
     keys.forEach(function (k) { h += '<button type="button" data-sact="snd:' + k + '" class="' + SBTN + (playing === k ? 'bg-teal-600 text-white border-teal-600' : 'bg-teal-50 dark:bg-slate-800 text-teal-800 dark:text-teal-200 border-slate-200 dark:border-slate-600') + '">' + t(SND[k][0], SND[k][1]) + '</button>'; });
     h += '</div>';
-    if (playing) h += '<p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">' + (sndBuf === playing ? t('Đang tải âm thanh...', 'Loading sound...') : t('Đang phát', 'Now playing') + ': <b>' + t(SND[playing][0], SND[playing][1]) + '</b> · ' + t('bấm lại để dừng', 'tap again to stop')) + '</p>';
+    if (playing) h += '<div class="flex items-center justify-between gap-2 mb-2"><p class="text-[11px] text-slate-500 dark:text-slate-400">' + (sndBuf === playing ? t('Đang tải âm thanh...', 'Loading sound...') : t('Đang phát', 'Now playing') + ': <b>' + t(SND[playing][0], SND[playing][1]) + '</b>') + '</p><button type="button" data-sact="stop:x" class="' + SBTN + 'shrink-0 bg-rose-50 dark:bg-slate-800 text-rose-600 dark:text-rose-300 border-rose-200 dark:border-slate-600">' + t('Dừng', 'Stop') + '</button></div>';
     h += '<label class="text-[11px] text-slate-500 dark:text-slate-400 block mb-2">' + t('Âm lượng', 'Volume') + ' <input id="mx-vol" type="range" min="0" max="1" step="0.05" value="' + vol + '" class="w-full"></label>';
     if (sndMsg) h += '<p class="text-[11px] text-rose-500 mb-2">' + esc(sndMsg) + '</p>';
     sndBox.innerHTML = h;
@@ -3365,6 +3365,7 @@
       var el = e.target.closest('[data-sact]'); if (!el) return;
       var a = el.getAttribute('data-sact').split(':'); sndMsg = '';
       if (a[0] === 'snd') { playSnd(a[1]); renderSnd(); }
+      else if (a[0] === 'stop') { if (playing) playSnd(playing); renderSnd(); }
       else if (a[0] === 'dl') dlSnd(a[1]);
       else if (a[0] === 'rm') rmSnd(a[1]);
     });
