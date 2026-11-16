@@ -1,6 +1,6 @@
 const CACHE = 'mindart-v46';
 const CORE = ['./', './index.html', './manifest.webmanifest', './favicon.png', './icon-192.png', './icon-512.png'];
-const SKIP = /youtube\.com|youtu\.be|googlevideo\.com|ytimg\.com|\/sounds\//;
+const SKIP = /youtube\.com|youtu\.be|googlevideo\.com|ytimg\.com|\/sounds\/|\.mp3(\?|$)/;
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(CORE)).then(() => self.skipWaiting()));
