@@ -1,6 +1,6 @@
 const ALLOWED_ORIGINS = ["https://meowmeow322.github.io"];
-const DEFAULT_MODEL = "gemma-4-31b-it";
-const DEFAULT_FALLBACK = "gemma-4-26b-a4b-it";
+const DEFAULT_MODEL = "gemma-4-26b-a4b-it";
+const DEFAULT_FALLBACK = "gemma-4-31b-it";
 const MAX_MESSAGE = 500;
 const MAX_HISTORY = 6;
 const RATE_LIMIT = 8;
@@ -104,6 +104,7 @@ export default {
     const fallback = env.FALLBACK_MODEL || DEFAULT_FALLBACK;
     const models = fallback && fallback !== model ? [model, fallback] : [model];
     let lastCode = "network";
+    const cfg = { temperature: 0.7, maxOutputTokens: 1024, thinkingConfig: { thinkingLevel: "minimal" } };
 
     for (const m of models) {
       for (let attempt = 0; attempt < 2; attempt++) {
@@ -111,7 +112,7 @@ export default {
           const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(m)}:generateContent`, {
             method: "POST",
             headers: { "Content-Type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
-            body: JSON.stringify({ contents, generationConfig: { temperature: 0.7, maxOutputTokens: 400 } }),
+            body: JSON.stringify({ contents, generationConfig: cfg }),
           });
           if (res.ok) {
             const data = await res.json();
@@ -124,6 +125,7 @@ export default {
           console.log("Upstream error", m, res.status, raw);
           lastCode = String(res.status);
           try { const e = JSON.parse(raw).error; if (e && e.status) lastCode += " " + e.status; } catch (_) {}
+          if (res.status === 400 && cfg.thinkingConfig) { delete cfg.thinkingConfig; attempt--; continue; }
           if (res.status === 500 || res.status === 503) {
             if (attempt === 0) { await new Promise((r) => setTimeout(r, 700)); continue; }
           }
