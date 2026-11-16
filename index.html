@@ -153,6 +153,11 @@
         </button>
       </div>
 
+      <div class="mt-4 text-center">
+        <button id="btn-dass-skip" type="button" class="px-5 py-2.5 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 text-xs font-semibold hover:border-teal-500 transition-all">Bỏ qua bài kiểm tra</button>
+        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-2">Vào thẳng phần chọn hoạt động: vẽ, tô màu, vẽ ra nhạc hoặc trò chuyện với AI.</p>
+      </div>
+
       <div class="mt-5 flex justify-center">
         <button id="btn-dass-choice-back" type="button" class="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-teal-200 dark:border-slate-700 text-teal-800 dark:text-teal-200 text-xs font-semibold hover:bg-teal-50 dark:hover:bg-slate-800 transition-all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 pointer-events-none"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg><span>Quay lại</span></button>
       </div>
@@ -185,7 +190,7 @@
         <p class="text-xs text-slate-500">Dành cho: <span id="res-user-name" class="font-bold text-teal-700 dark:text-teal-400"></span></p>
       </div>
 
-      <div class="grid grid-cols-3 gap-3 mb-4">
+      <div class="mx-dass-only grid grid-cols-3 gap-3 mb-4">
         <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl text-center">
           <div class="text-[10px] font-bold uppercase text-slate-400">Trầm cảm</div>
           <div id="score-d" class="text-xl font-extrabold my-1">0</div>
@@ -203,7 +208,7 @@
         </div>
       </div>
 
-      <div class="bg-teal-50/80 dark:bg-teal-950/40 p-4 rounded-2xl mb-4 text-xs text-teal-900 dark:text-teal-200">
+      <div class="mx-dass-only bg-teal-50/80 dark:bg-teal-950/40 p-4 rounded-2xl mb-4 text-xs text-teal-900 dark:text-teal-200">
         <div class="font-bold flex items-center mb-1"><i data-lucide="sparkles" class="w-4 h-4 mr-1 text-teal-600"></i>Gợi ý liệu pháp:</div>
         <p id="recommendation-text" class="text-slate-600 dark:text-slate-300">...</p>
       </div>
@@ -2266,6 +2271,7 @@
       const v = (k) => parseInt($('score-' + k)?.textContent, 10);
       dass = { d: v('d') || 0, a: v('a') || 0, s: v('s') || 0 };
     });
+    window.__clearDass = () => { dass = null; };
     wrap('openAIResult', () => {
       const h = load();
       h.push({ t: Date.now(), before: moodBefore, after: null, mode: typeof activeArtMode !== 'undefined' ? activeArtMode : null, dass, name: (typeof userName === 'string' && userName) || '', thumb: window.__thumb ? window.__thumb() : null });
@@ -3096,6 +3102,7 @@
   Object.assign(EN, {"Piano":"Piano","Cello":"Cello","Bass":"Bass"});
   RULES.unshift([/^Tranh ngày (.+)$/,'Drawing on $1'],[/^Người dùng: (.+) · Xuất ngày (.+)$/,'User: $1 · Exported on $2']);
   Object.assign(EN, {"AI hỗ trợ tâm lý": "AI emotional support", "Trò chuyện với trợ lý AI để được lắng nghe và gợi ý cách thư giãn.": "Chat with an AI assistant to be listened to and get relaxation tips.", "Lưu ý: AI chỉ hỗ trợ một phần, không thể giải quyết mọi vấn đề, không chẩn đoán và không thay thế ba mẹ, thầy cô hay chuyên gia tâm lý.": "Note: the AI only helps in part. It cannot solve every problem, does not diagnose, and does not replace parents, teachers or a psychologist."});
+  Object.assign(EN, {"Bỏ qua bài kiểm tra": "Skip the test", "Vào thẳng phần chọn hoạt động: vẽ, tô màu, vẽ ra nhạc hoặc trò chuyện với AI.": "Go straight to choosing an activity: draw, color, draw to music or chat with the AI.", "Chọn hoạt động": "Choose an activity"});
   var NK = {}; Object.keys(EN).forEach(function(k){ NK[k.normalize('NFC').replace(/\s+/g,' ').trim()] = EN[k]; });
   var lang = 'vi';
   try { localStorage.removeItem(KEY); } catch (_) {}
@@ -3223,6 +3230,7 @@
   st.textContent = ':root{--mxb:clamp(16px,min(1.61vh - 2.8px,1.6vw + 3px),22px)}@media(max-width:767px){:root{--mxb:16px}}' +
     'html[data-fs="1"]{font-size:calc(var(--mxb)*1.15)!important}html[data-fs="2"]{font-size:calc(var(--mxb)*1.3)!important}' +
     'html[data-hc="1"]{filter:contrast(1.2)}' +
+    '#screen-dass-result[data-skip="1"] .mx-dass-only{display:none}' +
     'html[data-rm="1"] *,html[data-rm="1"] *::before,html[data-rm="1"] *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}html[data-rm="1"] .reveal{opacity:1!important;transform:none!important}';
   document.head.appendChild(st);
   function applyA11y() {
@@ -3520,7 +3528,7 @@
     }
     var l = isEn() ? 'en' : 'vi';
     if (banner.getAttribute('data-l') !== l) { banner.setAttribute('data-l', l); banner.innerHTML = bannerHtml(); }
-    banner.style.display = (sev && !scr.classList.contains('hidden')) ? 'flex' : 'none';
+    banner.style.display = (sev && !scr.classList.contains('hidden') && scr.getAttribute('data-skip') !== '1') ? 'flex' : 'none';
   }
 
   function addButtons() {
@@ -3531,7 +3539,27 @@
     b.title = t('Tính năng', 'Features'); b.addEventListener('click', function () { open(); });
     lb && lb.parentNode === box ? box.insertBefore(b, lb.nextSibling) : box.insertBefore(b, box.firstChild);
   }
+  function skipDass() {
+    var ch = document.getElementById('screen-dass-choice'), rs = document.getElementById('screen-dass-result'); if (!ch || !rs) return;
+    if (window.__clearDass) window.__clearDass();
+    rs.setAttribute('data-skip', '1');
+    var tt = document.getElementById('dass-result-title'); if (tt) tt.textContent = 'Chọn hoạt động';
+    var un = document.getElementById('res-user-name'), inp = document.getElementById('user-name-input'); if (un && inp && inp.value.trim()) un.textContent = inp.value.trim();
+    ch.classList.add('hidden'); rs.classList.remove('hidden'); window.scrollTo(0, 0);
+  }
+  function bindSkip() {
+    var rs = document.getElementById('screen-dass-result'), sk = document.getElementById('btn-dass-skip'); if (!rs || !sk) return;
+    sk.addEventListener('click', skipDass);
+    rs.addEventListener('click', function (e) {
+      if (rs.getAttribute('data-skip') === '1' && e.target.closest('#btn-dass-result-back')) {
+        e.stopPropagation(); rs.classList.add('hidden');
+        var ch = document.getElementById('screen-dass-choice'); if (ch) ch.classList.remove('hidden');
+      }
+    }, true);
+    document.querySelectorAll('.btn-dass-version').forEach(function (b) { b.addEventListener('click', function () { rs.removeAttribute('data-skip'); }); });
+  }
   function early() {
+    bindSkip();
     addButtons(); mountSounds();
     var ai = document.getElementById('mx-ai-open'); if (ai) ai.addEventListener('click', function () { open('chat', { solo: true }); });
     var lb = document.getElementById('btn-lang');
@@ -3540,7 +3568,7 @@
   function init() {
     addButtons(); mountSounds(); refreshSaved().then(renderSnd); checkSevere(); remCheck();
     var scr = document.getElementById('screen-dass-result');
-    if (scr) new MutationObserver(function () { checkSevere(); }).observe(scr, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['class'] });
+    if (scr) new MutationObserver(function () { checkSevere(); }).observe(scr, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['class', 'data-skip'] });
     setInterval(remCheck, 30000);
   }
   early();
