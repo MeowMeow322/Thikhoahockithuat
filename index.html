@@ -3629,7 +3629,7 @@
 (function () {
   'use strict';
   var CHAT_URL = 'https://thikhoahockithuat.lexuandang0302.workers.dev', KEY = 'mindart_ai_chats', OLD = 'mindart_ai_chat';
-  var chats = [], curId = null, busy = false, err = '', el = {}, built = false;
+  var chats = [], curId = null, busy = false, err = '', el = {}, built = false, dock = {}, dockBuilt = false;
   function en() { return !!(window.__lang && window.__lang() === 'en'); }
   function T(v, e) { return en() ? e : v; }
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -3695,38 +3695,44 @@
     el.input.addEventListener('input', sync);
     el.input.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); send(); } });
     el.back.addEventListener('click', function () { side(false); });
-    s.addEventListener('click', function (e) {
+    function onClick(e, isDock) {
       var t = e.target.closest('[data-a],[data-sug],[data-copy],[data-open],[data-del]'); if (!t) return;
       var a = t.getAttribute('data-a');
       if (a === 'close') close();
       else if (a === 'new') newChat();
       else if (a === 'send') send();
+      else if (a === 'dnew') newChat();
+      else if (a === 'dsend') send(undefined, dock.input);
+      else if (a === 'dexp') open();
       else if (a === 'menu') side(true);
-      else if (a === 'sup') el.sup.classList.remove('hidden');
-      else if (a === 'supx') el.sup.classList.add('hidden');
+      else if (a === 'sup') (isDock ? dock.sup : el.sup).classList.remove('hidden');
+      else if (a === 'supx') (isDock ? dock.sup : el.sup).classList.add('hidden');
       else if (a === 'clear') { if (confirm(T('Xóa tất cả cuộc trò chuyện trên thiết bị này?', 'Delete all chats on this device?'))) { chats = []; curId = null; save(); err = ''; renderAll(); } }
-      else if (t.hasAttribute('data-sug')) { var q = SUG[+t.getAttribute('data-sug')]; send(T(q[1], q[2])); }
+      else if (t.hasAttribute('data-sug')) { var q = SUG[+t.getAttribute('data-sug')]; send(T(q[1], q[2]), isDock ? dock.input : el.input); }
       else if (t.hasAttribute('data-open')) { if (!busy) { curId = t.getAttribute('data-open'); err = ''; side(false); renderAll(); } }
       else if (t.hasAttribute('data-del')) { var id = t.getAttribute('data-del'); if (!busy) { chats = chats.filter(function (c) { return c.id !== id; }); if (curId === id) curId = null; save(); renderAll(); } }
-      else if (t.hasAttribute('data-copy')) { try { navigator.clipboard.writeText(cur().msgs[+t.getAttribute('data-copy')].text); t.textContent = T('Đã chép', 'Copied'); setTimeout(renderLog, 1200); } catch (_) {} }
-    });
+      else if (t.hasAttribute('data-copy')) { try { navigator.clipboard.writeText(cur().msgs[+t.getAttribute('data-copy')].text); t.textContent = T('Đã chép', 'Copied'); setTimeout(renderAll, 1200); } catch (_) {} }
+    }
+    el.onClick = onClick;
+    s.addEventListener('click', function (e) { onClick(e, false); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !s.classList.contains('hidden')) { if (!el.sup.classList.contains('hidden')) el.sup.classList.add('hidden'); else side(false); } });
     var lb = document.getElementById('btn-lang');
-    if (lb) lb.addEventListener('click', function () { setTimeout(function () { if (!s.classList.contains('hidden')) { texts(); renderAll(); } }, 120); });
+    if (lb) lb.addEventListener('click', function () { setTimeout(function () { texts(); renderAll(); }, 120); });
     var bh = document.getElementById('brand-home'); if (bh) bh.addEventListener('click', function () { if (!s.classList.contains('hidden')) close(); }, true);
   }
 
   function texts() {
     var D = {
-      'new': ['Cuộc trò chuyện mới', 'New chat'], hist: ['Lịch sử trò chuyện', 'Chat history'], histBtn: ['Lịch sử', 'History'], clear: ['Xóa tất cả lịch sử', 'Delete all history'],
+      'new': ['Cuộc trò chuyện mới', 'New chat'], dtitle: ['Trợ lý AI', 'AI assistant'], dnew: ['Mới', 'New'], dexp: ['Mở rộng', 'Expand'], hist: ['Lịch sử trò chuyện', 'Chat history'], histBtn: ['Lịch sử', 'History'], clear: ['Xóa tất cả lịch sử', 'Delete all history'],
       back: ['Quay lại', 'Back'], help: ['Hỗ trợ', 'Help'], close: ['Đóng', 'Close'],
       note: ['AI chỉ hỗ trợ một phần, không chẩn đoán và không thay thế ba mẹ, thầy cô hay chuyên gia tâm lý.', 'AI offers partial support only. It does not diagnose and cannot replace parents, teachers or professionals.'],
       supT: ['Cần được hỗ trợ?', 'Need support?'], supP: ['Hãy nói với người bạn tin tưởng: ba mẹ, thầy cô hoặc cô thầy phụ trách tâm lý của trường.', 'Talk to someone you trust: a parent, teacher or the school counselor.'],
       s111: ['Tổng đài quốc gia bảo vệ trẻ em: miễn phí, 24/7, có tư vấn tâm lý', 'National Child Protection Hotline: free, 24/7, with counseling'],
       s115: ['Cấp cứu y tế (khi bạn hoặc ai đó đang nguy hiểm)', 'Medical emergency (when you or someone is in danger)']
     };
-    el.s.querySelectorAll('[data-t]').forEach(function (e) { var d = D[e.getAttribute('data-t')]; if (d) e.textContent = T(d[0], d[1]); });
+    [el.s, dock.root].forEach(function (r) { if (r) r.querySelectorAll('[data-t]').forEach(function (e) { var d = D[e.getAttribute('data-t')]; if (d) e.textContent = T(d[0], d[1]); }); });
     el.input.placeholder = T('Nhập tin nhắn...', 'Type a message...');
+    if (dock.input) dock.input.placeholder = T('Nhập tin nhắn...', 'Type a message...');
   }
 
   function renderList() {
@@ -3747,36 +3753,46 @@
       (m.crisis ? '<div><button type="button" data-a="sup" class="mt-2 px-3 py-1.5 rounded-lg bg-rose-600 text-white text-sm font-semibold">' + T('Xem cách được hỗ trợ', 'Get support') + '</button></div>' : '') +
       '<div class="mt-1"><button type="button" data-copy="' + i + '" class="px-2 py-1 rounded-md text-xs text-slate-400 hover:bg-teal-50 dark:hover:bg-slate-800">' + T('Sao chép', 'Copy') + '</button></div></div></div>';
   }
-  function renderLog() {
+  function logHtml(compact) {
     var c = cur(), h = '';
     if (!c || !c.msgs.length) {
-      h = '<div class="text-center pt-6 pb-2">' + bot('w-16 h-16 rounded-2xl mx-auto mb-3', 'w-9 h-9') + '<h2 class="text-xl font-bold mb-1 text-teal-950 dark:text-teal-100">' + T('Bạn đang cảm thấy thế nào?', 'How are you feeling?') + '</h2>' +
-        '<p class="text-sm text-slate-500 mb-5">' + T('Mình ở đây để lắng nghe bạn.', "I'm here to listen to you.") + '</p><div class="grid sm:grid-cols-2 gap-2 text-left">';
+      h = '<div class="text-center pt-6 pb-2">' + bot(compact ? 'w-12 h-12 rounded-2xl mx-auto mb-2' : 'w-16 h-16 rounded-2xl mx-auto mb-3', compact ? 'w-7 h-7' : 'w-9 h-9') + '<h2 class="text-xl font-bold mb-1 text-teal-950 dark:text-teal-100">' + T('Bạn đang cảm thấy thế nào?', 'How are you feeling?') + '</h2>' +
+        '<p class="text-sm text-slate-500 mb-5">' + T('Mình ở đây để lắng nghe bạn.', "I'm here to listen to you.") + '</p><div class="grid ' + (compact ? '' : 'sm:grid-cols-2 ') + 'gap-2 text-left">';
       SUG.forEach(function (x, i) { h += '<button type="button" data-sug="' + i + '" class="px-4 py-3 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 hover:bg-teal-50 dark:hover:bg-slate-800 text-sm text-slate-700 dark:text-slate-200">' + esc(T(x[1], x[2])) + '</button>'; });
       h += '</div></div>';
     } else c.msgs.forEach(function (m, i) { h += bubble(m, i); });
     if (busy) h += '<div class="aim flex gap-2.5">' + bot('w-8 h-8 rounded-xl', 'w-5 h-5') + '<div class="aid text-slate-500 pt-2.5"><span></span><span></span><span></span></div></div>';
-    el.log.innerHTML = h;
+    return h;
+  }
+  function renderLog() {
+    el.log.innerHTML = logHtml(false);
     el.err.textContent = err; el.err.classList.toggle('hidden', !err);
-    var sc = el.s.querySelector('#ai-sc'); sc.scrollTop = sc.scrollHeight; sync();
+    var sc = el.s.querySelector('#ai-sc'); sc.scrollTop = sc.scrollHeight;
+    if (dock.root && !dock.root.classList.contains('hidden')) {
+      dock.log.innerHTML = logHtml(true);
+      dock.err.textContent = err; dock.err.classList.toggle('hidden', !err);
+      dock.sc.scrollTop = dock.sc.scrollHeight;
+    }
+    sync();
   }
   function renderAll() { renderList(); renderLog(); }
-  function sync() { el.count.textContent = el.input.value.length + '/500'; el.send.disabled = busy || !el.input.value.trim(); el.input.style.height = 'auto'; el.input.style.height = Math.min(el.input.scrollHeight, 144) + 'px'; }
+  function sync() { el.count.textContent = el.input.value.length + '/500'; el.send.disabled = busy || !el.input.value.trim(); el.input.style.height = 'auto'; el.input.style.height = Math.min(el.input.scrollHeight, 144) + 'px'; if (dock.input) { dock.send.disabled = busy || !dock.input.value.trim(); dock.input.style.height = 'auto'; dock.input.style.height = Math.min(dock.input.scrollHeight, 112) + 'px'; } }
   function side(on) { el.side.classList.toggle('-translate-x-[115%]', !on); el.back.classList.toggle('hidden', !on); }
-  function newChat() { if (busy) return; curId = null; err = ''; side(false); renderAll(); el.input.focus(); }
+  function newChat() { if (busy) return; curId = null; err = ''; side(false); renderAll(); (el.s.classList.contains('hidden') && dock.input ? dock.input : el.input).focus(); }
 
-  function send(text) {
-    var m = (text != null ? text : el.input.value).trim().slice(0, 500); if (!m || busy) return;
+  function send(text, inp) {
+    inp = inp || el.input;
+    var m = (text != null ? text : inp.value).trim().slice(0, 500); if (!m || busy) return;
     var c = cur();
     if (!c) { c = { id: 'c' + Date.now(), title: m.slice(0, 40), t: Date.now(), msgs: [] }; chats.unshift(c); curId = c.id; }
     var hist = c.msgs.slice(-6).map(function (x) { return { role: x.role, text: x.text }; });
-    c.msgs.push({ role: 'user', text: m }); c.t = Date.now(); el.input.value = ''; busy = true; err = ''; save(); renderAll();
-    var fail = function (e) { c.msgs.pop(); el.input.value = m; err = e; };
+    c.msgs.push({ role: 'user', text: m }); c.t = Date.now(); inp.value = ''; busy = true; err = ''; save(); renderAll();
+    var fail = function (e) { c.msgs.pop(); inp.value = m; err = e; };
     fetch(CHAT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: m, history: hist, lang: en() ? 'en' : 'vi' }) })
       .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d }; }); })
       .then(function (x) { if (x.ok && x.d.reply) c.msgs.push({ role: 'model', text: x.d.reply, crisis: !!x.d.crisis }); else fail((x.d && x.d.error) || T('Trợ lý đang bận, bạn thử lại sau nhé.', 'The assistant is busy, please try again later.')); })
       .catch(function () { fail(T('Không kết nối được. Hãy kiểm tra mạng rồi thử lại.', 'Could not connect. Check your connection and try again.')); })
-      .then(function () { busy = false; if (!c.msgs.length) { chats = chats.filter(function (x) { return x !== c; }); if (curId === c.id) curId = null; } save(); renderAll(); el.input.focus(); });
+      .then(function () { busy = false; if (!c.msgs.length) { chats = chats.filter(function (x) { return x !== c; }); if (curId === c.id) curId = null; } save(); renderAll(); inp.focus(); });
   }
 
   function open() {
@@ -3790,7 +3806,47 @@
     el.s.classList.add('hidden');
     var main = document.querySelector('main'); if (main) main.classList.remove('hidden');
   }
+
+  var HB = 'px-2.5 py-1.5 rounded-lg border border-teal-200 dark:border-slate-700 text-xs font-semibold hover:bg-teal-50 dark:hover:bg-slate-800';
+  function buildDock() {
+    if (dockBuilt) return;
+    var cv = document.getElementById('screen-canvas'); if (!cv) return; dockBuilt = true;
+    var st = document.createElement('style');
+    st.textContent = '#ai-side-panel{height:28rem}@media (min-width:768px) and (max-width:1023px){#screen-canvas{flex-wrap:wrap}#ai-side-panel{flex-basis:100%}}' +
+      '@media (min-width:1024px){#screen-canvas{width:min(calc(100vw - 2rem),76rem)!important;max-width:none!important}#ai-side-panel{order:-1;width:20rem;flex:0 0 20rem;height:auto;min-height:28rem}}';
+    document.head.appendChild(st);
+    var d = document.createElement('div'); d.id = 'ai-side-panel'; d.className = 'relative order-last w-full shrink-0';
+    d.innerHTML = '<div class="absolute inset-0 flex flex-col overflow-hidden rounded-3xl shadow-xl border border-teal-100 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 text-slate-700 dark:text-slate-200">' +
+      '<div class="flex items-center gap-1.5 px-3 py-2.5 border-b border-teal-100 dark:border-slate-800">' +
+        '<div class="flex-1 min-w-0 truncate text-sm font-bold text-teal-950 dark:text-teal-100" data-t="dtitle"></div>' +
+        '<button type="button" data-a="dnew" class="' + HB + '" data-t="dnew"></button>' +
+        '<button type="button" data-a="sup" class="' + HB + '" data-t="help"></button>' +
+        '<button type="button" data-a="dexp" class="' + HB + '" data-t="dexp"></button>' +
+      '</div>' +
+      '<div id="aid-sc" class="flex-1 overflow-y-auto"><div id="aid-log" class="px-3 py-4 space-y-4"></div></div>' +
+      '<div class="px-3 pt-2 pb-3 border-t border-teal-100 dark:border-slate-800">' +
+        '<p id="aid-err" class="hidden text-sm text-rose-500 mb-2"></p>' +
+        '<div class="flex items-end gap-2 rounded-3xl border border-teal-200 dark:border-slate-700 bg-teal-50/50 dark:bg-slate-800 px-3 py-1.5 focus-within:border-teal-500">' +
+          '<textarea id="aid-input" rows="1" maxlength="500" class="flex-1 min-w-0 resize-none bg-transparent outline-none text-base py-1.5 max-h-28 text-slate-800 dark:text-slate-100"></textarea>' +
+          '<button type="button" id="aid-send" data-a="dsend" class="shrink-0 w-9 h-9 rounded-full bg-teal-700 hover:bg-teal-800 disabled:opacity-40 text-white flex items-center justify-center" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 pointer-events-none"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></button>' +
+        '</div>' +
+        '<p class="text-[11px] text-slate-400 mt-1.5 px-2" data-t="note"></p>' +
+      '</div>' +
+      '<div id="aid-sup" class="hidden absolute inset-0 z-10 bg-black/50 flex items-center justify-center p-4"><div class="bg-white dark:bg-slate-900 rounded-2xl p-5 w-full shadow-xl">' +
+        '<h3 class="font-bold mb-2 text-teal-950 dark:text-teal-100" data-t="supT"></h3><p class="text-sm mb-3 text-slate-600 dark:text-slate-300" data-t="supP"></p>' +
+        '<a href="tel:111" class="block p-3 mb-2 rounded-xl bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800"><b class="text-xl">111</b><br><span class="text-sm" data-t="s111"></span></a>' +
+        '<a href="tel:115" class="block p-3 mb-3 rounded-xl bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800"><b class="text-xl">115</b><br><span class="text-sm" data-t="s115"></span></a>' +
+        '<button type="button" data-a="supx" class="w-full py-2 rounded-xl border border-teal-200 dark:border-slate-700 text-sm font-semibold" data-t="close"></button></div></div>' +
+    '</div>';
+    cv.insertBefore(d, cv.firstChild);
+    dock.root = d; dock.log = d.querySelector('#aid-log'); dock.sc = d.querySelector('#aid-sc'); dock.err = d.querySelector('#aid-err');
+    dock.input = d.querySelector('#aid-input'); dock.send = d.querySelector('#aid-send'); dock.sup = d.querySelector('#aid-sup');
+    dock.input.addEventListener('input', sync);
+    dock.input.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); send(undefined, dock.input); } });
+    d.addEventListener('click', function (e) { el.onClick(e, true); });
+  }
   window.mxChat = { open: open, close: close };
+  build(); buildDock(); if (!curId && chats.length) curId = chats[0].id; texts(); renderAll();
 })();
 </script>
 
