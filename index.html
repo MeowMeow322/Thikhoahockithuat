@@ -1227,9 +1227,14 @@
       document.getElementById('screen-dass-result')?.classList.remove('hidden');
     }
 
+    function availHeightFor(rect) {
+      return Math.max(240, window.innerHeight - (rect.top + window.scrollY) - 100);
+    }
+
     function fitCanvasDisplaySize() {
       const container = canvas.parentElement;
       container.style.aspectRatio = `${canvas.width} / ${canvas.height}`;
+      container.style.maxWidth = Math.floor(availHeightFor(container.getBoundingClientRect()) * canvas.width / canvas.height) + 'px';
       canvas.style.width = '100%';
       canvas.style.height = '100%';
     }
@@ -1240,11 +1245,12 @@
       ctx = canvas.getContext('2d');
       sessionStartTime = Date.now();
 
+      canvas.parentElement.style.maxWidth = '';
       const containerRect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.max(window.devicePixelRatio || 1, 2); 
       const displaySize = containerRect.width || 450;
       canvas.width = Math.round(displaySize * dpr);
-      canvas.height = Math.round(displaySize * dpr);
+      canvas.height = Math.round(Math.min(availHeightFor(containerRect), displaySize * 1.6) * dpr);
       fitCanvasDisplaySize();
 
       ctx.imageSmoothingEnabled = true;
@@ -3880,7 +3886,13 @@
       if (acts.parentNode) acts.parentNode.removeChild(acts);
     }
   }
-  function set(v) { collapsed = v; try { localStorage.setItem(KEY, v ? '1' : '0'); } catch (_) {} apply(); }
+  function refit() {
+    try {
+      if (cv.classList.contains('hidden')) return;
+      if (strokeCount === 0 && activeArtMode !== 'coloring') setTimeout(function () { window.initCanvas(); }, 60);
+    } catch (_) {}
+  }
+  function set(v) { collapsed = v; try { localStorage.setItem(KEY, v ? '1' : '0'); } catch (_) {} apply(); refit(); }
   hide.addEventListener('click', function () { set(true); });
   show.addEventListener('click', function () { set(false); });
   var lb = document.getElementById('btn-lang');
