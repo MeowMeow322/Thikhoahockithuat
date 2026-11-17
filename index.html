@@ -258,7 +258,7 @@
     </section>
 
     <section id="screen-canvas" class="hidden w-full flex flex-col md:flex-row gap-4 my-auto">
-      <div class="flex-1 bg-white dark:bg-slate-900 p-4 rounded-3xl shadow-xl border border-teal-100 dark:border-slate-800 flex flex-col items-center">
+      <div class="flex-1 min-w-0 bg-white dark:bg-slate-900 p-3 rounded-3xl shadow-xl border border-teal-100 dark:border-slate-800 flex flex-col items-center">
         
         <div id="mandala-control-panel" class="hidden w-full flex items-center justify-between mb-3 bg-teal-50/60 dark:bg-slate-800/60 p-2.5 rounded-2xl text-xs">
           <span id="mandala-title" class="font-bold text-teal-900 dark:text-teal-200">Đang tô: ...</span>
@@ -316,7 +316,7 @@
           </div>
         </div>
 
-        <div class="relative w-full max-w-[450px] mx-auto bg-white rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-inner cursor-crosshair">
+        <div style="max-width:max(20rem,calc(100dvh - 12rem))" class="relative w-full mx-auto bg-white rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-inner cursor-crosshair">
           <div id="loading-spinner" class="absolute inset-0 bg-white/80 dark:bg-slate-900/80 flex flex-col items-center justify-center z-10 hidden">
             <div class="w-8 h-8 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mb-2"></div>
             <span class="text-xs font-semibold text-teal-800 dark:text-teal-200">Đang tải tranh tô màu...</span>
@@ -3849,5 +3849,42 @@
 })();
 </script>
 
+<script>
+(function () {
+  var KEY = 'mindart_panel_collapsed';
+  var cv = document.getElementById('screen-canvas'), fin = document.getElementById('btn-finish'), clr = document.getElementById('btn-clear');
+  if (!cv || !fin || !clr) return;
+  var panel = fin.parentElement, tools = clr.parentElement, orig = fin.className;
+  var head = panel.querySelector('h3').parentElement;
+  var B = 'px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800';
+  var hide = document.createElement('button'); hide.type = 'button'; hide.id = 'btn-panel-collapse'; hide.className = 'ml-auto ' + B;
+  head.appendChild(hide);
+  var show = document.createElement('button'); show.type = 'button'; show.id = 'btn-panel-expand'; show.className = B + ' hidden';
+  tools.appendChild(show);
+  var collapsed = false;
+  try { collapsed = localStorage.getItem(KEY) === '1'; } catch (_) {}
+  function en() { return !!(window.__lang && window.__lang() === 'en'); }
+  function apply() {
+    hide.textContent = en() ? 'Collapse' : 'Thu gọn';
+    show.textContent = en() ? 'Analysis' : 'Phân tích';
+    panel.classList.toggle('hidden', collapsed);
+    show.classList.toggle('hidden', !collapsed);
+    tools.classList.toggle('w-full', collapsed);
+    if (collapsed) {
+      fin.className = orig.replace(/\bw-full\b/, '').replace(/\bmt-4\b/, '').replace(/\bpy-3\b/, 'py-2') + ' px-4 ml-auto';
+      tools.appendChild(fin);
+    } else {
+      fin.className = orig;
+      panel.appendChild(fin);
+    }
+  }
+  function set(v) { collapsed = v; try { localStorage.setItem(KEY, v ? '1' : '0'); } catch (_) {} apply(); }
+  hide.addEventListener('click', function () { set(true); });
+  show.addEventListener('click', function () { set(false); });
+  var lb = document.getElementById('btn-lang');
+  if (lb) lb.addEventListener('click', function () { setTimeout(apply, 120); });
+  apply();
+})();
+</script>
 </body>
 </html>
