@@ -1227,19 +1227,21 @@
       document.getElementById('screen-dass-result')?.classList.remove('hidden');
     }
 
-    function freeRoom() {
-      if (window.innerWidth < 1024) return 0;
-      const main = document.querySelector('main');
-      const sec = document.getElementById('screen-canvas');
-      const cs = getComputedStyle(main);
-      return main.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - sec.getBoundingClientRect().height;
-    }
-
     function fitCanvasDisplaySize(constrain = true) {
       const container = canvas.parentElement;
-      const avail = Math.max(240, container.getBoundingClientRect().height + freeRoom());
-      container.style.aspectRatio = `${canvas.width} / ${canvas.height}`;
-      container.style.maxWidth = constrain && window.innerWidth >= 1024 ? Math.floor(avail * canvas.width / canvas.height) + 'px' : '';
+      const wide = window.innerWidth >= 1024;
+      if (constrain && wide) {
+        const rect = container.getBoundingClientRect();
+        const bw = parseFloat(container.dataset.bw) || rect.width;
+        const bh = parseFloat(container.dataset.bh) || rect.height;
+        const sc = Math.min(bw / canvas.width, bh / canvas.height);
+        container.style.flex = 'none';
+        container.style.aspectRatio = '';
+        container.style.width = (canvas.width * sc) + 'px';
+        container.style.height = (canvas.height * sc) + 'px';
+      } else {
+        container.style.aspectRatio = wide ? '' : `${canvas.width} / ${canvas.height}`;
+      }
       canvas.style.width = '100%';
       canvas.style.height = '100%';
     }
@@ -1250,20 +1252,23 @@
       ctx = canvas.getContext('2d');
       sessionStartTime = Date.now();
 
-      canvas.parentElement.style.maxWidth = '';
-      const containerRect = canvas.parentElement.getBoundingClientRect();
+      const box = canvas.parentElement;
+      const wide = window.innerWidth >= 1024;
+      box.style.aspectRatio = '';
+      box.style.maxWidth = '';
+      box.style.width = '';
+      box.style.height = '';
+      box.style.flex = wide ? '1 1 0' : '';
+      box.style.minHeight = wide ? '0' : '';
+      const containerRect = box.getBoundingClientRect();
       const dpr = Math.max(window.devicePixelRatio || 1, 2); 
       const displaySize = containerRect.width || 450;
+      const displayHeight = wide && containerRect.height > 200 ? containerRect.height : Math.max(240, Math.min(displaySize * 1.25, window.innerHeight * 0.6));
+      box.dataset.bw = displaySize;
+      box.dataset.bh = displayHeight;
       canvas.width = Math.round(displaySize * dpr);
-      canvas.height = Math.round(Math.max(240, Math.min(displaySize * 1.25, window.innerHeight * 0.6)) * dpr);
+      canvas.height = Math.round(displayHeight * dpr);
       fitCanvasDisplaySize(false);
-      for (let i = 0; i < 4; i++) {
-        const free = freeRoom();
-        if (Math.abs(free) < 6) break;
-        const curH = canvas.parentElement.getBoundingClientRect().height;
-        canvas.height = Math.round(Math.max(240, curH + free - 4) * dpr);
-        fitCanvasDisplaySize(false);
-      }
 
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
@@ -3830,7 +3835,7 @@
     var cv = document.getElementById('screen-canvas'); if (!cv) return; dockBuilt = true;
     var st = document.createElement('style');
     st.textContent = '#aid-input,#ai-input{min-height:2.5rem}#ai-side-panel{height:28rem}@media (min-width:768px) and (max-width:1023px){#screen-canvas{flex-wrap:wrap}#ai-side-panel{flex-basis:100%}}' +
-      '@media (min-width:1024px){#screen-canvas{width:min(calc(100vw - 2rem),76rem)!important;max-width:none!important}#ai-side-panel{order:-1;width:20rem;flex:0 0 20rem;height:auto;min-height:28rem}}';
+      '@media (min-width:1024px){#screen-canvas{width:min(calc(100vw - 2rem),76rem)!important;max-width:none!important;flex:1 1 0;min-height:30rem;margin-block:0}#ai-side-panel{order:-1;width:20rem;flex:0 0 20rem;height:auto;min-height:28rem}}';
     document.head.appendChild(st);
     var d = document.createElement('div'); d.id = 'ai-side-panel'; d.className = 'relative order-last w-full shrink-0';
     d.innerHTML = '<div class="absolute inset-0 flex flex-col overflow-hidden rounded-3xl shadow-xl border border-teal-100 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 text-slate-700 dark:text-slate-200">' +
