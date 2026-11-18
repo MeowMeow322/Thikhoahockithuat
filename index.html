@@ -1227,19 +1227,19 @@
       document.getElementById('screen-dass-result')?.classList.remove('hidden');
     }
 
-    function availHeightFor(rect) {
-      const panelEl = canvas.parentElement.closest('.rounded-3xl');
-      const head = document.querySelector('header');
-      const foot = document.querySelector('footer');
-      const above = panelEl ? rect.top - panelEl.getBoundingClientRect().top : 160;
-      const chrome = (head ? head.getBoundingClientRect().height : 0) + (foot ? foot.getBoundingClientRect().height : 0);
-      return Math.max(240, window.innerHeight - chrome - above - 56);
+    function freeRoom() {
+      if (window.innerWidth < 1024) return 0;
+      const main = document.querySelector('main');
+      const sec = document.getElementById('screen-canvas');
+      const cs = getComputedStyle(main);
+      return main.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - sec.getBoundingClientRect().height;
     }
 
-    function fitCanvasDisplaySize() {
+    function fitCanvasDisplaySize(constrain = true) {
       const container = canvas.parentElement;
+      const avail = Math.max(240, container.getBoundingClientRect().height + freeRoom());
       container.style.aspectRatio = `${canvas.width} / ${canvas.height}`;
-      container.style.maxWidth = Math.floor(availHeightFor(container.getBoundingClientRect()) * canvas.width / canvas.height) + 'px';
+      container.style.maxWidth = constrain && window.innerWidth >= 1024 ? Math.floor(avail * canvas.width / canvas.height) + 'px' : '';
       canvas.style.width = '100%';
       canvas.style.height = '100%';
     }
@@ -1255,8 +1255,15 @@
       const dpr = Math.max(window.devicePixelRatio || 1, 2); 
       const displaySize = containerRect.width || 450;
       canvas.width = Math.round(displaySize * dpr);
-      canvas.height = Math.round(Math.min(availHeightFor(containerRect), displaySize * 1.6) * dpr);
-      fitCanvasDisplaySize();
+      canvas.height = Math.round(Math.max(240, Math.min(displaySize * 1.25, window.innerHeight * 0.6)) * dpr);
+      fitCanvasDisplaySize(false);
+      for (let i = 0; i < 4; i++) {
+        const free = freeRoom();
+        if (Math.abs(free) < 6) break;
+        const curH = canvas.parentElement.getBoundingClientRect().height;
+        canvas.height = Math.round(Math.max(240, curH + free - 4) * dpr);
+        fitCanvasDisplaySize(false);
+      }
 
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
