@@ -1228,7 +1228,12 @@
     }
 
     function availHeightFor(rect) {
-      return Math.max(240, window.innerHeight - (rect.top + window.scrollY) - 100);
+      const panelEl = canvas.parentElement.closest('.rounded-3xl');
+      const head = document.querySelector('header');
+      const foot = document.querySelector('footer');
+      const above = panelEl ? rect.top - panelEl.getBoundingClientRect().top : 160;
+      const chrome = (head ? head.getBoundingClientRect().height : 0) + (foot ? foot.getBoundingClientRect().height : 0);
+      return Math.max(240, window.innerHeight - chrome - above - 56);
     }
 
     function fitCanvasDisplaySize() {
