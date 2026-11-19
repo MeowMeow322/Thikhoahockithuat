@@ -15,24 +15,6 @@ Nguyên tắc bắt buộc:
 4. Không hỏi và không lưu thông tin cá nhân như họ tên đầy đủ, địa chỉ, số điện thoại, trường lớp.
 5. Trả lời ngắn gọn (tối đa khoảng 120 từ), ấm áp, bằng đúng ngôn ngữ của người dùng (tiếng Việt hoặc tiếng Anh).`;
 
-const LISTEN_PROMPT = `CHẾ ĐỘ CHỈ LẮNG NGHE đang được bật.
-Chỉ phản hồi bằng 1 đến 3 câu ngắn (tối đa khoảng 45 từ): phản chiếu lại cảm xúc bạn ấy vừa chia sẻ và cho bạn ấy biết mình đang lắng nghe.
-Không đưa lời khuyên, không gợi ý hoạt động, không giải thích, không phân tích, không liệt kê.
-Có thể kết thúc bằng một câu hỏi mở rất nhẹ như "Bạn muốn kể thêm không?". Nếu bạn ấy xin lời khuyên hoặc cách thư giãn, hãy nhắc nhẹ rằng đang ở chế độ chỉ lắng nghe và bạn ấy có thể tắt chế độ này trong khung chat.
-Các nguyên tắc an toàn ở trên vẫn giữ nguyên.`;
-
-const TASK_SYSTEM = `Bạn là trợ lý của website vẽ trị liệu giúp học sinh thư giãn. Bạn không chẩn đoán, không diễn giải tâm lý từ nét vẽ hay màu sắc, không đưa lời khuyên y tế. Chỉ trả về đúng nội dung được yêu cầu, không lời dẫn, không giải thích thêm, không dùng ký hiệu markdown.`;
-
-const ART_MODES = {
-  trame: "vẽ chấm trame",
-  doodle: "vẽ tự do",
-  coloring: "tô màu mandala",
-  emotion: "vẽ cảm xúc bằng màu sắc",
-  body: "quét cơ thể và tô vùng đang căng",
-  prompt: "vẽ theo đề bài",
-  music: "vẽ ra nhạc",
-};
-
 const CRISIS_WORDS = [
   "tu tu", "muon chet", "khong muon song", "ket thuc cuoc doi", "tu lam dau", "tu hai",
   "tu sat", "cat tay", "bien mat khoi the gioi", "song de lam gi",
@@ -97,41 +79,8 @@ export default {
       return json({ error: "Dữ liệu không hợp lệ." }, 400, cors);
     }
 
-    const lang = body.lang === "en" ? "en" : "vi";
-    const task = body.task === "daily_prompt" || body.task === "art_questions" ? body.task : "";
-
-    if (task) {
-      if (!env.GEMINI_API_KEY) return json({ error: "Máy chủ chưa được cấu hình." }, 500, cors);
-      const clip = (v, n) => (typeof v === "string" ? v.trim().slice(0, n) : "");
-      const mood = (v) => (Number.isInteger(v) && v >= 1 && v <= 5 ? v : null);
-      let ask;
-      if (task === "daily_prompt") {
-        const seed = Number.isFinite(body.seed) ? Math.abs(Math.floor(body.seed)) % 100000 : 0;
-        ask = `Hãy viết MỘT đề bài vẽ ngắn (tối đa 25 từ) để học sinh thư giãn và biểu đạt cảm xúc nhẹ nhàng. Đề bài tích cực hoặc trung tính, dễ thực hiện trong 5 đến 10 phút, không nhắc đến chấn thương, bệnh tật, cái chết hay tự làm đau. Ngôn ngữ: ${lang === "en" ? "tiếng Anh" : "tiếng Việt"}. Hãy sáng tạo khác mọi lần (mã ngẫu nhiên ${seed}). Chỉ trả về câu đề bài.`;
-      } else {
-        const title = clip(body.title, 140);
-        const note = clip(body.note, 140);
-        if (isCrisis(title + " " + note)) return json({ reply: CRISIS_REPLY[lang], crisis: true }, 200, cors);
-        const modeName = ART_MODES[body.mode] || "vẽ";
-        const b = mood(body.before), a = mood(body.after);
-        const lines = [`Phương pháp: ${modeName}.`];
-        if (title) lines.push(`Tên bạn ấy đặt cho bức vẽ: "${title}".`);
-        if (b) lines.push(`Tâm trạng trước khi vẽ: ${b}/5.`);
-        if (a) lines.push(`Tâm trạng sau khi vẽ: ${a}/5.`);
-        if (note) lines.push(`Ghi chú của bạn ấy: "${note}".`);
-        ask = `Một học sinh vừa vẽ xong. ${lines.join(" ")}\nHãy viết đúng 3 câu hỏi mở, ngắn, dịu dàng để bạn ấy tự nhìn lại bức vẽ và cảm xúc của mình (ví dụ về điều bạn ấy chú ý, cảm giác khi vẽ, điều muốn giữ lại). Không diễn giải hay đoán ý nghĩa bức vẽ, không đánh giá tâm lý, không đưa lời khuyên. Mỗi câu một dòng, không đánh số. Ngôn ngữ: ${lang === "en" ? "tiếng Anh" : "tiếng Việt"}.`;
-      }
-      const out = await callModel(env, [
-        { role: "user", parts: [{ text: TASK_SYSTEM }] },
-        { role: "model", parts: [{ text: "Mình hiểu và sẽ chỉ trả về nội dung được yêu cầu." }] },
-        { role: "user", parts: [{ text: ask }] },
-      ], { temperature: task === "daily_prompt" ? 0.95 : 0.7, maxOutputTokens: 300 });
-      if (out.reply) return json({ reply: out.reply }, 200, cors);
-      return json({ error: "Trợ lý đang bận, bạn thử lại sau nhé. (mã lỗi: " + out.code + ")" }, 502, cors);
-    }
-
     const message = typeof body.message === "string" ? body.message.trim() : "";
-    const listen = body.mode === "listen";
+    const lang = body.lang === "en" ? "en" : "vi";
     if (!message) return json({ error: "Thiếu nội dung tin nhắn." }, 400, cors);
     if (message.length > MAX_MESSAGE) return json({ error: "Tin nhắn quá dài, hãy gửi ngắn hơn nhé." }, 400, cors);
 
@@ -143,57 +92,51 @@ export default {
     if (userTexts.some(isCrisis)) return json({ reply: CRISIS_REPLY[lang], crisis: true }, 200, cors);
 
     if (!env.GEMINI_API_KEY) return json({ error: "Máy chủ chưa được cấu hình." }, 500, cors);
+    const model = env.MODEL_NAME || DEFAULT_MODEL;
 
     const contents = [
-      { role: "user", parts: [{ text: SYSTEM_PROMPT + (listen ? "\n\n" + LISTEN_PROMPT : "") + "\n\nHãy tuân thủ nghiêm ngặt các nguyên tắc trên." }] },
+      { role: "user", parts: [{ text: SYSTEM_PROMPT + "\n\nHãy tuân thủ nghiêm ngặt các nguyên tắc trên." }] },
       { role: "model", parts: [{ text: "Mình hiểu rõ vai trò và sẽ tuân thủ các nguyên tắc này." }] },
       ...history.map((h) => ({ role: h.role, parts: [{ text: h.text }] })),
       { role: "user", parts: [{ text: message }] },
     ];
 
-    const out = await callModel(env, contents, listen ? { temperature: 0.6, maxOutputTokens: 220 } : {});
-    if (out.reply) return json({ reply: out.reply }, 200, cors);
-    return json({ error: "Trợ lý đang bận, bạn thử lại sau nhé. (mã lỗi: " + out.code + ")" }, 502, cors);
-  },
-};
+    const fallback = env.FALLBACK_MODEL || DEFAULT_FALLBACK;
+    const models = fallback && fallback !== model ? [model, fallback] : [model];
+    let lastCode = "network";
+    const cfg = { temperature: 0.7, maxOutputTokens: 1024, thinkingConfig: { thinkingLevel: "minimal" } };
 
-async function callModel(env, contents, override) {
-  const model = env.MODEL_NAME || DEFAULT_MODEL;
-  const fallback = env.FALLBACK_MODEL || DEFAULT_FALLBACK;
-  const models = fallback && fallback !== model ? [model, fallback] : [model];
-  let lastCode = "network";
-  const cfg = { temperature: 0.7, maxOutputTokens: 1024, thinkingConfig: { thinkingLevel: "minimal" }, ...(override || {}) };
-
-  for (const m of models) {
-    for (let attempt = 0; attempt < 2; attempt++) {
-      try {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(m)}:generateContent`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
-          body: JSON.stringify({ contents, generationConfig: cfg }),
-        });
-        if (res.ok) {
-          const data = await res.json();
-          const reply = data?.candidates?.[0]?.content?.parts?.filter((p) => !p.thought).map((p) => p.text || "").join("").trim();
-          if (reply) return { reply };
-          lastCode = "empty";
+    for (const m of models) {
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(m)}:generateContent`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
+            body: JSON.stringify({ contents, generationConfig: cfg }),
+          });
+          if (res.ok) {
+            const data = await res.json();
+            const reply = data?.candidates?.[0]?.content?.parts?.filter((p) => !p.thought).map((p) => p.text || "").join("").trim();
+            if (reply) return json({ reply }, 200, cors);
+            lastCode = "empty";
+            break;
+          }
+          const raw = (await res.text()).slice(0, 800);
+          console.log("Upstream error", m, res.status, raw);
+          lastCode = String(res.status);
+          try { const e = JSON.parse(raw).error; if (e && e.status) lastCode += " " + e.status; } catch (_) {}
+          if (res.status === 400 && cfg.thinkingConfig) { delete cfg.thinkingConfig; attempt--; continue; }
+          if (res.status === 500 || res.status === 503) {
+            if (attempt === 0) { await new Promise((r) => setTimeout(r, 700)); continue; }
+          }
           break;
-        }
-        const raw = (await res.text()).slice(0, 800);
-        console.log("Upstream error", m, res.status, raw);
-        lastCode = String(res.status);
-        try { const e = JSON.parse(raw).error; if (e && e.status) lastCode += " " + e.status; } catch (_) {}
-        if (res.status === 400 && cfg.thinkingConfig) { delete cfg.thinkingConfig; attempt--; continue; }
-        if (res.status === 500 || res.status === 503) {
+        } catch (err) {
+          console.log("Worker error", m, String(err));
+          lastCode = "network";
           if (attempt === 0) { await new Promise((r) => setTimeout(r, 700)); continue; }
         }
-        break;
-      } catch (err) {
-        console.log("Worker error", m, String(err));
-        lastCode = "network";
-        if (attempt === 0) { await new Promise((r) => setTimeout(r, 700)); continue; }
       }
     }
-  }
-  return { code: lastCode };
-}
+    return json({ error: "Trợ lý đang bận, bạn thử lại sau nhé. (mã lỗi: " + lastCode + ")" }, 502, cors);
+  },
+};
