@@ -1246,6 +1246,37 @@
       canvas.style.height = '100%';
     }
 
+    function refitCanvas() {
+      const sc = document.getElementById('screen-canvas');
+      if (!canvas || !sc || sc.classList.contains('hidden')) return;
+      const box = canvas.parentElement;
+      if (window.innerWidth < 1024) {
+        box.style.flex = '';
+        box.style.minHeight = '';
+        box.style.width = '';
+        box.style.height = '';
+        box.style.aspectRatio = `${canvas.width} / ${canvas.height}`;
+        return;
+      }
+      if (strokeCount === 0 && activeArtMode !== 'coloring') { initCanvas(); return; }
+      box.style.aspectRatio = '';
+      box.style.maxWidth = '';
+      box.style.width = '';
+      box.style.height = '';
+      box.style.flex = '1 1 0';
+      box.style.minHeight = '0';
+      const r = box.getBoundingClientRect();
+      box.dataset.bw = r.width;
+      box.dataset.bh = r.height;
+      fitCanvasDisplaySize(true);
+    }
+
+    let refitTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(refitTimer);
+      refitTimer = setTimeout(refitCanvas, 150);
+    });
+
     function initCanvas() {
       canvas = document.getElementById('art-canvas');
       if (!canvas) return;
@@ -3906,7 +3937,7 @@
   function refit() {
     try {
       if (cv.classList.contains('hidden')) return;
-      if (strokeCount === 0 && activeArtMode !== 'coloring') setTimeout(function () { window.initCanvas(); }, 60);
+      setTimeout(function () { refitCanvas(); }, 60);
     } catch (_) {}
   }
   function set(v) { collapsed = v; try { localStorage.setItem(KEY, v ? '1' : '0'); } catch (_) {} apply(); refit(); }
