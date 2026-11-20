@@ -3,11 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#0f766e">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="description" content="Đánh giá sức khỏe tinh thần theo thang DASS và thư giãn bằng hội họa trị liệu dành cho học sinh.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <title>Thi khoa học kỹ thuật</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -76,6 +79,41 @@
     html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after {
       transition: background-color .45s, color .45s, border-color .45s, fill .45s !important;
     }
+
+    html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+    html.dark { color-scheme: dark; }
+    html:not(.dark) { color-scheme: light; }
+    * { scrollbar-width: thin; }
+    body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+    html .text-\[10px\] { font-size: 0.75rem; line-height: 1.35; }
+    html .text-\[11px\] { font-size: 0.8125rem; line-height: 1.4; }
+    html .text-xs { font-size: 0.8125rem; line-height: 1.5; }
+    :focus { outline: none; }
+    :focus-visible { outline: 2px solid #0d9488; outline-offset: 2px; border-radius: 0.5rem; }
+    .dark :focus-visible { outline-color: #5eead4; }
+    input:focus-visible, textarea:focus-visible, select:focus-visible { outline-offset: 0; }
+    ::placeholder { color: #94a3b8; opacity: 1; }
+    button:disabled { cursor: not-allowed; }
+    button, [role="button"], label, summary { cursor: pointer; }
+    header { padding-top: max(0.75rem, env(safe-area-inset-top)); padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
+    footer { padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); line-height: 1.5; }
+    #brand-home { min-width: 0; }
+    #brand-home > div { min-width: 0; }
+    #brand-home h1, #brand-home p { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    main { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
+    main p, main label { max-width: 68ch; }
+    main .text-center p { margin-left: auto; margin-right: auto; }
+    .fixed.overflow-y-auto, .overflow-y-auto { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+    #user-name-input { min-height: 3rem; }
+    main section button { min-height: 2.5rem; }
+    @media (hover: none) {
+      .btn-art-mode:hover, .btn-dass-version:hover, #gallery-grid > *:hover { transform: none; box-shadow: none; }
+    }
+    @media (max-width: 480px) {
+      main { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+      main > section { padding: 1.25rem; border-radius: 1.5rem; }
+    }
+    @media print { header, footer, #music-panel { display: none !important; } }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
     }
@@ -90,6 +128,7 @@
 </script>
 </head>
 <body class="bg-gradient-to-br from-emerald-50 via-teal-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-teal-950 min-h-screen text-slate-700 dark:text-slate-200 flex flex-col justify-between transition-colors duration-300">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-xl focus:bg-teal-700 focus:text-white focus:text-sm focus:font-semibold">Bỏ qua đến nội dung chính</a>
 
   <header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-teal-100/80 dark:border-slate-800 px-4 py-3 flex items-center justify-between shadow-sm">
     <div id="brand-home" role="button" tabindex="0" title="Về trang đăng nhập" class="flex items-center gap-3 cursor-pointer select-none">
@@ -108,7 +147,7 @@
     </div>
   </header>
 
-  <main class="flex-1 max-w-4xl w-full mx-auto p-4 flex flex-col justify-center items-center">
+  <main id="main-content" tabindex="-1" class="flex-1 max-w-4xl w-full mx-auto p-4 flex flex-col justify-center items-center">
 
     <section id="screen-welcome" class="w-full bg-white/90 dark:bg-slate-900/90 p-6 md:p-8 rounded-3xl shadow-xl border border-teal-100 dark:border-slate-800 text-center max-w-md my-auto">
       <div class="w-16 h-16 bg-teal-100 dark:bg-teal-950 text-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -121,7 +160,7 @@
         <label class="block text-xs font-semibold text-teal-900 dark:text-teal-200 mb-1.5">
           Tên hoặc Biệt danh của bạn:
         </label>
-        <input type="text" id="user-name-input" placeholder="Ví dụ: Nguyễn Văn A..." class="w-full px-4 py-3 text-sm rounded-xl border border-teal-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500">
+        <input type="text" id="user-name-input" autocomplete="off" enterkeyhint="go" placeholder="Ví dụ: Nguyễn Văn A..." class="w-full px-4 py-3 text-sm rounded-xl border border-teal-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500">
         <p id="name-error-msg" class="hidden text-rose-500 text-[11px] font-medium mt-1.5 flex items-center">
           <i data-lucide="alert-circle" class="w-3.5 h-3.5 mr-1"></i> Vui lòng nhập tên để bắt đầu!
         </p>
@@ -401,7 +440,7 @@
   </div>
 
   <footer class="py-3 text-center text-[11px] text-slate-400 border-t border-slate-100 dark:border-slate-800">
-    Chúc bạn có một ngày tốt lành và hãy giữ tâm trạng mình thật tốt nhé !
+    Chúc bạn có một ngày tốt lành và hãy giữ tâm trạng mình thật tốt nhé!
   </footer>
 
   <script>
@@ -2009,7 +2048,7 @@
   (() => {
     const $ = (id) => document.getElementById(id);
     const MOODS = ['Rất tệ', 'Tệ', 'Bình thường', 'Tốt', 'Rất tốt'];
-    const MODES = { trame: 'Chấm trame', doodle: 'Vẽ tự do', coloring: 'Tô màu' };
+    const MODES = { trame: 'Chấm trame', doodle: 'Vẽ tự do', coloring: 'Tô màu', emotion: 'Vẽ cảm xúc', body: 'Quét cơ thể', prompt: 'Vẽ theo đề bài' };
     const SITE = 'https://meowmeow322.github.io/Thikhoahockithuat/';
     const KEY = 'mindart_history';
     let moodBefore = null, preDone = false, dass = null, lastIdx = -1, timers = [], histUser = null, histCur = [];
@@ -3123,7 +3162,7 @@
     "Số thao tác tô màu": "Coloring actions", "0 thao tác": "0 actions", "Nhịp độ": "Pace", "Đang ghi nhận...": "Recording...",
     "Lời khuyên": "Tip", "Hãy từ từ chọn cọ hoặc thùng sơn tự động tô màu theo ý thích...": "Take your time to pick a brush or the paint bucket and color as you like...",
     "Hoàn thành": "Finish", "Nhận xét về tranh của bạn": "Feedback on your artwork", "Phong cách gần giống:": "Similar style:", "Tải dữ liệu về": "Download data",
-    "Chúc bạn có một ngày tốt lành và hãy giữ tâm trạng mình thật tốt nhé !": "Wishing you a lovely day — please keep your spirits high!",
+    "Chúc bạn có một ngày tốt lành và hãy giữ tâm trạng mình thật tốt nhé!": "Wishing you a lovely day — please keep your spirits high!",
     "Về trang đăng nhập": "Back to login page", "Đổi chế độ Sáng/Tối": "Toggle Light/Dark mode", "tự pha màu": "Custom color", "Cọ vẽ": "Brush",
     "Thùng sơn tự động tô": "Paint bucket", "Tẩy": "Eraser", "Xóa tất cả": "Clear all", "Lịch sử": "History", "Về dự án": "About",
     "Hoa Mây": "Cloud Flowers", "Xe Hoa": "Flower Car", "Biển Nắng": "Sunny Sea", "Nhà Đồng Quê": "Country House", "Đầu Sói": "Wolf Head", "Chuông gió": "Wind Chime",
@@ -3694,10 +3733,10 @@
     if (!chats.length) { var o = JSON.parse(localStorage.getItem(OLD)); if (Array.isArray(o) && o.length) { chats = [{ id: 'c' + Date.now(), title: String(o[0].text || '').slice(0, 40), t: Date.now(), msgs: o }]; } }
   } catch (_) {}
   var SUG = [
-    ['😮‍💨', 'Dạo này mình thấy căng thẳng vì học tập', "I've been stressed about school lately"],
-    ['🌬️', 'Hướng dẫn mình hít thở chậm để bình tĩnh', 'Guide me through slow breathing to calm down'],
-    ['🎨', 'Gợi ý hoạt động vẽ để thư giãn', 'Suggest a relaxing drawing activity'],
-    ['😴', 'Mình khó ngủ và hay suy nghĩ lung tung', "I can't sleep and my mind keeps racing"]
+    ['', 'Dạo này mình thấy căng thẳng vì học tập', "I've been stressed about school lately"],
+    ['', 'Hướng dẫn mình hít thở chậm để bình tĩnh', 'Guide me through slow breathing to calm down'],
+    ['', 'Gợi ý hoạt động vẽ để thư giãn', 'Suggest a relaxing drawing activity'],
+    ['', 'Mình khó ngủ và hay suy nghĩ lung tung', "I can't sleep and my mind keeps racing"]
   ];
   var PANEL = 'bg-white/90 dark:bg-slate-900/90 rounded-3xl shadow-xl border border-teal-100 dark:border-slate-800';
 
@@ -3946,6 +3985,1081 @@
   var lb = document.getElementById('btn-lang');
   if (lb) lb.addEventListener('click', function () { setTimeout(apply, 120); });
   apply();
+})();
+</script>
+<script>
+(function () {
+  'use strict';
+  var D = document;
+  var CHAT_URL = 'https://thikhoahockithuat.lexuandang0302.workers.dev';
+  function $(id) { return D.getElementById(id); }
+  function en() { return !!(window.__lang && window.__lang() === 'en'); }
+  function T(v, e) { return en() ? e : v; }
+  function ls(k, d) { try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (_) { return d; } }
+  function sv(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (_) { return false; } }
+  function pad(n) { return ('0' + n).slice(-2); }
+  function dstr(d) { d = d || new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function uname() { try { return (typeof userName === 'string' && userName) || ''; } catch (_) { return ''; } }
+  function fmtDate(t, withTime) {
+    var o = withTime ? { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' } : { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return new Date(t).toLocaleString(en() ? 'en-GB' : 'vi-VN', o);
+  }
+
+  var HK = 'mindart_history';
+  function hist() { var h = ls(HK, []); return Array.isArray(h) ? h : []; }
+  function histSave(a) {
+    a = a.slice(-50);
+    if (!sv(HK, a)) { a.forEach(function (r, i) { if (i < a.length - 3) delete r.thumb; }); sv(HK, a); }
+  }
+
+  var BTN = 'py-2 px-4 rounded-xl border border-teal-200 dark:border-slate-700 text-teal-800 dark:text-teal-200 text-xs font-semibold hover:bg-teal-50 dark:hover:bg-slate-800';
+  var PRI = 'py-2.5 px-4 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold disabled:opacity-40';
+  var CARD = 'p-4 rounded-2xl border border-teal-200 dark:border-slate-700 bg-white/60 dark:bg-slate-800/40';
+  var H3 = 'font-bold text-teal-950 dark:text-teal-100 text-base mb-1';
+  var MOODS_VI = ['Rất tệ', 'Tệ', 'Bình thường', 'Tốt', 'Rất tốt'];
+  var MOODS_EN = ['Very bad', 'Bad', 'Okay', 'Good', 'Very good'];
+
+  var st = D.createElement('style');
+  st.textContent = '.mx2-modal:not(.hidden){animation:fade .2s ease}.mx2-modal:not(.hidden)>div{animation:pop .3s cubic-bezier(.34,1.56,.64,1)}' +
+    '#mx2-studio canvas{touch-action:none}.mx2-sw{width:30px;height:30px;border-radius:9999px;border:2px solid transparent;box-shadow:0 0 0 1px rgba(100,116,139,.35)}' +
+    '.mx2-sw.on{border-color:#0d9488;box-shadow:0 0 0 2px #0d9488}';
+  D.head.appendChild(st);
+
+  function modal(id, z) {
+    var o = D.createElement('div');
+    o.id = id;
+    o.className = 'mx2-modal hidden fixed inset-0 flex items-center justify-center bg-black/40 p-4';
+    o.style.zIndex = z || 65;
+    o.innerHTML = '<div class="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto text-slate-700 dark:text-slate-200"></div>';
+    D.body.appendChild(o);
+    o.addEventListener('click', function (e) { if (e.target === o && !o.getAttribute('data-sticky')) hideM(o); });
+    return o;
+  }
+  function mb(o) { return o.firstElementChild; }
+  function showM(o) { o.classList.remove('hidden'); }
+  function hideM(o) { o.classList.add('hidden'); }
+
+  var toastEl = null, toastTm = 0;
+  function toast(msg) {
+    if (!toastEl) {
+      toastEl = D.createElement('div');
+      toastEl.className = 'fixed left-1/2 -translate-x-1/2 bottom-6 px-4 py-2 rounded-xl bg-slate-900 text-white text-xs shadow-lg max-w-[90vw] text-center';
+      toastEl.style.zIndex = 100;
+      D.body.appendChild(toastEl);
+    }
+    toastEl.textContent = msg; toastEl.style.display = 'block';
+    clearTimeout(toastTm); toastTm = setTimeout(function () { toastEl.style.display = 'none'; }, 3200);
+  }
+
+  function moodBtns(attr) {
+    var M = en() ? MOODS_EN : MOODS_VI;
+    return '<div class="grid grid-cols-5 gap-1.5 mt-2">' + M.map(function (m, i) {
+      return '<button type="button" ' + attr + '="' + (i + 1) + '" class="py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-teal-50 dark:hover:bg-slate-800"><span class="block text-base font-bold">' + (i + 1) + '</span><span class="block text-[10px] leading-tight text-slate-500 dark:text-slate-400">' + m + '</span></button>';
+    }).join('') + '</div>';
+  }
+  function markMood(box, attr, v) {
+    box.querySelectorAll('[' + attr + ']').forEach(function (b) {
+      var on = +b.getAttribute(attr) === v;
+      ['bg-teal-600', 'text-white', 'border-teal-600'].forEach(function (c) { b.classList.toggle(c, on); });
+    });
+  }
+
+  var brM = modal('mx2-breath', 90), brT = [];
+  function breathe(onDone) {
+    brT.forEach(clearTimeout); brT = [];
+    mb(brM).innerHTML = '<div class="text-center"><h3 class="' + H3 + '">' + T('Hít thở cùng vòng tròn', 'Breathe with the circle') + '</h3>' +
+      '<p class="text-xs text-slate-500 dark:text-slate-400">' + T('Hít vào 4 giây, thở ra 6 giây, lặp lại 3 lần', 'Inhale 4 seconds, exhale 6 seconds, repeat 3 times') + '</p>' +
+      '<div class="h-44 flex items-center justify-center"><div id="mx2-bc" class="w-24 h-24 rounded-full bg-teal-400/50 border-2 border-teal-500" style="transition-property:transform;transition-timing-function:ease-in-out"></div></div>' +
+      '<p id="mx2-bt" class="font-semibold text-teal-700 dark:text-teal-300 h-6"></p><p id="mx2-bn" class="text-xs text-slate-400 mb-3"></p>' +
+      '<button type="button" data-x class="' + BTN + '">' + T('Dừng', 'Stop') + '</button></div>';
+    showM(brM);
+    var c = $('mx2-bc'), t = $('mx2-bt'), n = $('mx2-bn'), cycle = 0;
+    function end(done) { brT.forEach(clearTimeout); brT = []; hideM(brM); if (done && onDone) onDone(); }
+    mb(brM).querySelector('[data-x]').onclick = function () { end(false); };
+    c.style.transitionDuration = '.01ms';
+    (function step() {
+      if (cycle >= 3) { t.textContent = T('Làm tốt lắm', 'Well done'); brT.push(setTimeout(function () { end(true); }, 900)); return; }
+      n.textContent = T('Vòng ', 'Round ') + (++cycle) + '/3';
+      t.textContent = T('Hít vào', 'Breathe in');
+      c.style.transitionDuration = '4s'; c.style.transform = 'scale(1.6)';
+      brT.push(setTimeout(function () {
+        t.textContent = T('Thở ra', 'Breathe out');
+        c.style.transitionDuration = '6s'; c.style.transform = 'scale(1)';
+        brT.push(setTimeout(step, 6000));
+      }, 4000));
+    })();
+  }
+
+  function callWorker(payload, ms) {
+    var ctl = window.AbortController ? new AbortController() : null, tm = setTimeout(function () { if (ctl) ctl.abort(); }, ms || 20000);
+    payload.lang = en() ? 'en' : 'vi';
+    return fetch(CHAT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: ctl ? ctl.signal : undefined })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok && !j.reply) throw new Error(j.error || 'http'); return j; }); })
+      .then(function (j) { clearTimeout(tm); return j; }, function (e) { clearTimeout(tm); throw e; });
+  }
+
+  var LK = 'mindart_listen';
+  function listenOn() { return ls(LK, false) === true; }
+  (function patchFetch() {
+    var f = window.fetch; if (!f) return;
+    window.fetch = function (u, o) {
+      try {
+        if (listenOn() && typeof u === 'string' && u.indexOf('workers.dev') > -1 && o && typeof o.body === 'string') {
+          var b = JSON.parse(o.body);
+          if (b && typeof b.message === 'string' && !b.task) { b.mode = 'listen'; o = Object.assign({}, o, { body: JSON.stringify(b) }); }
+        }
+      } catch (_) {}
+      return f.call(this, u, o);
+    };
+  })();
+  function listenLabel() {
+    var l = D.createElement('label');
+    l.className = 'mx2-listen flex items-start gap-2 text-xs text-slate-600 dark:text-slate-300 mb-2 cursor-pointer select-none';
+    l.innerHTML = '<input type="checkbox" class="mt-0.5 accent-teal-600"><span><b>' + T('Chỉ lắng nghe', 'Listen only') + '</b> · ' +
+      T('AI chỉ lắng nghe và đồng cảm, không đưa lời khuyên.', 'The AI only listens and empathizes, with no advice.') + '</span>';
+    var cb = l.querySelector('input'); cb.checked = listenOn();
+    cb.addEventListener('change', function () {
+      sv(LK, cb.checked);
+      D.querySelectorAll('.mx2-listen input').forEach(function (x) { x.checked = cb.checked; });
+      toast(cb.checked ? T('Đã bật chế độ chỉ lắng nghe', 'Listen-only mode is on') : T('Đã tắt chế độ chỉ lắng nghe', 'Listen-only mode is off'));
+    });
+    return l;
+  }
+  var listenRaf = 0;
+  function injectListen() {
+    listenRaf = 0;
+    [['mx-chat-in', 0], ['ai-err', 0]].forEach(function (a) {
+      var el = $(a[0]); if (!el || !el.parentNode) return;
+      var prev = el.previousElementSibling;
+      if (prev && prev.classList.contains('mx2-listen')) { prev.querySelector('b').textContent = T('Chỉ lắng nghe', 'Listen only'); return; }
+      el.parentNode.insertBefore(listenLabel(), el);
+    });
+  }
+  new MutationObserver(function () { if (!listenRaf) listenRaf = requestAnimationFrame(injectListen); }).observe(D.body, { childList: true, subtree: true });
+
+  var EMO = [
+    { k: 'joy', vi: 'Vui', en: 'Joy', c: ['#FFD166', '#F78C6B', '#EF476F', '#FFE8A3'] },
+    { k: 'calm', vi: 'Bình yên', en: 'Calm', c: ['#A8D5BA', '#7FB7BE', '#C7E3E1', '#5C8EA6'] },
+    { k: 'sad', vi: 'Buồn', en: 'Sad', c: ['#5C7CFA', '#748FFC', '#A5B4FC', '#364FC7'] },
+    { k: 'anger', vi: 'Giận', en: 'Angry', c: ['#E03131', '#F76707', '#C92A2A', '#FF8787'] },
+    { k: 'fear', vi: 'Lo sợ', en: 'Anxious', c: ['#7048E8', '#9775FA', '#495057', '#B197FC'] },
+    { k: 'tired', vi: 'Mệt mỏi', en: 'Tired', c: ['#ADB5BD', '#868E96', '#B5C99A', '#CED4DA'] },
+    { k: 'empty', vi: 'Trống rỗng', en: 'Empty', c: ['#DEE2E6', '#ADB5BD', '#F1F3F5', '#868E96'] },
+    { k: 'hope', vi: 'Hy vọng', en: 'Hopeful', c: ['#FFE066', '#8CE99A', '#74C0FC', '#FFA8A8'] }
+  ];
+  var BODYC = [
+    ['#FDE047', 'Hơi khó chịu', 'Mild discomfort'], ['#FB923C', 'Căng, nặng', 'Tense, heavy'], ['#EF4444', 'Đau, rất căng', 'Painful, very tight'],
+    ['#60A5FA', 'Lạnh, tê', 'Cold, numb'], ['#86EFAC', 'Thả lỏng', 'Relaxed']
+  ];
+  var FREEC = ['#0f172a', '#ef4444', '#f97316', '#facc15', '#22c55e', '#06b6d4', '#3b82f6', '#a855f7', '#ec4899', '#92400e'];
+  var MODEDEF = {
+    emotion: { vi: 'Vẽ cảm xúc bằng màu', en: 'Draw feelings in color', w: 900, h: 650, size: 14, alpha: 1 },
+    body: { vi: 'Quét cơ thể', en: 'Body scan', w: 560, h: 760, size: 30, alpha: 0.55 },
+    prompt: { vi: 'Vẽ theo đề bài', en: 'Prompt drawing', w: 900, h: 650, size: 8, alpha: 1 }
+  };
+  var MODE_NAME = {
+    trame: ['Chấm trame', 'Dot drawing'], doodle: ['Vẽ tự do', 'Free drawing'], coloring: ['Tô màu mandala', 'Mandala coloring'],
+    emotion: ['Vẽ cảm xúc', 'Feeling colors'], body: ['Quét cơ thể', 'Body scan'], prompt: ['Vẽ theo đề bài', 'Prompt drawing'], music: ['Vẽ ra nhạc', 'Draw to music']
+  };
+  function modeName(m) { var a = MODE_NAME[m]; return a ? T(a[0], a[1]) : T('Vẽ', 'Drawing'); }
+
+  var S = null, root = null, cvB, cvF, cvC, xB, xF, xC, xT, fin = null;
+
+  function rr(p, x, y, w, h, r) {
+    p.moveTo(x + r, y); p.arcTo(x + w, y, x + w, y + h, r); p.arcTo(x + w, y + h, x, y + h, r); p.arcTo(x, y + h, x, y, r); p.arcTo(x, y, x + w, y, r); p.closePath();
+  }
+  function bodyPath() {
+    var p = new Path2D(), cx = 280;
+    p.moveTo(cx + 58, 95); p.arc(cx, 95, 58, 0, Math.PI * 2);
+    rr(p, cx - 22, 148, 44, 44, 10);
+    rr(p, cx - 95, 184, 190, 290, 40);
+    rr(p, cx - 152, 196, 52, 270, 26); rr(p, cx + 100, 196, 52, 270, 26);
+    rr(p, cx - 92, 470, 84, 270, 32); rr(p, cx + 8, 470, 84, 270, 32);
+    return p;
+  }
+  function zoneOf(x, y) {
+    var cx = 280;
+    if (y < 186) return 'head';
+    if (y < 474) { if (x < cx - 95 || x > cx + 95) return 'arms'; return y < 335 ? 'chest' : 'belly'; }
+    return 'legs';
+  }
+  var ZONE = {
+    head: ['đầu và cổ', 'head and neck', 'thường căng khi suy nghĩ nhiều hoặc ngồi học lâu. Thử xoay cổ thật chậm và thả lỏng hai vai.', 'often tightens with heavy thinking or long study sessions. Try slow neck rolls and relax your shoulders.'],
+    chest: ['vai và ngực', 'shoulders and chest', 'thường căng khi lo lắng, hơi thở dễ nông. Thử thở chậm vào bụng vài lần.', 'often tightens with worry and makes breathing shallow. Try a few slow belly breaths.'],
+    belly: ['bụng', 'belly', 'dễ thắt lại khi hồi hộp hoặc áp lực. Đặt tay lên bụng và thở thật chậm.', 'can knot up with nerves or pressure. Rest a hand on your belly and breathe slowly.'],
+    arms: ['hai tay', 'arms and hands', 'hay mỏi khi cầm bút hoặc điện thoại lâu. Thử nắm chặt rồi thả lỏng bàn tay vài lần.', 'often tire from holding a pen or phone. Try clenching and releasing your hands a few times.'],
+    legs: ['hai chân', 'legs', 'thường nặng, mỏi khi cơ thể kiệt sức. Hãy ngồi nghỉ, duỗi chân và uống nước.', 'often feel heavy when your body is worn out. Sit, stretch your legs and drink some water.']
+  };
+  function bodyReport() {
+    var p = bodyPath(), img = xF.getImageData(0, 0, S.w, S.h).data, area = {}, paint = {}, x, y, z, step = 6;
+    for (y = 0; y < S.h; y += step) for (x = 0; x < S.w; x += step) {
+      if (!xB.isPointInPath(p, x, y)) continue;
+      z = zoneOf(x, y); area[z] = (area[z] || 0) + 1;
+      if (img[(y * S.w + x) * 4 + 3] > 40) paint[z] = (paint[z] || 0) + 1;
+    }
+    var rows = [];
+    Object.keys(area).forEach(function (k) { var r = (paint[k] || 0) / area[k]; if (r >= 0.12) rows.push([k, r]); });
+    rows.sort(function (a, b) { return b[1] - a[1]; });
+    return rows;
+  }
+
+  function palette() {
+    if (S.mode === 'body') return BODYC.map(function (b) { return b[0]; });
+    if (S.mode === 'emotion') { var e = EMO.filter(function (x) { return x.k === S.emo; })[0]; return e ? e.c : EMO[1].c; }
+    return FREEC;
+  }
+
+  function buildStudio() {
+    if (root) return;
+    root = D.createElement('div');
+    root.id = 'mx2-studio';
+    root.className = 'hidden fixed inset-0 bg-slate-50 dark:bg-slate-950 flex flex-col text-slate-700 dark:text-slate-200';
+    root.style.zIndex = 70;
+    root.innerHTML =
+      '<div class="flex items-center justify-between gap-2 px-3 py-2 border-b border-teal-100 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80">' +
+      '<button type="button" data-st="back" class="' + BTN + '"></button><div id="st-title" class="flex-1 text-center text-sm font-bold text-teal-950 dark:text-teal-100 truncate"></div>' +
+      '<button type="button" data-st="done" class="' + PRI + '"></button></div>' +
+      '<div id="st-hint" class="px-3 pt-1.5 text-[11px] text-slate-500 dark:text-slate-400 text-center"></div>' +
+      '<div id="st-tools" class="px-3 py-2 flex flex-wrap items-center gap-2 justify-center"></div>' +
+      '<div id="st-stage" class="flex-1 min-h-0 flex items-center justify-center px-3 pb-3"><div id="st-wrap" class="relative bg-white rounded-2xl shadow border border-slate-200 dark:border-slate-700 overflow-hidden"></div></div>' +
+      '<div id="st-setup" class="absolute inset-0 z-10 bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-4 overflow-y-auto"></div>';
+    D.body.appendChild(root);
+    root.addEventListener('click', onStudioClick);
+    root.addEventListener('input', function (e) {
+      if (e.target.id === 'st-size' && S) S.size = +e.target.value;
+      else if (e.target.id === 'st-custom' && S) { S.color = e.target.value; S.erase = false; markTools(); }
+    });
+    window.addEventListener('resize', fit);
+    fin = modal('mx2-fin', 75);
+    fin.setAttribute('data-sticky', '1');
+  }
+
+  function fit() {
+    if (!root || !S || root.classList.contains('hidden')) return;
+    var st = $('st-stage'), w = $('st-wrap'); if (!st || !w) return;
+    var aw = st.clientWidth - 24, ah = st.clientHeight - 6;
+    var k = Math.max(0.1, Math.min(aw / S.w, ah / S.h));
+    w.style.width = Math.floor(S.w * k) + 'px'; w.style.height = Math.floor(S.h * k) + 'px';
+  }
+
+  function openStudio(mode, opts) {
+    buildStudio(); opts = opts || {};
+    var def = MODEDEF[mode]; if (!def) return;
+    S = { mode: mode, w: def.w, h: def.h, strokes: [], color: null, size: def.size, alpha: def.alpha, erase: false, emo: opts.emo || null, emos: {}, prompt: opts.prompt || '', before: null, after: null, t: null, drawing: null, started: false };
+    var wrap = $('st-wrap');
+    wrap.innerHTML = '<canvas id="st-b" class="absolute inset-0 w-full h-full"></canvas><canvas id="st-f" class="absolute inset-0 w-full h-full"></canvas><canvas id="st-c" class="absolute inset-0 w-full h-full"></canvas>';
+    cvB = $('st-b'); cvF = $('st-f'); cvC = $('st-c');
+    [cvB, cvF, cvC].forEach(function (c) { c.width = S.w; c.height = S.h; });
+    xB = cvB.getContext('2d'); xF = cvF.getContext('2d'); xC = cvC.getContext('2d');
+    var tc = D.createElement('canvas'); tc.width = S.w; tc.height = S.h; xT = tc.getContext('2d');
+    xB.fillStyle = '#ffffff'; xB.fillRect(0, 0, S.w, S.h);
+    if (mode === 'body') {
+      var bp = bodyPath(); xB.fillStyle = '#f1f5f9'; xB.fill(bp); xB.lineWidth = 3; xB.strokeStyle = '#94a3b8'; xB.stroke(bp);
+    }
+    cvC.addEventListener('pointerdown', onDown); cvC.addEventListener('pointermove', onMove);
+    cvC.addEventListener('pointerup', onUp); cvC.addEventListener('pointercancel', onUp);
+    root.querySelector('[data-st=back]').textContent = T('Thoát', 'Exit');
+    root.querySelector('[data-st=done]').textContent = T('Xong', 'Done');
+    $('st-title').textContent = opts.prompt && mode === 'prompt' ? T('Vẽ theo đề bài', 'Prompt drawing') : T(def.vi, def.en);
+    $('st-hint').textContent = ''; $('st-tools').innerHTML = '';
+    renderSetup();
+    root.classList.remove('hidden');
+    D.documentElement.style.overflow = 'hidden';
+    setTimeout(fit, 30);
+  }
+  function closeStudio() {
+    if (!root) return;
+    root.classList.add('hidden'); hideM(fin);
+    D.documentElement.style.overflow = '';
+    S = null;
+  }
+
+  function renderSetup() {
+    var box = $('st-setup'), h = '<div class="' + 'bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-teal-100 dark:border-slate-800 p-6 max-w-lg w-full' + '">';
+    var def = MODEDEF[S.mode];
+    h += '<h3 class="' + H3 + '">' + T(def.vi, def.en) + '</h3>';
+    if (S.mode === 'emotion') {
+      h += '<p class="text-xs text-slate-500 dark:text-slate-400 mb-3">' + T('Chọn cảm xúc bạn đang có. Hãy tô nó thành màu, nét và hình dạng, không cần giống thật hay đẹp. Khi xong, bạn đặt cho nó một cái tên.', 'Pick the feeling you have right now. Turn it into color, lines and shapes; it does not need to look real or pretty. Afterwards, give it a name.') + '</p>' +
+        '<div class="grid grid-cols-4 gap-2 mb-4">' + EMO.map(function (e) {
+          return '<button type="button" data-emo="' + e.k + '" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-teal-500 text-center"><span class="block w-8 h-8 mx-auto rounded-full mb-1" style="background:linear-gradient(135deg,' + e.c[0] + ',' + e.c[1] + ')"></span><span class="text-[11px] font-semibold">' + T(e.vi, e.en) + '</span></button>';
+        }).join('') + '</div>';
+    } else if (S.mode === 'body') {
+      h += '<p class="text-xs text-slate-500 dark:text-slate-400 mb-2">' + T('Hít thở chậm. Quét từ đầu xuống chân và chú ý chỗ nào đang căng, nặng, đau hoặc tê. Dùng màu để tô vào đúng vùng đó trên hình người.', 'Breathe slowly. Scan from head to toe and notice where you feel tense, heavy, painful or numb. Use color to paint those spots on the figure.') + '</p>' +
+        '<div class="flex flex-wrap gap-x-3 gap-y-1 mb-4 text-[11px]">' + BODYC.map(function (b) { return '<span class="inline-flex items-center gap-1"><i class="inline-block w-3 h-3 rounded-full" style="background:' + b[0] + '"></i>' + T(b[1], b[2]) + '</span>'; }).join('') + '</div>';
+    } else {
+      h += '<p class="text-xs text-slate-500 dark:text-slate-400 mb-2">' + T('Đề bài của bạn:', 'Your prompt:') + '</p>' +
+        '<p class="text-base font-semibold text-teal-900 dark:text-teal-100 mb-4">' + esc(S.prompt) + '</p>';
+    }
+    h += '<div class="text-xs font-semibold">' + T('Bây giờ bạn cảm thấy thế nào? (không bắt buộc)', 'How do you feel right now? (optional)') + '</div>' + moodBtns('data-sb') +
+      '<p id="st-setup-err" class="hidden text-[11px] text-rose-500 mt-3">' + T('Hãy chọn một cảm xúc để bắt đầu nhé.', 'Please pick a feeling to begin.') + '</p>' +
+      '<div class="flex gap-2 mt-5"><button type="button" data-st="back" class="' + BTN + '">' + T('Quay lại', 'Back') + '</button><button type="button" data-st="start" class="' + PRI + ' flex-1">' + T('Bắt đầu vẽ', 'Start drawing') + '</button></div></div>';
+    box.innerHTML = h; box.classList.remove('hidden');
+    if (S.emo) markEmo();
+  }
+  function markEmo() {
+    $('st-setup').querySelectorAll('[data-emo]').forEach(function (b) {
+      var on = b.getAttribute('data-emo') === S.emo;
+      ['border-teal-600', 'bg-teal-50', 'dark:bg-slate-800'].forEach(function (c) { b.classList.toggle(c, on); });
+    });
+  }
+
+  function renderTools() {
+    var h = '', pal = palette();
+    if (S.mode === 'emotion') {
+      h += '<div class="w-full flex flex-wrap justify-center gap-1.5 mb-1">' + EMO.map(function (e) {
+        return '<button type="button" data-emo="' + e.k + '" title="' + T(e.vi, e.en) + '" class="px-2 py-1 rounded-full text-[11px] border ' + (e.k === S.emo ? 'border-teal-600 bg-teal-50 dark:bg-slate-800 font-bold' : 'border-slate-200 dark:border-slate-700') + '"><i class="inline-block w-2.5 h-2.5 rounded-full mr-1" style="background:' + e.c[0] + '"></i>' + T(e.vi, e.en) + '</button>';
+      }).join('') + '</div>';
+    }
+    h += pal.map(function (c) { return '<button type="button" data-col="' + c + '" class="mx2-sw" style="background:' + c + '" aria-label="' + c + '"></button>'; }).join('');
+    if (S.mode !== 'body') h += '<input id="st-custom" type="color" value="' + (S.color || '#0d9488') + '" class="w-8 h-8 rounded-full border-0 p-0 bg-transparent cursor-pointer" aria-label="' + T('Chọn màu khác', 'Custom color') + '">';
+    h += '<label class="flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-400">' + T('Nét', 'Size') + '<input id="st-size" type="range" min="3" max="60" value="' + S.size + '" class="w-20 accent-teal-600"></label>' +
+      '<button type="button" data-st="eraser" class="' + BTN + '"></button><button type="button" data-st="undo" class="' + BTN + '">' + T('Hoàn tác', 'Undo') + '</button><button type="button" data-st="clear" class="' + BTN + '">' + T('Xóa hết', 'Clear') + '</button>';
+    $('st-tools').innerHTML = h;
+    markTools();
+  }
+  function markTools() {
+    $('st-tools').querySelectorAll('[data-col]').forEach(function (b) { b.classList.toggle('on', !S.erase && b.getAttribute('data-col') === S.color); });
+    var e = $('st-tools').querySelector('[data-st=eraser]');
+    if (e) { e.textContent = S.erase ? T('Đang tẩy', 'Erasing') : T('Cục tẩy', 'Eraser'); ['bg-teal-600', 'text-white'].forEach(function (c) { e.classList.toggle(c, S.erase); }); }
+  }
+  function renderHint() {
+    var h = $('st-hint');
+    if (S.mode === 'prompt') h.textContent = S.prompt;
+    else if (S.mode === 'body') h.textContent = T('Tô vùng đang căng, nặng hoặc đau trên hình người. Không có đúng hay sai.', 'Paint the areas that feel tense, heavy or painful. There is no right or wrong.');
+    else h.textContent = T('Không cần đẹp. Hãy để màu và nét thể hiện cảm xúc của bạn.', 'It does not have to be pretty. Let color and lines show how you feel.');
+  }
+
+  function onStudioClick(e) {
+    var b;
+    if ((b = e.target.closest('[data-emo]'))) {
+      S.emo = b.getAttribute('data-emo');
+      if (S.started) { S.color = palette()[0]; S.erase = false; renderTools(); } else markEmo();
+      $('st-setup-err').classList.add('hidden');
+      return;
+    }
+    if ((b = e.target.closest('[data-sb]'))) { S.before = +b.getAttribute('data-sb'); markMood($('st-setup'), 'data-sb', S.before); return; }
+    if ((b = e.target.closest('[data-col]'))) { S.color = b.getAttribute('data-col'); S.erase = false; markTools(); return; }
+    b = e.target.closest('[data-st]'); if (!b) return;
+    var a = b.getAttribute('data-st');
+    if (a === 'back') { if (S && S.strokes.length && !confirm(T('Thoát và bỏ bức vẽ hiện tại?', 'Exit and discard the current drawing?'))) return; closeStudio(); }
+    else if (a === 'start') {
+      if (S.mode === 'emotion' && !S.emo) { $('st-setup-err').classList.remove('hidden'); return; }
+      S.started = true; S.color = palette()[0]; $('st-setup').classList.add('hidden'); renderTools(); renderHint(); setTimeout(fit, 30);
+    }
+    else if (a === 'eraser') { S.erase = !S.erase; markTools(); }
+    else if (a === 'undo') { S.strokes.pop(); redraw(); }
+    else if (a === 'clear') { if (S.strokes.length && confirm(T('Xóa toàn bộ bức vẽ?', 'Clear the whole drawing?'))) { S.strokes = []; redraw(); } }
+    else if (a === 'done') finish();
+  }
+
+  function pathOn(x, s) {
+    var p = s.p, i;
+    x.lineCap = 'round'; x.lineJoin = 'round'; x.lineWidth = s.w;
+    x.beginPath();
+    if (p.length === 1) { x.arc(p[0][0], p[0][1], s.w / 2, 0, Math.PI * 2); x.fill(); return; }
+    x.moveTo(p[0][0], p[0][1]);
+    for (i = 1; i < p.length - 1; i++) x.quadraticCurveTo(p[i][0], p[i][1], (p[i][0] + p[i + 1][0]) / 2, (p[i][1] + p[i + 1][1]) / 2);
+    x.lineTo(p[p.length - 1][0], p[p.length - 1][1]);
+    x.stroke();
+  }
+  function paintStroke(target, s) {
+    if (s.e) { target.save(); target.globalCompositeOperation = 'destination-out'; target.strokeStyle = '#000'; target.fillStyle = '#000'; pathOn(target, s); target.restore(); return; }
+    xT.clearRect(0, 0, S.w, S.h); xT.strokeStyle = s.c; xT.fillStyle = s.c; pathOn(xT, s);
+    target.save(); target.globalAlpha = s.a; target.drawImage(xT.canvas, 0, 0); target.restore();
+  }
+  function redraw() { xF.clearRect(0, 0, S.w, S.h); S.strokes.forEach(function (s) { paintStroke(xF, s); }); }
+  function pos(e) { var r = cvC.getBoundingClientRect(); return [(e.clientX - r.left) * S.w / r.width, (e.clientY - r.top) * S.h / r.height]; }
+  function onDown(e) {
+    if (!S || !S.started || e.button > 0) return;
+    e.preventDefault();
+    try { cvC.setPointerCapture(e.pointerId); } catch (_) {}
+    S.drawing = { c: S.color, w: S.size, e: S.erase, a: S.erase ? 1 : S.alpha, p: [pos(e)], emo: S.emo };
+    liveDraw();
+  }
+  function onMove(e) {
+    if (!S || !S.drawing) return;
+    var evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+    (evs.length ? evs : [e]).forEach(function (ev) { S.drawing.p.push(pos(ev)); });
+    liveDraw();
+  }
+  function liveDraw() {
+    var s = S.drawing; if (!s) return;
+    if (s.e) { paintStroke(xF, s); return; }
+    xC.clearRect(0, 0, S.w, S.h); cvC.style.opacity = s.a; xC.strokeStyle = s.c; xC.fillStyle = s.c; pathOn(xC, s);
+  }
+  function onUp() {
+    if (!S || !S.drawing) return;
+    var s = S.drawing; S.drawing = null;
+    if (!s.e) { xF.save(); xF.globalAlpha = s.a; xF.drawImage(cvC, 0, 0); xF.restore(); xC.clearRect(0, 0, S.w, S.h); cvC.style.opacity = 1; }
+    S.strokes.push(s);
+    if (s.emo) S.emos[s.emo] = (S.emos[s.emo] || 0) + 1;
+  }
+
+  function compose() {
+    var c = D.createElement('canvas'); c.width = S.w; c.height = S.h;
+    var x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, S.w, S.h); x.drawImage(cvB, 0, 0); x.drawImage(cvF, 0, 0);
+    return c;
+  }
+  function makeThumb() {
+    var src = compose(), t = D.createElement('canvas'); t.width = 240; t.height = Math.round(240 * S.h / S.w);
+    t.getContext('2d').drawImage(src, 0, 0, t.width, t.height);
+    try { return t.toDataURL('image/jpeg', 0.6); } catch (_) { return null; }
+  }
+
+  function finish() {
+    if (!S.strokes.length) { toast(T('Hãy vẽ một chút trước khi kết thúc nhé.', 'Draw a little before finishing.')); return; }
+    var rows = S.mode === 'body' ? bodyReport() : null, h = '<h3 class="' + H3 + '">' + T('Hoàn thành bức vẽ', 'Drawing complete') + '</h3>';
+    if (rows) {
+      h += '<div class="mb-3 p-3 rounded-xl bg-teal-50 dark:bg-teal-950/40 text-xs leading-relaxed">';
+      if (rows.length) {
+        h += '<p class="font-semibold mb-1">' + T('Vùng bạn tô nhiều nhất:', 'Areas you painted most:') + '</p><ul class="list-disc pl-4 space-y-1">' +
+          rows.slice(0, 3).map(function (r) { var z = ZONE[r[0]]; return '<li><b>' + T(z[0], z[1]) + '</b> ' + T(z[2], z[3]) + '</li>'; }).join('') + '</ul>';
+      } else h += '<p>' + T('Bạn chưa tô nhiều vào hình người. Có thể cơ thể bạn đang khá thoải mái, hoặc bạn muốn quét lại thật chậm lần nữa.', 'You have not painted much on the figure. Your body may feel fairly comfortable, or you may want to scan again more slowly.') + '</p>';
+      h += '<p class="mt-2 text-[11px] opacity-70">' + T('Đây chỉ là gợi ý để bạn chú ý hơn đến cơ thể, không phải chẩn đoán.', 'This is only a prompt to notice your body, not a diagnosis.') + '</p></div>';
+    }
+    h += '<label class="text-xs font-semibold" for="fin-title">' + (S.mode === 'emotion' ? T('Nếu cảm xúc này có tên, bạn sẽ gọi nó là gì?', 'If this feeling had a name, what would you call it?') : T('Đặt tên cho bức vẽ (không bắt buộc)', 'Give your drawing a title (optional)')) + '</label>' +
+      '<input id="fin-title" maxlength="60" class="mt-1 mb-3 w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 px-3 py-2">' +
+      '<div class="text-xs font-semibold">' + T('Sau khi vẽ, bạn cảm thấy thế nào?', 'How do you feel after drawing?') + '</div>' + moodBtns('data-fm') +
+      '<label class="text-xs font-semibold block mt-3" for="fin-note">' + T('Nhật ký một dòng (không bắt buộc)', 'One-line diary (optional)') + '</label>' +
+      '<textarea id="fin-note" rows="2" maxlength="140" class="mt-1 w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 px-3 py-2"></textarea>' +
+      '<div class="grid grid-cols-2 gap-2 mt-4"><button type="button" data-f="ai" class="' + BTN + '">' + T('AI hỏi về bức tranh', 'AI questions') + '</button><button type="button" data-f="dl" class="' + BTN + '">' + T('Tải ảnh', 'Download') + '</button></div>' +
+      '<div class="flex gap-2 mt-3"><button type="button" data-f="back" class="' + BTN + '">' + T('Vẽ tiếp', 'Keep drawing') + '</button><button type="button" data-f="save" class="' + PRI + ' flex-1">' + T('Lưu vào phòng tranh', 'Save to gallery') + '</button></div>';
+    mb(fin).innerHTML = h; showM(fin);
+    S.after = null;
+  }
+  function finVals() { return { title: ($('fin-title') || {}).value || '', note: ($('fin-note') || {}).value || '' }; }
+  function mainEmo() {
+    var best = S.emo, n = 0; Object.keys(S.emos).forEach(function (k) { if (S.emos[k] > n) { n = S.emos[k]; best = k; } }); return best;
+  }
+  function persist() {
+    var v = finVals(), first = !S.t; if (first) S.t = Date.now();
+    var rec = { t: S.t, before: S.before, after: S.after, mode: S.mode, dass: window.__mx2dass || null, name: uname(), thumb: makeThumb(), note: v.note.trim(), title: v.title.trim(), emo: S.mode === 'emotion' ? mainEmo() : undefined };
+    var h = hist(), i, idx = -1;
+    for (i = 0; i < h.length; i++) if (h[i].t === S.t) idx = i;
+    if (idx >= 0) h[idx] = rec; else h.push(rec);
+    h.forEach(function (r, j) { if (j < h.length - 12) delete r.thumb; });
+    histSave(h);
+    compose().toBlob(function (blob) { if (blob) galPut({ t: rec.t, mode: rec.mode, name: rec.name, title: rec.title, before: rec.before, after: rec.after, note: rec.note, blob: blob }); }, 'image/jpeg', 0.9);
+    if (first) planAuto(S.mode);
+    return rec;
+  }
+  mbHandlers();
+  function mbHandlers() {
+    D.addEventListener('click', function (e) {
+      if (!S || !fin || fin.classList.contains('hidden') || !fin.contains(e.target)) return;
+      var m = e.target.closest('[data-fm]'), b = e.target.closest('[data-f]');
+      if (m) { S.after = +m.getAttribute('data-fm'); markMood(fin, 'data-fm', S.after); return; }
+      if (!b) return;
+      var a = b.getAttribute('data-f');
+      if (a === 'back') hideM(fin);
+      else if (a === 'save') {
+        var rec = persist(); hideM(fin); closeStudio(); refreshAll();
+        toast(T('Đã lưu bức vẽ vào phòng tranh của bạn.', 'Your drawing was saved to your gallery.'));
+        return rec;
+      }
+      else if (a === 'dl') { compose().toBlob(function (bl) { downloadBlob(bl, (finVals().title || modeName(S.mode)) + '.png'); }, 'image/png'); }
+      else if (a === 'ai') { var r = persist(); askAI({ mode: S.mode, title: r.title, note: r.note, before: r.before, after: r.after }); }
+    });
+  }
+  function downloadBlob(bl, name) {
+    if (!bl) return;
+    var u = URL.createObjectURL(bl), a = D.createElement('a'); a.href = u; a.download = String(name).replace(/[\\/:*?"<>|]+/g, '_'); D.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(u); }, 4000);
+  }
+
+  var aiM = modal('mx2-ai', 95);
+  var QFB = {
+    def: [['Khi vẽ, bạn chú ý nhất đến điều gì?', 'Có chỗ nào trong bức vẽ bạn muốn nhìn lâu hơn không?', 'Nếu bức vẽ này kể một câu chuyện ngắn, câu chuyện đó sẽ như thế nào?'],
+      ['What did you notice most while drawing?', 'Is there a part of the drawing you would like to look at a little longer?', 'If this drawing told a short story, what would it be?']],
+    emotion: [['Cảm xúc này đang ở đâu trong cơ thể bạn?', 'Màu nào trong bức vẽ khiến bạn thấy gần gũi nhất?', 'Bạn muốn cảm xúc này được lắng nghe như thế nào?'],
+      ['Where does this feeling sit in your body?', 'Which color in the drawing feels closest to you?', 'How would you like this feeling to be heard?']],
+    body: [['Vùng nào trong cơ thể bạn đã được chú ý nhiều nhất hôm nay?', 'Cơ thể bạn muốn gì lúc này: nghỉ, vận động hay một cái ôm?', 'Một việc nhỏ nào có thể giúp vùng đó dễ chịu hơn?'],
+      ['Which part of your body got the most attention today?', 'What does your body want right now: rest, movement or a hug?', 'What small thing could make that area feel a bit better?']],
+    mandala: [['Bạn thấy thế nào khi tô từng vùng nhỏ?', 'Có màu nào bạn chọn mà không cần suy nghĩ không?', 'Khoảnh khắc nào khi tô bạn thấy nhẹ nhõm nhất?'],
+      ['How did it feel to color each small area?', 'Was there a color you picked without thinking?', 'When did you feel most at ease while coloring?']]
+  };
+  function fallbackQs(mode) {
+    var k = mode === 'emotion' ? 'emotion' : mode === 'body' ? 'body' : mode === 'coloring' ? 'mandala' : 'def';
+    return QFB[k][en() ? 1 : 0];
+  }
+  function parseQs(txt) {
+    return String(txt || '').split(/\n+/).map(function (l) { return l.replace(/^\s*(?:[-*•]|\d+[.)])\s*/, '').replace(/^["“]|["”]$/g, '').trim(); })
+      .filter(function (l) { return l.length > 8 && l.length < 220; }).slice(0, 3);
+  }
+  function askAI(ctx) {
+    mb(aiM).innerHTML = '<h3 class="' + H3 + '">' + T('Câu hỏi gợi mở', 'Open questions') + '</h3><p class="text-sm py-6 text-center text-slate-500">' + T('Đang suy nghĩ vài câu hỏi cho bạn...', 'Thinking of a few questions for you...') + '</p>';
+    showM(aiM);
+    var num = function (v) { return typeof v === 'number' && v >= 1 && v <= 5 ? v : null; };
+    callWorker({ task: 'art_questions', mode: ctx.mode, title: ctx.title || '', note: ctx.note || '', before: num(ctx.before), after: num(ctx.after) })
+      .then(function (j) {
+        if (j.crisis) { renderAsk(null, false, j.reply); return; }
+        var q = parseQs(j.reply);
+        if (q.length >= 2) renderAsk(q, false); else renderAsk(fallbackQs(ctx.mode), true);
+      }, function () { renderAsk(fallbackQs(ctx.mode), true); });
+  }
+  function renderAsk(qs, fb, crisis) {
+    var h = '<h3 class="' + H3 + '">' + (crisis ? T('Mình ở đây với bạn', 'I am here with you') : T('Câu hỏi gợi mở', 'Open questions')) + '</h3>';
+    if (crisis) h += '<p class="text-sm leading-relaxed">' + esc(crisis) + '</p>';
+    else {
+      h += '<p class="text-xs text-slate-500 dark:text-slate-400 mb-3">' + T('Những câu hỏi này để bạn tự nhìn lại bức vẽ và cảm xúc của mình. AI không diễn giải hay đánh giá tâm lý từ bức vẽ.', 'These questions are for you to reflect on your drawing and feelings. The AI does not interpret or judge your mind from a drawing.') + (fb ? ' ' + T('(Gợi ý có sẵn vì AI đang bận.)', '(Built-in questions because the AI is busy.)') : '') + '</p>' +
+        '<ol class="list-decimal pl-5 space-y-2 text-sm leading-relaxed">' + qs.map(function (q) { return '<li>' + esc(q) + '</li>'; }).join('') + '</ol>' +
+        '<p class="text-[11px] text-slate-400 mt-3">' + T('Bạn có thể viết câu trả lời vào nhật ký một dòng hoặc kể với người bạn tin.', 'You can write an answer in your one-line diary or tell someone you trust.') + '</p>';
+    }
+    h += '<div class="flex gap-2 mt-4">' + (window.mxChat ? '<button type="button" data-a="chat" class="' + BTN + ' flex-1">' + T('Trò chuyện với AI', 'Chat with AI') + '</button>' : '') + '<button type="button" data-a="x" class="' + PRI + ' flex-1">' + T('Đóng', 'Close') + '</button></div>';
+    mb(aiM).innerHTML = h;
+    mb(aiM).onclick = function (e) {
+      var b = e.target.closest('[data-a]'); if (!b) return;
+      hideM(aiM);
+      if (b.getAttribute('data-a') === 'chat' && window.mxChat) { if (S) { } window.mxChat.open(); }
+    };
+  }
+
+  var GAL_MAX = 60, dbp = null;
+  function dbOpen() {
+    if (dbp) return dbp;
+    dbp = new Promise(function (res, rej) {
+      if (!window.indexedDB) { rej(new Error('no-idb')); return; }
+      var r = indexedDB.open('mindart_gallery', 1);
+      r.onupgradeneeded = function () { r.result.createObjectStore('art', { keyPath: 't' }); };
+      r.onsuccess = function () { res(r.result); };
+      r.onerror = function () { rej(r.error); };
+    });
+    dbp.catch(function () { dbp = null; });
+    return dbp;
+  }
+  function dbTx(mode, fn) {
+    return dbOpen().then(function (db) {
+      return new Promise(function (res, rej) {
+        var t = db.transaction('art', mode), req = fn(t.objectStore('art'));
+        t.oncomplete = function () { res(req ? req.result : undefined); };
+        t.onerror = t.onabort = function () { rej(t.error); };
+      });
+    });
+  }
+  function galAll() { return dbTx('readonly', function (s) { return s.getAll(); }); }
+  function galDel(t) { return dbTx('readwrite', function (s) { return s.delete(t); }); }
+  function galClear() { return dbTx('readwrite', function (s) { return s.clear(); }); }
+  function galPut(rec) {
+    return dbTx('readwrite', function (s) { return s.put(rec); }).then(function () {
+      return galAll().then(function (all) {
+        all.sort(function (a, b) { return a.t - b.t; });
+        var extra = all.slice(0, Math.max(0, all.length - GAL_MAX));
+        return Promise.all(extra.map(function (x) { return galDel(x.t); }));
+      });
+    }).catch(function () { toast(T('Trình duyệt không cho lưu tranh vào phòng tranh.', 'Your browser would not save the drawing to the gallery.')); });
+  }
+  function galFromCanvas(t, mode) {
+    var cv = null;
+    try { cv = typeof canvas !== 'undefined' ? canvas : null; } catch (_) {}
+    if (!cv || !cv.width) return;
+    try {
+      var c = D.createElement('canvas'); c.width = cv.width; c.height = cv.height;
+      var x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(cv, 0, 0);
+      c.toBlob(function (blob) { if (blob) galPut({ t: t, mode: mode, name: uname(), blob: blob }); }, 'image/jpeg', 0.88);
+    } catch (_) {}
+  }
+
+  var PK = 'mindart_gal_pin', galM = modal('mx2-gal', 66), G = { open: false, ok: false, view: 'lock', items: [], filter: 'all', cur: null, urls: [], tries: 0, until: 0, msg: '' };
+  galM.setAttribute('data-sticky', '1');
+  galM.addEventListener('click', function (e) { if (e.target === galM) closeGallery(); });
+  mb(galM).classList.replace('max-w-md', 'max-w-3xl');
+
+  function hashPin(pin, salt) {
+    var s = salt + ':' + pin;
+    if (window.crypto && crypto.subtle && window.TextEncoder) {
+      return crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)).then(function (b) {
+        return Array.prototype.map.call(new Uint8Array(b), function (x) { return ('0' + x.toString(16)).slice(-2); }).join('');
+      });
+    }
+    var h = 5381, i; for (i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
+    return Promise.resolve('x' + h);
+  }
+  function revoke() { G.urls.forEach(function (u) { URL.revokeObjectURL(u); }); G.urls = []; }
+  function openGallery() {
+    G.open = true; G.cur = null; G.filter = 'all'; G.msg = ''; G.ok = !ls(PK, null); G.view = G.ok ? 'list' : 'lock';
+    showM(galM); D.documentElement.style.overflow = 'hidden';
+    if (G.ok) loadGal(); else renderGal();
+  }
+  function closeGallery() { G.open = false; G.ok = false; revoke(); hideM(galM); if (!root || root.classList.contains('hidden')) D.documentElement.style.overflow = ''; }
+  function loadGal() {
+    G.view = 'list'; G.items = null; renderGal();
+    galAll().then(function (all) {
+      var hm = {}; hist().forEach(function (r) { hm[r.t] = r; });
+      all.forEach(function (a) {
+        var r = hm[a.t]; if (!r) return;
+        ['title', 'note', 'before', 'after', 'name'].forEach(function (k) { if (r[k] != null && r[k] !== '') a[k] = r[k]; });
+      });
+      all.sort(function (a, b) { return b.t - a.t; });
+      G.items = all; renderGal();
+    }, function () { G.items = false; renderGal(); });
+  }
+  function galHead(sub) {
+    return '<div class="flex items-center justify-between gap-2 mb-3"><div><h3 class="' + H3.replace('mb-1', 'mb-0') + '">' + T('Phòng tranh của tôi', 'My gallery') + '</h3>' + (sub ? '<p class="text-[11px] text-slate-400">' + sub + '</p>' : '') + '</div>' +
+      '<button type="button" data-g="close" class="' + BTN + '">' + T('Đóng', 'Close') + '</button></div>';
+  }
+  function renderGal() {
+    revoke();
+    var b = mb(galM), h = '';
+    if (G.view === 'lock') {
+      h = galHead('') + '<div class="max-w-xs mx-auto text-center py-4"><p class="text-sm mb-3">' + T('Nhập mã PIN 4 số để mở phòng tranh.', 'Enter your 4-digit PIN to open the gallery.') + '</p>' +
+        '<input id="g-pin" type="password" inputmode="numeric" maxlength="4" autocomplete="off" class="w-full text-center text-2xl tracking-[.6em] rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 py-2" aria-label="PIN">' +
+        '<p class="text-[11px] text-rose-500 min-h-[1.25rem] mt-2">' + esc(G.msg) + '</p>' +
+        '<button type="button" data-g="unlock" class="' + PRI + ' w-full mt-1">' + T('Mở', 'Open') + '</button>' +
+        '<button type="button" data-g="forgot" class="mt-4 text-[11px] text-slate-400 underline">' + T('Quên mã PIN', 'Forgot PIN') + '</button></div>';
+    } else if (G.view === 'pin') {
+      var has = !!ls(PK, null);
+      h = galHead('') + '<div class="max-w-xs mx-auto py-2"><h4 class="font-bold text-sm mb-2">' + (has ? T('Đổi hoặc tắt mã PIN', 'Change or turn off PIN') : T('Đặt mã PIN', 'Set a PIN')) + '</h4>' +
+        '<input id="g-p1" type="password" inputmode="numeric" maxlength="4" placeholder="' + T('PIN mới (4 số)', 'New PIN (4 digits)') + '" autocomplete="off" class="w-full mb-2 text-sm rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-3 py-2">' +
+        '<input id="g-p2" type="password" inputmode="numeric" maxlength="4" placeholder="' + T('Nhập lại PIN', 'Repeat PIN') + '" autocomplete="off" class="w-full mb-2 text-sm rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-3 py-2">' +
+        '<p class="text-[11px] text-rose-500 min-h-[1.25rem]">' + esc(G.msg) + '</p>' +
+        '<p class="text-[11px] text-slate-400 mb-3">' + T('Mã PIN chỉ ngăn người khác mở nhanh phòng tranh trong trang này. Ảnh không được mã hóa trên thiết bị. Nếu quên PIN, bạn chỉ có thể đặt lại bằng cách xóa toàn bộ tranh.', 'The PIN only stops others from quickly opening the gallery on this page. Images are not encrypted on your device. If you forget it, the only way to reset is to delete all drawings.') + '</p>' +
+        '<div class="flex gap-2"><button type="button" data-g="list" class="' + BTN + '">' + T('Quay lại', 'Back') + '</button><button type="button" data-g="savepin" class="' + PRI + ' flex-1">' + T('Lưu PIN', 'Save PIN') + '</button></div>' +
+        (has ? '<button type="button" data-g="offpin" class="' + BTN + ' w-full mt-2">' + T('Tắt mã PIN', 'Turn off PIN') + '</button>' : '') + '</div>';
+    } else if (G.view === 'detail' && G.cur) {
+      var a = G.cur, u = URL.createObjectURL(a.blob); G.urls.push(u);
+      h = galHead(fmtDate(a.t, true)) + '<img src="' + u + '" alt="" class="w-full max-h-[55vh] object-contain rounded-xl bg-white border border-slate-200 dark:border-slate-700">' +
+        '<div class="mt-3 text-sm"><div class="font-semibold">' + esc(a.title || modeName(a.mode)) + '</div>' +
+        '<div class="text-xs text-slate-500 dark:text-slate-400">' + modeName(a.mode) + (a.before || a.after ? ' · ' + T('Tâm trạng', 'Mood') + ': ' + (a.before || '?') + ' → ' + (a.after || '?') : '') + '</div>' +
+        (a.note ? '<div class="mt-1 text-xs italic">“' + esc(a.note) + '”</div>' : '') + '</div>' +
+        '<div class="grid grid-cols-2 gap-2 mt-4"><button type="button" data-g="dl" class="' + BTN + '">' + T('Tải ảnh', 'Download') + '</button><button type="button" data-g="ai" class="' + BTN + '">' + T('AI hỏi về bức tranh', 'AI questions') + '</button></div>' +
+        '<div class="flex gap-2 mt-2"><button type="button" data-g="list" class="' + BTN + ' flex-1">' + T('Quay lại', 'Back') + '</button><button type="button" data-g="del" class="' + BTN + ' flex-1 !text-rose-600 !border-rose-200">' + T('Xóa bức này', 'Delete') + '</button></div>';
+    } else {
+      var items = G.items, locked = !!ls(PK, null);
+      h = galHead(items ? items.length + '/' + GAL_MAX + ' ' + T('bức · chỉ lưu trên thiết bị này', 'drawings · stored on this device only') : '');
+      if (items === null) h += '<p class="text-sm text-center text-slate-500 py-8">' + T('Đang tải...', 'Loading...') + '</p>';
+      else if (items === false) h += '<p class="text-sm text-center text-slate-500 py-8">' + T('Trình duyệt này không cho lưu tranh (có thể đang ở chế độ riêng tư).', 'This browser does not allow saving drawings (it may be in private mode).') + '</p>';
+      else {
+        var modes = []; items.forEach(function (x) { if (modes.indexOf(x.mode) < 0) modes.push(x.mode); });
+        var shown = items.filter(function (x) { return G.filter === 'all' || x.mode === G.filter; });
+        if (modes.length > 1) h += '<div class="flex flex-wrap gap-1.5 mb-3">' + ['all'].concat(modes).map(function (m) {
+          return '<button type="button" data-g="f:' + m + '" class="px-2.5 py-1 rounded-full text-[11px] border ' + (G.filter === m ? 'bg-teal-600 text-white border-teal-600' : 'border-slate-200 dark:border-slate-700') + '">' + (m === 'all' ? T('Tất cả', 'All') : modeName(m)) + '</button>';
+        }).join('') + '</div>';
+        if (!shown.length) h += '<p class="text-sm text-center text-slate-500 py-8">' + T('Chưa có bức tranh nào. Hoàn thành một bài vẽ để tranh được lưu tại đây.', 'No drawings yet. Finish a drawing and it will appear here.') + '</p>';
+        else h += '<div class="grid grid-cols-2 sm:grid-cols-3 gap-3">' + shown.map(function (x) {
+          var u = URL.createObjectURL(x.blob); G.urls.push(u);
+          return '<button type="button" data-g="v:' + x.t + '" class="text-left"><img src="' + u + '" alt="" class="w-full aspect-[4/3] object-contain bg-white rounded-xl border border-slate-200 dark:border-slate-700"><span class="block text-[11px] mt-1 truncate font-semibold">' + esc(x.title || modeName(x.mode)) + '</span><span class="block text-[10px] text-slate-400">' + fmtDate(x.t) + '</span></button>';
+        }).join('') + '</div>';
+      }
+      h += '<div class="flex flex-wrap gap-2 mt-5 pt-4 border-t border-slate-200 dark:border-slate-700"><button type="button" data-g="pin" class="' + BTN + '">' + (locked ? T('Đổi hoặc tắt mã PIN', 'Change or turn off PIN') : T('Đặt mã PIN', 'Set a PIN')) + '</button>' +
+        (items && items.length ? '<button type="button" data-g="clear" class="' + BTN + ' !text-rose-600 !border-rose-200">' + T('Xóa tất cả tranh', 'Delete all') + '</button>' : '') + '</div>' +
+        '<p class="text-[11px] text-slate-400 mt-3">' + T('Tranh nằm trong trình duyệt của bạn, không được gửi đi đâu. Nếu xóa dữ liệu trình duyệt, tranh sẽ mất.', 'Drawings stay in your browser and are never uploaded. Clearing browser data removes them.') + '</p>';
+    }
+    b.innerHTML = h;
+    var inp = b.querySelector('#g-pin'); if (inp) setTimeout(function () { inp.focus(); }, 50);
+  }
+  galM.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-g]'); if (!b) return;
+    var a = b.getAttribute('data-g');
+    if (a === 'close') closeGallery();
+    else if (a === 'unlock') {
+      var now = Date.now(); if (now < G.until) { G.msg = T('Hãy chờ ', 'Please wait ') + Math.ceil((G.until - now) / 1000) + 's'; renderGal(); return; }
+      var pin = ($('g-pin') || {}).value || '', info = ls(PK, null); if (!info) { G.ok = true; loadGal(); return; }
+      hashPin(pin, info.salt).then(function (hx) {
+        if (hx === info.hash) { G.ok = true; G.tries = 0; G.msg = ''; loadGal(); }
+        else { G.tries++; G.msg = T('Mã PIN chưa đúng.', 'Incorrect PIN.'); if (G.tries >= 5) { G.until = Date.now() + 30000; G.tries = 0; G.msg = T('Sai nhiều lần, hãy chờ 30 giây.', 'Too many tries, wait 30 seconds.'); } renderGal(); }
+      });
+    }
+    else if (a === 'forgot') {
+      if (confirm(T('Đặt lại sẽ xóa TOÀN BỘ tranh trong phòng tranh và tắt mã PIN. Tiếp tục?', 'Resetting will delete ALL drawings in the gallery and turn off the PIN. Continue?'))) {
+        galClear().catch(function () {}).then(function () { try { localStorage.removeItem(PK); } catch (_) {} G.ok = true; G.msg = ''; loadGal(); });
+      }
+    }
+    else if (a === 'pin') { G.view = 'pin'; G.msg = ''; renderGal(); }
+    else if (a === 'list') { G.view = 'list'; G.msg = ''; renderGal(); }
+    else if (a === 'savepin') {
+      var p1 = ($('g-p1') || {}).value || '', p2 = ($('g-p2') || {}).value || '';
+      if (!/^\d{4}$/.test(p1)) { G.msg = T('PIN phải gồm đúng 4 chữ số.', 'The PIN must be exactly 4 digits.'); renderGal(); return; }
+      if (p1 !== p2) { G.msg = T('Hai lần nhập chưa giống nhau.', 'The two entries do not match.'); renderGal(); return; }
+      var salt = Math.random().toString(36).slice(2);
+      hashPin(p1, salt).then(function (hx) { sv(PK, { salt: salt, hash: hx }); G.view = 'list'; G.msg = ''; renderGal(); toast(T('Đã đặt mã PIN.', 'PIN set.')); });
+    }
+    else if (a === 'offpin') { try { localStorage.removeItem(PK); } catch (_) {} G.view = 'list'; renderGal(); toast(T('Đã tắt mã PIN.', 'PIN turned off.')); }
+    else if (a === 'clear') {
+      if (confirm(T('Xóa tất cả tranh trong phòng tranh? Không thể khôi phục.', 'Delete all drawings in the gallery? This cannot be undone.'))) galClear().then(loadGal, loadGal);
+    }
+    else if (a.indexOf('f:') === 0) { G.filter = a.slice(2); renderGal(); }
+    else if (a.indexOf('v:') === 0) { var t = +a.slice(2); G.cur = (G.items || []).filter(function (x) { return x.t === t; })[0] || null; G.view = G.cur ? 'detail' : 'list'; renderGal(); }
+    else if (a === 'dl' && G.cur) downloadBlob(G.cur.blob, (G.cur.title || modeName(G.cur.mode)) + '.jpg');
+    else if (a === 'ai' && G.cur) askAI({ mode: G.cur.mode, title: G.cur.title, note: G.cur.note, before: G.cur.before, after: G.cur.after });
+    else if (a === 'del' && G.cur) {
+      if (confirm(T('Xóa bức tranh này khỏi phòng tranh?', 'Delete this drawing from the gallery?'))) galDel(G.cur.t).then(loadGal, loadGal);
+    }
+  });
+  galM.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.id === 'g-pin') { var u = galM.querySelector('[data-g=unlock]'); if (u) u.click(); } });
+
+  var DLK = 'mindart_dass_log', LV = ['Bình thường', 'Nhẹ', 'Vừa', 'Nặng'], LV_EN = ['Normal', 'Mild', 'Moderate', 'Severe'];
+  function dlog() { var a = ls(DLK, []); return Array.isArray(a) ? a : []; }
+  function myLogs() { var n = uname(), a = dlog(); return n ? a.filter(function (x) { return x.name === n; }) : a; }
+  function lvl(score, type) {
+    try { var s = getSeverity(score, type); return Math.max(0, LV.indexOf(s.text)); } catch (_) { return 0; }
+  }
+  function lvlName(i) { return en() ? LV_EN[i] : LV[i]; }
+
+  function sensitiveMax() {
+    var q, a, m = 0;
+    try { q = typeof activeQuestions !== 'undefined' ? activeQuestions : null; a = typeof dassAnswers !== 'undefined' ? dassAnswers : null; } catch (_) { return 0; }
+    if (!q || !a) return 0;
+    q.forEach(function (x, i) { if (/không đáng làm người|vô nghĩa|không đáng sống/i.test(x.text)) m = Math.max(m, a[i] || 0); });
+    return m;
+  }
+  var careEl = null, cmpEl = null;
+  function renderCare(level) {
+    if (!careEl) return;
+    if (level < 2) { careEl.innerHTML = ''; return; }
+    var strong = level >= 3;
+    careEl.innerHTML = '<div class="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-xs text-slate-700 dark:text-slate-200 leading-relaxed">' +
+      '<p class="font-bold text-sm text-rose-800 dark:text-rose-200 mb-1">' + (strong ? T('Mình lo cho bạn và muốn bạn được giúp đỡ sớm', 'I am worried about you and want you to get support soon') : T('Mình muốn hỏi thăm bạn một chút', 'I would like to check in with you')) + '</p>' +
+      '<p>' + (strong
+        ? T('Bạn vừa chọn mức cao nhất ở những câu nói về cảm giác rất nặng nề (như thấy mình không có giá trị hoặc cuộc sống vô nghĩa). Đây không phải chẩn đoán, nhưng bạn rất đáng được quan tâm. Hãy tìm một người lớn bạn tin tưởng ngay bây giờ, ở cạnh họ và cho họ biết bạn đang thế nào.', 'You chose the highest level on statements about very heavy feelings (such as feeling worthless or that life is meaningless). This is not a diagnosis, but you deserve care. Please find an adult you trust right now, stay near them and tell them how you are.')
+        : T('Bạn có chọn một số câu nói về cảm giác nặng nề (như thấy mình không có giá trị hoặc cuộc sống vô nghĩa). Đây không phải chẩn đoán, nhưng bạn đáng được quan tâm. Hôm nay hãy nói với một người lớn bạn tin (ba mẹ, thầy cô, cô thầy phụ trách tâm lý của trường) và đừng ở một mình với cảm giác này quá lâu.', 'You chose some statements about heavy feelings (such as feeling worthless or that life is meaningless). This is not a diagnosis, but you deserve care. Today, please talk to an adult you trust (a parent, teacher or the school counselor) and try not to stay alone with this feeling for long.')) + '</p>' +
+      '<div class="flex flex-wrap gap-2 mt-3"><a href="tel:111" class="' + PRI + ' no-underline">' + T('Gọi 111 (miễn phí, 24/7)', 'Call 111 (free, 24/7)') + '</a><a href="tel:115" class="' + BTN + ' no-underline bg-white dark:bg-slate-900">' + T('Gọi 115 (cấp cứu)', 'Call 115 (emergency)') + '</a><button type="button" data-a="breath" class="' + BTN + ' bg-white dark:bg-slate-900">' + T('Hít thở 1 phút', 'Breathe for 1 minute') + '</button></div>' +
+      '<p class="mt-3 text-[11px] opacity-80">' + T('Nếu bạn đang nghĩ đến việc làm hại bản thân hoặc thấy không an toàn, hãy gọi 115 hoặc nhờ người lớn ở gần gọi giúp ngay.', 'If you are thinking about hurting yourself or feel unsafe, call 115 or ask an adult nearby to call for you right away.') + '</p></div>';
+  }
+  function renderCmp() {
+    if (!cmpEl) return;
+    var a = myLogs();
+    if (a.length < 2) { cmpEl.innerHTML = ''; return; }
+    var cur = a[a.length - 1], prev = a[a.length - 2], days = Math.max(0, Math.round((cur.t - prev.t) / 86400000));
+    var dims = [['d', 'Trầm cảm', 'Depression'], ['a', 'Lo âu', 'Anxiety'], ['s', 'Căng thẳng', 'Stress']], down = 0, up = 0;
+    var cols = dims.map(function (d) {
+      var k = d[0], diff = cur[k] - prev[k], cls = 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300', arrow = '→';
+      if (diff <= -3) { cls = 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300'; arrow = '↓'; down++; }
+      else if (diff >= 3) { cls = 'bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300'; arrow = '↑'; up++; }
+      return '<div class="p-2.5 bg-white/70 dark:bg-slate-800/60 rounded-xl text-center"><div class="text-[10px] font-bold uppercase text-slate-400">' + T(d[1], d[2]) + '</div>' +
+        '<div class="text-sm font-extrabold my-0.5">' + prev[k] + ' → ' + cur[k] + '</div><span class="text-[10px] px-2 py-0.5 rounded-full inline-block ' + cls + '">' + arrow + ' ' + (diff > 0 ? '+' : '') + diff + '</span>' +
+        '<div class="text-[10px] text-slate-400 mt-1">' + lvlName(lvl(prev[k], k.toUpperCase())) + ' → ' + lvlName(lvl(cur[k], k.toUpperCase())) + '</div></div>';
+    }).join('');
+    var msg = up === 0 && down > 0 ? T('Có dấu hiệu nhẹ nhõm hơn so với lần trước. Hãy tiếp tục những hoạt động đang giúp bạn.', 'There are signs of feeling lighter than last time. Keep up what has been helping you.')
+      : up > 0 && down === 0 ? T('Điểm cao hơn lần trước. Điều này có thể do tuần học nhiều áp lực, bài kiểm tra hoặc mệt mỏi. Nếu kéo dài, hãy chia sẻ với người lớn bạn tin.', 'Scores are higher than last time. This may come from a stressful week, exams or tiredness. If it lasts, please share it with an adult you trust.')
+      : T('Mức điểm gần như ổn định so với lần trước.', 'Scores are about the same as last time.');
+    cmpEl.innerHTML = '<div class="p-4 bg-teal-50/80 dark:bg-teal-950/40 rounded-2xl"><div class="font-bold text-xs flex items-center mb-2 text-teal-900 dark:text-teal-200">' + T('So với lần làm trước', 'Compared with last time') + ' <span class="ml-2 font-normal text-slate-500 dark:text-slate-400">' + (days ? days + ' ' + T('ngày trước', 'days ago') : T('hôm nay', 'today')) + '</span></div>' +
+      '<div class="grid grid-cols-3 gap-2">' + cols + '</div><p class="text-xs mt-3 text-slate-600 dark:text-slate-300 leading-relaxed">' + msg + '</p>' +
+      '<p class="text-[10px] mt-1 text-slate-400">' + T('Điểm tự đánh giá có thể dao động theo từng thời điểm, chỉ để tham khảo, không phải chẩn đoán.', 'Self-report scores fluctuate over time. For reference only, not a diagnosis.') + '</p></div>';
+  }
+  function afterDass() {
+    var v = function (k) { return parseInt(($('score-' + k) || {}).textContent, 10) || 0; };
+    var cur = { t: Date.now(), v: (function () { try { return typeof activeDassVersion !== 'undefined' ? activeDassVersion : 21; } catch (_) { return 21; } })(), d: v('d'), a: v('a'), s: v('s'), name: uname() };
+    window.__mx2dass = { d: cur.d, a: cur.a, s: cur.s };
+    var a = dlog(); a.push(cur); sv(DLK, a.slice(-30));
+    renderCare(sensitiveMax()); renderCmp(); refreshAll();
+  }
+
+  var PLK = 'mindart_plan';
+  function P(m, tv, dv, te, de) { return { m: m, vi: [tv, dv], en: [te, de] }; }
+  var PLANS = {
+    stress: { vi: 'Giảm căng thẳng', en: 'Easing stress', days: [
+      P('trame', 'Chấm trame chậm', 'Vẽ chấm đều theo nhịp thở trong 5 phút, không cần đẹp.', 'Slow dots', 'Draw dots in a steady rhythm with your breathing for 5 minutes. It need not be pretty.'),
+      P('breath', 'Thở chậm 4–6', 'Thở theo vòng tròn 3 lượt, sau đó nghỉ một chút.', 'Slow 4–6 breathing', 'Breathe with the circle for 3 rounds, then rest a moment.'),
+      P('body', 'Quét cơ thể', 'Tô những chỗ đang căng, rồi thả lỏng từng vùng.', 'Body scan', 'Paint the tense spots, then relax each area.'),
+      P('coloring', 'Mandala dịu', 'Tô một mandala bằng gam màu xanh mát.', 'Soft mandala', 'Color a mandala in cool, calm shades.'),
+      P('doodle', 'Xả nét', 'Vẽ nét tự do thật nhanh 2 phút, rồi vẽ chậm lại dần.', 'Let it out', 'Scribble freely and fast for 2 minutes, then slow down gradually.'),
+      P('emotion', 'Gọi tên cảm xúc', 'Chọn cảm xúc hôm nay, tô bằng màu của nó và đặt tên.', 'Name the feeling', 'Pick today\'s feeling, color it and give it a name.'),
+      P('prompt', 'Nơi bình yên', 'Vẽ theo đề bài của AI rồi xem lại tâm trạng.', 'A peaceful place', 'Draw the AI prompt, then check how you feel.')] },
+    anx: { vi: 'Làm dịu lo âu', en: 'Calming worry', days: [
+      P('doodle', 'Nét liền không nhấc tay', 'Vẽ một đường cong liên tục, để suy nghĩ trôi theo nét bút.', 'One continuous line', 'Draw one continuous curve and let your thoughts drift with the pen.'),
+      P('breath', 'Thở chậm 4–6', 'Thở theo vòng tròn 3 lượt trước khi làm việc khác.', 'Slow 4–6 breathing', 'Breathe with the circle for 3 rounds before anything else.'),
+      P('trame', 'Chấm trame kiên nhẫn', 'Chấm từng điểm một, chú ý vào cảm giác của bàn tay.', 'Patient dots', 'Place one dot at a time and notice your hand.'),
+      P('body', 'Quét cơ thể', 'Chú ý cơ thể đang giữ lo lắng ở đâu và tô lại.', 'Body scan', 'Notice where your body holds worry and paint it.'),
+      P('emotion', 'Gọi tên cảm xúc', 'Tô sự lo lắng thành màu và hình dạng, rồi đặt tên cho nó.', 'Name the feeling', 'Turn the worry into color and shape, then name it.'),
+      P('coloring', 'Mandala lavender', 'Tô một mandala bằng tím và xanh nhạt.', 'Lavender mandala', 'Color a mandala in purples and light blues.'),
+      P('prompt', 'Điều khiến mình an tâm', 'Vẽ theo đề bài của AI rồi xem lại tâm trạng.', 'What makes me feel safe', 'Draw the AI prompt, then check how you feel.')] },
+    low: { vi: 'Nâng đỡ tâm trạng', en: 'Lifting mood', note: ['Nếu bạn thấy buồn hoặc nặng nề kéo dài, hãy nói với ba mẹ, thầy cô hoặc cô thầy phụ trách tâm lý. Lộ trình này chỉ là hoạt động hỗ trợ nhỏ.', 'If you feel sad or heavy for a long time, please talk to a parent, teacher or the school counselor. This plan is only a small supportive activity.'], days: [
+      P('emotion', 'Gọi tên cảm xúc', 'Chọn cảm xúc của hôm nay, tô nó thành màu và đặt tên.', 'Name the feeling', 'Pick today\'s feeling, color it and name it.'),
+      P('coloring', 'Mandala ấm áp', 'Tô một mandala bằng vàng, cam và hồng.', 'Warm mandala', 'Color a mandala in yellow, orange and pink.'),
+      P('prompt', 'Một điều nhỏ dễ thương', 'Vẽ theo đề bài của AI, chỉ cần vài nét.', 'A small lovely thing', 'Draw the AI prompt, just a few strokes.'),
+      P('body', 'Chăm sóc cơ thể', 'Quét cơ thể và tô chỗ cần được nghỉ ngơi.', 'Caring for the body', 'Scan your body and paint where it needs rest.'),
+      P('trame', 'Chấm trame nhẹ nhàng', 'Chấm từng điểm trong 5 phút để làm đầu óc nhẹ đi.', 'Gentle dots', 'Place dots for 5 minutes to quiet your mind.'),
+      P('emotion', 'Cảm xúc hôm nay', 'So sánh với ngày đầu: màu của bạn hôm nay thế nào?', 'Today\'s feeling', 'Compare with day one: how do your colors look today?'),
+      P('prompt', 'Điều mình biết ơn', 'Vẽ điều bạn biết ơn hôm nay.', 'Something I am grateful for', 'Draw something you are grateful for today.')] },
+    bal: { vi: 'Giữ cân bằng', en: 'Staying balanced', days: [
+      P('prompt', 'Đề bài của AI', 'Vẽ theo đề bài của hôm nay.', 'Today\'s AI prompt', 'Draw today\'s prompt.'),
+      P('emotion', 'Màu của cảm xúc', 'Tô cảm xúc hôm nay thành màu.', 'Colors of feeling', 'Color today\'s feeling.'),
+      P('coloring', 'Tô mandala', 'Chọn một mandala bạn thích rồi tô.', 'Color a mandala', 'Pick a mandala you like and color it.'),
+      P('doodle', 'Vẽ tự do', 'Vẽ bất cứ gì xuất hiện trong đầu.', 'Free drawing', 'Draw whatever comes to mind.'),
+      P('body', 'Quét cơ thể', 'Kiểm tra xem cơ thể có chỗ nào cần nghỉ ngơi.', 'Body scan', 'Check whether any part of your body needs rest.'),
+      P('trame', 'Chấm trame', 'Thư giãn với những điểm chấm kiên nhẫn.', 'Dot drawing', 'Relax with patient dots.'),
+      P('prompt', 'Đề bài của AI', 'Vẽ theo đề bài của hôm nay và nhìn lại cả tuần.', 'Today\'s AI prompt', 'Draw today\'s prompt and look back at your week.')] }
+  };
+  function lastDassNow() {
+    if (window.__mx2dass) return window.__mx2dass;
+    var a = myLogs(); return a.length ? a[a.length - 1] : null;
+  }
+  function autoFocus() {
+    var d = lastDassNow(); if (!d) return 'bal';
+    var s = lvl(d.s, 'S'), a = lvl(d.a, 'A'), l = lvl(d.d, 'D'), m = Math.max(s, a, l);
+    if (m === 0) return 'bal';
+    return s === m ? 'stress' : a === m ? 'anx' : 'low';
+  }
+  function plan() { var p = ls(PLK, null); return p && Array.isArray(p.done) && Array.isArray(p.doneAt) && PLANS[p.focus] ? p : null; }
+  function planFirstUndone(p) { for (var i = 0; i < 7; i++) if (!p.done[i]) return i; return -1; }
+  function planMark(i) {
+    var p = plan(); if (!p || p.done[i]) return;
+    p.done[i] = true; p.doneAt[i] = Date.now(); sv(PLK, p); refreshAll();
+    if (planM && !planM.classList.contains('hidden')) renderPlan();
+  }
+  function planAuto(mode) {
+    var p = plan(); if (!p) return;
+    var i = planFirstUndone(p); if (i < 0 || PLANS[p.focus].days[i].m !== mode) return;
+    var lastT = Math.max.apply(null, p.doneAt.filter(Boolean).concat([0]));
+    if (lastT && dstr(new Date(lastT)) === dstr()) return;
+    planMark(i);
+  }
+  var planM = modal('mx2-plan', 66), planFocus = null;
+  function openPlan() { planFocus = null; renderPlan(); showM(planM); }
+  function renderPlan() {
+    var p = plan(), h = '';
+    if (!p) {
+      var rec = autoFocus(), cur = planFocus || rec;
+      h = '<h3 class="' + H3 + '">' + T('Lộ trình 7 ngày', '7-day plan') + '</h3><p class="text-xs text-slate-500 dark:text-slate-400 mb-3">' + T('Mỗi ngày một hoạt động nhỏ khoảng 5 đến 10 phút. Bỏ lỡ một ngày cũng không sao, bạn cứ làm tiếp theo nhịp của mình.', 'One small activity a day, about 5 to 10 minutes. Missing a day is fine; continue at your own pace.') + '</p>' +
+        '<div class="text-xs font-semibold mb-2">' + T('Chọn hướng phù hợp:', 'Choose a focus:') + '</div><div class="grid grid-cols-2 gap-2 mb-4">' +
+        Object.keys(PLANS).map(function (k) {
+          return '<button type="button" data-p="focus:' + k + '" class="p-3 rounded-xl border text-left text-xs ' + (k === cur ? 'border-teal-600 bg-teal-50 dark:bg-slate-800' : 'border-slate-200 dark:border-slate-700') + '"><b class="block">' + T(PLANS[k].vi, PLANS[k].en) + '</b>' + (k === rec ? '<span class="text-[10px] text-teal-700 dark:text-teal-300">' + T('Gợi ý cho bạn', 'Suggested for you') + '</span>' : '') + '</button>';
+        }).join('') + '</div><div class="flex gap-2"><button type="button" data-p="close" class="' + BTN + '">' + T('Đóng', 'Close') + '</button><button type="button" data-p="start:' + cur + '" class="' + PRI + ' flex-1">' + T('Bắt đầu lộ trình', 'Start the plan') + '</button></div>';
+    } else {
+      var def = PLANS[p.focus], n = p.done.filter(Boolean).length, next = planFirstUndone(p);
+      h = '<h3 class="' + H3 + '">' + T('Lộ trình 7 ngày: ', '7-day plan: ') + T(def.vi, def.en) + '</h3>' +
+        '<div class="h-2 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden my-2"><div class="h-full bg-teal-500" style="width:' + Math.round(n / 7 * 100) + '%"></div></div>' +
+        '<p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3">' + n + '/7 ' + T('hoạt động đã hoàn thành', 'activities completed') + '</p><div class="space-y-2">' +
+        def.days.map(function (d, i) {
+          var done = p.done[i], isNext = i === next, tx = en() ? d.en : d.vi;
+          return '<div class="p-3 rounded-xl border text-xs ' + (done ? 'border-teal-300 bg-teal-50 dark:bg-teal-950/40 dark:border-teal-700' : isNext ? 'border-teal-500' : 'border-slate-200 dark:border-slate-700') + '">' +
+            '<div class="flex items-center justify-between gap-2"><b>' + T('Ngày ', 'Day ') + (i + 1) + ': ' + esc(tx[0]) + '</b><span>' + (done ? '<svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Đã xong"><path d="M20 6 9 17l-5-5"/></svg>' : '') + '</span></div>' +
+            '<p class="text-slate-500 dark:text-slate-400 mt-0.5">' + esc(tx[1]) + '</p>' +
+            (isNext ? '<div class="flex gap-2 mt-2"><button type="button" data-p="go:' + i + '" class="' + PRI + '">' + (d.m === 'breath' ? T('Bắt đầu thở', 'Start breathing') : T('Bắt đầu', 'Start')) + '</button><button type="button" data-p="done:' + i + '" class="' + BTN + '">' + T('Đánh dấu xong', 'Mark done') + '</button></div>' : '') + '</div>';
+        }).join('') + '</div>' +
+        (def.note ? '<p class="text-[11px] text-slate-500 dark:text-slate-400 mt-3">' + T(def.note[0], def.note[1]) + '</p>' : '') +
+        (next < 0 ? '<p class="text-sm font-semibold text-teal-700 dark:text-teal-300 mt-3">' + T('Bạn đã hoàn thành lộ trình 7 ngày. Cảm ơn bạn đã dành thời gian cho bản thân!', 'You completed the 7-day plan. Thank you for making time for yourself!') + '</p>' : '') +
+        '<div class="flex gap-2 mt-4"><button type="button" data-p="close" class="' + BTN + ' flex-1">' + T('Đóng', 'Close') + '</button><button type="button" data-p="reset" class="' + BTN + ' flex-1">' + T('Làm lộ trình mới', 'New plan') + '</button></div>';
+    }
+    mb(planM).innerHTML = h;
+  }
+  planM.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-p]'); if (!b) return;
+    var a = b.getAttribute('data-p'), p = plan();
+    if (a === 'close') hideM(planM);
+    else if (a.indexOf('focus:') === 0) { planFocus = a.slice(6); renderPlan(); }
+    else if (a.indexOf('start:') === 0) { sv(PLK, { focus: a.slice(6), start: Date.now(), done: [0, 0, 0, 0, 0, 0, 0].map(function () { return false; }), doneAt: [0, 0, 0, 0, 0, 0, 0], v: 1 }); renderPlan(); refreshAll(); }
+    else if (a === 'reset') { if (confirm(T('Bắt đầu lộ trình mới và xóa tiến độ hiện tại?', 'Start a new plan and clear the current progress?'))) { try { localStorage.removeItem(PLK); } catch (_) {} planFocus = null; renderPlan(); refreshAll(); } }
+    else if (a.indexOf('done:') === 0) planMark(+a.slice(5));
+    else if (a.indexOf('go:') === 0 && p) {
+      var i = +a.slice(3), m = PLANS[p.focus].days[i].m;
+      hideM(planM);
+      if (m === 'breath') breathe(function () { planMark(i); }); else launch(m);
+    }
+  });
+
+  function launch(mode, opts) {
+    if (MODEDEF[mode]) { openStudio(mode, opts || (mode === 'prompt' ? { prompt: dailyText() } : {})); return; }
+    var b = D.querySelector('.btn-art-mode[data-mode="' + mode + '"]');
+    if (b) b.click();
+  }
+
+  var FEEL = [
+    ['rest', 'Bồn chồn, lo lắng', 'Restless, worried', [['trame', 'Chấm từng điểm chậm giúp nhịp thở và suy nghĩ chậm lại.', 'Placing dots slowly helps your breathing and thoughts slow down.'], ['body', 'Quét cơ thể giúp bạn nhận ra lo lắng đang nằm ở đâu.', 'A body scan helps you notice where the worry sits.']]],
+    ['sad', 'Buồn', 'Sad', [['emotion', 'Gọi tên và tô màu cho nỗi buồn giúp nó bớt mơ hồ.', 'Naming and coloring sadness makes it feel less vague.'], ['coloring', 'Tô mandala với gam màu ấm tạo cảm giác được che chở.', 'Coloring a mandala in warm shades feels comforting.']]],
+    ['angry', 'Bực, tức giận', 'Annoyed, angry', [['doodle', 'Cứ vẽ nét mạnh và nhanh để xả năng lượng, rồi vẽ chậm dần.', 'Draw strong, fast lines to release energy, then slow down.'], ['emotion', 'Tô cơn giận thành màu và hình dạng, rồi đặt tên cho nó.', 'Turn the anger into color and shape, then name it.']]],
+    ['tired', 'Mệt mỏi', 'Tired', [['coloring', 'Tô màu nhẹ nhàng, không cần suy nghĩ nhiều.', 'Gentle coloring that needs little thinking.'], ['body', 'Quét cơ thể xem chỗ nào cần được nghỉ ngơi.', 'Scan to see what part of you needs rest.']]],
+    ['empty', 'Trống rỗng', 'Empty, flat', [['emotion', 'Chọn một màu hợp với cảm giác này và để nét vẽ dẫn đường.', 'Pick a color that fits this feeling and let your lines lead.'], ['prompt', 'Một đề bài nhỏ giúp bạn bắt đầu mà không phải nghĩ.', 'A small prompt helps you begin without having to think.']]],
+    ['study', 'Áp lực học tập', 'Study pressure', [['trame', 'Năm phút chấm trame là một khoảng nghỉ cho đầu óc.', 'Five minutes of dots is a rest for your mind.'], ['body', 'Cổ, vai và tay thường căng khi học lâu, hãy quét cơ thể.', 'Neck, shoulders and hands tighten when studying, so scan your body.']]],
+    ['ok', 'Ổn, muốn vẽ cho vui', 'Fine, just want to draw', [['prompt', 'Vẽ theo đề bài hôm nay.', 'Draw today\'s prompt.'], ['doodle', 'Vẽ tự do không cần lý do.', 'Free drawing for no reason.']]]
+  ];
+  var feelSel = null;
+
+  var DPK = 'mindart_daily_ai', dailyBusy = false;
+  var LOCALP = [
+    ['Vẽ tâm trạng hôm nay như một thời tiết.', 'Draw today\'s mood as weather.'], ['Vẽ một nơi khiến bạn thấy bình yên.', 'Draw a place that makes you feel peaceful.'],
+    ['Vẽ một con vật nhỏ đang ngủ say.', 'Draw a small animal fast asleep.'], ['Vẽ chiếc cửa sổ nhìn ra thứ bạn thích.', 'Draw a window that opens onto something you like.'],
+    ['Vẽ một con đường dẫn đến nơi bạn muốn tới.', 'Draw a path leading somewhere you would like to go.'], ['Vẽ một cái cây qua bốn mùa.', 'Draw a tree through the four seasons.'],
+    ['Vẽ thứ nhỏ bé khiến bạn mỉm cười hôm nay.', 'Draw a small thing that made you smile today.'], ['Vẽ chiếc cốc ấm và thứ bạn muốn uống vào ngày mưa.', 'Draw a warm cup and what you would drink on a rainy day.'],
+    ['Vẽ đám mây có hình dạng bạn thích.', 'Draw a cloud in a shape you like.'], ['Vẽ căn phòng bình yên của riêng bạn.', 'Draw your own peaceful room.'],
+    ['Vẽ những đường sóng như hơi thở chậm.', 'Draw waves like slow breathing.'], ['Vẽ một món quà nhỏ bạn muốn tặng chính mình.', 'Draw a small gift you would give yourself.'],
+    ['Vẽ bầu trời lúc bạn thấy nhẹ nhõm nhất.', 'Draw the sky at the moment you feel most at ease.'], ['Vẽ khu vườn nhỏ với những màu bạn yêu.', 'Draw a little garden in colors you love.']
+  ];
+  function doy() { var n = new Date(); return Math.floor((n - new Date(n.getFullYear(), 0, 0)) / 86400000); }
+  function localPrompt() { var p = LOCALP[doy() % LOCALP.length]; return en() ? p[1] : p[0]; }
+  function dailyCache() { var c = ls(DPK, null); return c && c.date === dstr() && c.lang === (en() ? 'en' : 'vi') ? c : null; }
+  function dailyText() { var c = dailyCache(); return c && c.text ? c.text : localPrompt(); }
+  function ensureDaily(force) {
+    if (dailyBusy) return;
+    var c = dailyCache(); if (c && !force) return;
+    if (force && c && (c.n || 0) >= 5) { toast(T('Hôm nay bạn đã đổi đủ 5 đề, hãy thử đề này nhé.', 'You have changed the prompt 5 times today. Try this one!')); return; }
+    var n = (c && c.n || 0) + (force ? 1 : 0);
+    dailyBusy = true; renderSection();
+    callWorker({ task: 'daily_prompt', seed: Math.floor(Math.random() * 100000) }, 15000).then(function (j) {
+      var tx = String(j.reply || '').split(/\n/)[0].replace(/^["“\s]+|["”\s]+$/g, '').slice(0, 160);
+      if (tx.length < 8 || j.crisis) throw new Error('bad');
+      sv(DPK, { date: dstr(), lang: en() ? 'en' : 'vi', text: tx, src: 'ai', n: n });
+    }).catch(function () {
+      sv(DPK, { date: dstr(), lang: en() ? 'en' : 'vi', text: localPrompt(), src: 'local', n: n });
+    }).then(function () { dailyBusy = false; renderSection(); });
+  }
+
+  var sciM = modal('mx2-sci', 66);
+  function renderSci() {
+    var sec = function (t, ps, refs) {
+      return '<h4 class="font-bold text-sm text-teal-900 dark:text-teal-200 mt-4 mb-1">' + t + '</h4>' + ps.map(function (p) { return '<p class="text-xs leading-relaxed mb-1.5">' + p + '</p>'; }).join('') +
+        '<ul class="text-[11px] text-slate-500 dark:text-slate-400 list-disc pl-4 space-y-0.5">' + refs.map(function (r) { return '<li>' + r + '</li>'; }).join('') + '</ul>';
+    };
+    mb(sciM).innerHTML = '<h3 class="' + H3 + '">' + T('Cơ sở khoa học', 'Scientific background') + '</h3>' +
+      '<p class="text-xs text-slate-500 dark:text-slate-400">' + T('Các hoạt động trong trang này dựa trên những hướng nghiên cứu dưới đây. Đây là tóm tắt ngắn, bạn nên đọc bài gốc khi trích dẫn.', 'The activities here draw on the lines of research below. These are short summaries; please read the original papers before citing them.') + '</p>' +
+      sec(T('Thang tự đánh giá DASS', 'The DASS self-report scale'), [T('DASS đo mức độ trầm cảm, lo âu và căng thẳng trong tuần qua. Bản DASS-21 có số liệu chuẩn và độ tin cậy tốt trên mẫu không lâm sàng, và đã được kiểm định tại Việt Nam. Đây là công cụ sàng lọc, không thay cho chẩn đoán.', 'The DASS measures depression, anxiety and stress over the past week. DASS-21 has good normative data and reliability in non-clinical samples and has been validated in Vietnam. It is a screening tool, not a diagnosis.')],
+        ['Lovibond, S. H., &amp; Lovibond, P. F. (1995). <i>Manual for the Depression Anxiety Stress Scales</i> (2nd ed.). Psychology Foundation of Australia.', 'Henry, J. D., &amp; Crawford, J. R. (2005). The short-form version of the DASS-21. <i>British Journal of Clinical Psychology, 44</i>(2), 227–239.', 'Tran, T. D., Tran, T., &amp; Fisher, J. (2013). Validation of the DASS-21 in northern Vietnamese women. <i>BMC Psychiatry, 13</i>, 24.']) +
+      sec(T('Vẽ và tô màu để giảm căng thẳng', 'Drawing and coloring to ease stress'), [T('Một nghiên cứu nhỏ cho thấy 45 phút tạo hình nghệ thuật làm giảm cortisol (hormone căng thẳng) ở phần lớn người tham gia. Nghiên cứu về tô mandala ghi nhận giảm lo âu ngắn hạn ở sinh viên; cần thêm nghiên cứu lớn hơn.', 'A small study found that 45 minutes of art making lowered cortisol (a stress hormone) in most participants. Studies of mandala coloring report short-term anxiety reduction in students; larger studies are still needed.')],
+        ['Kaimal, G., Ray, K., &amp; Muniz, J. (2016). Reduction of cortisol levels and participants\' responses following art making. <i>Art Therapy, 33</i>(2), 74–80.', 'Curry, N. A., &amp; Kasser, T. (2005). Can coloring mandalas reduce anxiety? <i>Art Therapy, 22</i>(2), 81–85.', 'Van der Vennet, R., &amp; Serice, S. (2012). Can coloring mandalas reduce anxiety? A replication study. <i>Art Therapy, 29</i>(2), 87–92.']) +
+      sec(T('Gọi tên cảm xúc (vẽ cảm xúc bằng màu)', 'Naming feelings (feeling colors)'), [T('Khi gắn từ ngữ cho cảm xúc, hoạt động của vùng hạch hạnh nhân (amygdala) trong não giảm trong thí nghiệm hình ảnh não. Vì vậy phần vẽ cảm xúc luôn yêu cầu bạn đặt tên cho cảm xúc.', 'Putting feelings into words reduced amygdala activity in a brain-imaging experiment. That is why the feeling-color activity asks you to name your emotion.')],
+        ['Lieberman, M. D., et al. (2007). Putting feelings into words: Affect labeling disrupts amygdala activity. <i>Psychological Science, 18</i>(5), 421–428.']) +
+      sec(T('Thở chậm', 'Slow breathing'), [T('Tổng quan hệ thống cho thấy thở chậm (khoảng 6 nhịp mỗi phút) liên quan đến tăng biến thiên nhịp tim và cảm giác thư giãn. Bài thở 4 giây vào, 6 giây ra trong trang này dựa trên nguyên tắc đó.', 'A systematic review linked slow breathing (about 6 breaths per minute) to higher heart rate variability and feelings of relaxation. The 4-second in, 6-second out exercise here follows that principle.')],
+        ['Zaccaro, A., et al. (2018). How breath-control can change your life. <i>Frontiers in Human Neuroscience, 12</i>, 353.']) +
+      sec(T('Quét cơ thể', 'Body scan'), [T('Quét cơ thể là bài thực hành chánh niệm, giúp chú ý đến cảm giác thân thể mà không phán xét. Phần tô vùng căng trên hình người chuyển bài thực hành này sang dạng vẽ.', 'The body scan is a mindfulness practice for noticing bodily sensations without judgment. Painting tense areas on the figure turns it into a drawing activity.')],
+        ['Kabat-Zinn, J. (1990). <i>Full Catastrophe Living</i>. Delacorte.']) +
+      '<h4 class="font-bold text-sm text-rose-700 dark:text-rose-300 mt-4 mb-1">' + T('Giới hạn cần biết', 'Limits to keep in mind') + '</h4>' +
+      '<ul class="text-xs leading-relaxed list-disc pl-4 space-y-1"><li>' + T('Nhiều nghiên cứu về vẽ và tô màu có quy mô nhỏ và đo hiệu quả ngắn hạn.', 'Many studies on drawing and coloring are small and measure short-term effects.') + '</li><li>' + T('Trang web hỗ trợ thư giãn và tự nhìn lại, không phải điều trị và không thay cho chuyên gia tâm lý.', 'This site supports relaxation and self-reflection; it is not treatment and does not replace a mental health professional.') + '</li><li>' + T('Các chỉ số như "mức độ gắn kết" hay "phong cách" là ước tính từ thao tác vẽ, không phải đánh giá tâm lý.', 'Indicators such as "engagement" or "style" are estimates from drawing actions, not psychological assessments.') + '</li><li>' + T('AI chỉ đặt câu hỏi gợi mở, không diễn giải bức vẽ.', 'The AI only asks open questions and does not interpret drawings.') + '</li></ul>' +
+      '<button type="button" data-a="x" class="' + PRI + ' w-full mt-5">' + T('Đóng', 'Close') + '</button>';
+  }
+  sciM.addEventListener('click', function (e) { if (e.target.closest('[data-a=x]')) hideM(sciM); });
+  function openSci() { renderSci(); showM(sciM); }
+
+  var progM = modal('mx2-prog', 66);
+  function openProg() {
+    var a = myLogs(), h = '<h3 class="' + H3 + '">' + T('Tiến triển điểm DASS', 'DASS progress') + '</h3>';
+    if (a.length < 2) h += '<p class="text-sm text-slate-500 dark:text-slate-400 py-5">' + T('Bạn cần làm bài đánh giá ít nhất 2 lần để so sánh. Nên làm lại sau 1 đến 2 tuần.', 'Take the assessment at least twice to compare. Retaking it after 1 to 2 weeks works well.') + '</p>';
+    else {
+      var r = a.slice(-10), W = 320, Hh = 130, px = function (i) { return 24 + i * (W - 48) / (r.length - 1); }, py = function (v) { return 108 - Math.min(v, 42) / 42 * 90; };
+      var line = function (k, c) { var pts = r.map(function (x, i) { return [px(i), py(x[k])]; }); return '<polyline fill="none" stroke="' + c + '" stroke-width="2" points="' + pts.map(function (q) { return q.join(','); }).join(' ') + '"/>' + pts.map(function (q) { return '<circle cx="' + q[0] + '" cy="' + q[1] + '" r="3" fill="' + c + '"/>'; }).join(''); };
+      var grid = [0, 14, 28, 42].map(function (v) { return '<line x1="14" x2="' + (W - 8) + '" y1="' + py(v) + '" y2="' + py(v) + '" stroke="#94a3b8" stroke-opacity=".25"/><text x="0" y="' + (py(v) + 4) + '" font-size="9" fill="#94a3b8">' + v + '</text>'; }).join('');
+      h += '<svg viewBox="0 0 ' + W + ' ' + Hh + '" class="w-full">' + grid + line('d', '#818cf8') + line('a', '#f59e0b') + line('s', '#f43f5e') + '</svg>' +
+        '<div class="flex justify-center gap-3 text-[11px] mb-3"><span style="color:#818cf8">' + T('Trầm cảm', 'Depression') + '</span><span style="color:#f59e0b">' + T('Lo âu', 'Anxiety') + '</span><span style="color:#f43f5e">' + T('Căng thẳng', 'Stress') + '</span></div>' +
+        '<div class="space-y-1.5">' + a.slice(-6).reverse().map(function (x) { return '<div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-xs flex justify-between gap-2"><span>' + fmtDate(x.t) + ' · DASS-' + x.v + '</span><span>D ' + x.d + ' · A ' + x.a + ' · S ' + x.s + '</span></div>'; }).join('') + '</div>' +
+        '<p class="text-[11px] text-slate-400 mt-3">' + T('Thang điểm 0 đến 42 cho cả hai phiên bản. Chỉ để tham khảo, không phải chẩn đoán.', 'Both versions use a 0 to 42 scale. For reference only, not a diagnosis.') + '</p>';
+    }
+    h += '<button type="button" data-a="x" class="' + PRI + ' w-full mt-4">' + T('Đóng', 'Close') + '</button>';
+    mb(progM).innerHTML = h; showM(progM);
+  }
+  progM.addEventListener('click', function (e) { if (e.target.closest('[data-a=x]')) hideM(progM); });
+
+  var secEl = null;
+  function renderSection() {
+    if (!secEl) return;
+    var p = plan(), n = p ? p.done.filter(Boolean).length : 0, dc = dailyCache(), f = FEEL.filter(function (x) { return x[0] === feelSel; })[0];
+    var h = '<h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-3 mt-5 uppercase tracking-wider">' + T('Thêm phương pháp', 'More methods') + '</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-3">' +
+      '<button type="button" data-a="open:emotion" class="p-4 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all"><svg class="w-6 h-6 mb-1.5 text-teal-600 dark:text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg><div class="font-bold text-xs mb-1">' + T('Vẽ cảm xúc bằng màu', 'Draw feelings in color') + '</div><div class="text-[10px] text-slate-500">' + T('Chọn cảm xúc, tô thành màu và đặt tên cho nó.', 'Pick a feeling, turn it into color and give it a name.') + '</div></button>' +
+      '<button type="button" data-a="open:body" class="p-4 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all"><svg class="w-6 h-6 mb-1.5 text-teal-600 dark:text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="1"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/></svg><div class="font-bold text-xs mb-1">' + T('Quét cơ thể', 'Body scan') + '</div><div class="text-[10px] text-slate-500">' + T('Tô lên hình người những chỗ đang căng, nặng hoặc đau.', 'Paint the tense, heavy or painful places on a body figure.') + '</div></button></div>';
+
+    h += '<div class="' + CARD + ' mt-3"><div class="font-bold text-xs mb-2">' + T('Hôm nay bạn thấy thế nào?', 'How are you feeling today?') + '</div><div class="flex flex-wrap gap-1.5">' + FEEL.map(function (x) {
+      return '<button type="button" data-a="feel:' + x[0] + '" class="px-3 py-1.5 rounded-full text-[11px] border ' + (x[0] === feelSel ? 'bg-teal-600 text-white border-teal-600' : 'border-slate-200 dark:border-slate-700') + '">' + T(x[1], x[2]) + '</button>';
+    }).join('') + '</div>';
+    if (f) h += '<div class="mt-3 space-y-2">' + f[3].map(function (s) {
+      return '<div class="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-teal-50/70 dark:bg-slate-800/60"><div class="text-xs"><b>' + modeName(s[0]) + '</b><br><span class="text-slate-500 dark:text-slate-400">' + T(s[1], s[2]) + '</span></div><button type="button" data-a="open:' + s[0] + '" class="' + PRI + ' shrink-0">' + T('Vẽ', 'Draw') + '</button></div>';
+    }).join('') + '</div>';
+    h += '</div>';
+
+    h += '<div class="' + CARD + ' mt-3"><div class="flex items-center justify-between gap-2 mb-1"><div class="font-bold text-xs">' + T('Đề bài hôm nay', 'Today\'s prompt') + (dc && dc.src === 'ai' ? ' <span class="font-normal text-[10px] text-teal-700 dark:text-teal-300">· AI</span>' : '') + '</div>' +
+      '<button type="button" data-a="newprompt" ' + (dailyBusy ? 'disabled' : '') + ' class="text-[11px] underline text-slate-500 dark:text-slate-400 disabled:opacity-40">' + T('Đổi đề khác', 'Another prompt') + '</button></div>' +
+      '<p class="text-sm font-semibold text-teal-900 dark:text-teal-100 mb-3">' + (dailyBusy ? T('Đang nghĩ đề bài cho bạn...', 'Thinking of a prompt for you...') : esc(dailyText())) + '</p>' +
+      '<button type="button" data-a="open:prompt" ' + (dailyBusy ? 'disabled' : '') + ' class="' + PRI + '">' + T('Vẽ theo đề này', 'Draw this prompt') + '</button></div>';
+
+    h += '<div class="' + CARD + ' mt-3 flex items-center justify-between gap-3"><div class="text-xs"><div class="font-bold">' + T('Lộ trình 7 ngày', '7-day plan') + '</div><div class="text-slate-500 dark:text-slate-400">' +
+      (p ? T(PLANS[p.focus].vi, PLANS[p.focus].en) + ' · ' + n + '/7' : T('Mỗi ngày một hoạt động nhỏ, hợp với điểm DASS hoặc tâm trạng của bạn.', 'One small activity a day, matched to your DASS result or mood.')) + '</div></div>' +
+      '<button type="button" data-a="plan" class="' + PRI + ' shrink-0">' + (p ? T('Xem', 'Open') : T('Bắt đầu', 'Start')) + '</button></div>';
+
+    h += '<div class="grid grid-cols-3 gap-2 mt-3"><button type="button" data-a="gal" class="' + BTN + '">' + T('Phòng tranh', 'Gallery') + '</button><button type="button" data-a="prog" class="' + BTN + '">' + T('Tiến triển DASS', 'DASS progress') + '</button><button type="button" data-a="sci" class="' + BTN + '">' + T('Cơ sở khoa học', 'Science') + '</button></div>';
+    secEl.innerHTML = h;
+  }
+  function refreshAll() { renderSection(); renderCmp(); }
+  function onSection(e) {
+    var b = e.target.closest('[data-a]'); if (!b) return;
+    var a = b.getAttribute('data-a');
+    if (a.indexOf('open:') === 0) launch(a.slice(5));
+    else if (a.indexOf('feel:') === 0) { feelSel = feelSel === a.slice(5) ? null : a.slice(5); renderSection(); }
+    else if (a === 'newprompt') ensureDaily(true);
+    else if (a === 'plan') openPlan();
+    else if (a === 'gal') openGallery();
+    else if (a === 'prog') openProg();
+    else if (a === 'sci') openSci();
+    else if (a === 'breath') breathe();
+  }
+
+  function wrap(name, fn) {
+    var o = window[name]; if (typeof o !== 'function') return;
+    window[name] = function () { var r = o.apply(this, arguments); try { fn(); } catch (e) { if (window.console) console.warn(e); } return r; };
+  }
+  function mount() {
+    var scr = $('screen-dass-result'), back = $('btn-dass-result-back'), rec = $('recommendation-text');
+    if (!scr || !back || !rec) return;
+    var box = rec.parentNode;
+    careEl = D.createElement('div'); careEl.id = 'mx2-care'; careEl.className = 'mx-dass-only mb-4 empty:hidden';
+    cmpEl = D.createElement('div'); cmpEl.id = 'mx2-cmp'; cmpEl.className = 'mx-dass-only mb-4 empty:hidden';
+    box.parentNode.insertBefore(careEl, box.nextSibling); box.parentNode.insertBefore(cmpEl, careEl.nextSibling);
+    secEl = D.createElement('div'); secEl.id = 'mx2-sec';
+    back.parentNode.parentNode.insertBefore(secEl, back.parentNode);
+    secEl.addEventListener('click', onSection); careEl.addEventListener('click', onSection);
+    new MutationObserver(function () { if (!scr.classList.contains('hidden')) { renderSection(); ensureDaily(false); } }).observe(scr, { attributes: true, attributeFilter: ['class'] });
+    renderSection(); renderCmp();
+  }
+  function aiResultButton() {
+    var note = $('diary-note'); if (!note || $('mx2-ai-btn')) return;
+    var d = D.createElement('div'); d.className = 'mb-5';
+    d.innerHTML = '<button type="button" id="mx2-ai-btn" class="' + BTN + ' w-full">' + T('AI hỏi về bức tranh', 'AI questions about the drawing') + '</button>';
+    note.parentNode.after(d);
+    $('mx2-ai-btn').addEventListener('click', function () {
+      var h = hist(), r = h[h.length - 1] || {}, mode = null;
+      try { mode = typeof activeArtMode !== 'undefined' ? activeArtMode : r.mode; } catch (_) { mode = r.mode; }
+      askAI({ mode: mode, title: '', note: (note.value || r.note || '').trim(), before: r.before, after: r.after });
+    });
+  }
+  function headerButton() {
+    var tb = $('btn-theme-toggle'); if (!tb || $('mx2-gal-btn')) return;
+    var b = D.createElement('button'); b.id = 'mx2-gal-btn'; b.type = 'button';
+    b.className = 'p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-teal-700 dark:text-teal-300 hover:bg-teal-100 dark:hover:bg-slate-700';
+    b.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;pointer-events:none"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg>';
+    b.title = T('Phòng tranh', 'Gallery'); b.setAttribute('aria-label', b.title);
+    b.addEventListener('click', openGallery);
+    tb.parentNode.insertBefore(b, tb);
+  }
+  function aboutButton() {
+    var ab = $('about-modal'); if (!ab || ab.querySelector('[data-sci]')) return;
+    var grid = ab.querySelector('.grid-cols-2'); if (!grid) return;
+    var b = D.createElement('button'); b.type = 'button'; b.setAttribute('data-sci', '1'); b.className = BTN + ' col-span-2'; b.textContent = T('Cơ sở khoa học', 'Scientific background');
+    grid.appendChild(b);
+    b.addEventListener('click', function () { ab.classList.add('hidden'); openSci(); });
+  }
+  function relabel() {
+    var g = $('mx2-gal-btn'); if (g) { g.title = T('Phòng tranh', 'Gallery'); g.setAttribute('aria-label', g.title); }
+    var ab = D.querySelector('[data-sci]'); if (ab) ab.textContent = T('Cơ sở khoa học', 'Scientific background');
+    var ai = $('mx2-ai-btn'); if (ai) ai.textContent = T('AI hỏi về bức tranh', 'AI questions about the drawing');
+    injectListen(); refreshAll();
+    var c = dailyCache(); if (!c && secEl && !$('screen-dass-result').classList.contains('hidden')) ensureDaily(false);
+  }
+  function init() {
+    mount(); aiResultButton(); headerButton(); aboutButton(); injectListen();
+    wrap('processDASSResults', afterDass);
+    wrap('openAIResult', function () {
+      var h = hist(), r = h[h.length - 1]; if (!r) return;
+      var m = r.mode; galFromCanvas(r.t, m); planAuto(m); refreshAll();
+    });
+    wrap('__clearDass', function () { window.__mx2dass = null; renderCare(0); renderCmp(); });
+    var lb = $('btn-lang'); if (lb) lb.addEventListener('click', function () { setTimeout(relabel, 120); });
+    D.addEventListener('keydown', function (e) { if (e.key === 'Escape' && root && !root.classList.contains('hidden') && fin && fin.classList.contains('hidden') && S && S.started === false) closeStudio(); });
+  }
+  if (D.readyState === 'complete') setTimeout(init, 200); else window.addEventListener('load', function () { setTimeout(init, 200); });
+})();
+</script>
+<script>
+(function () {
+  function label() {
+    document.querySelectorAll('button, [role="button"]').forEach(function (b) {
+      if (b.getAttribute('aria-label')) return;
+      if (!(b.textContent || '').trim() && b.title) b.setAttribute('aria-label', b.title);
+    });
+  }
+  function init() {
+    label();
+    new MutationObserver(label).observe(document.body, { childList: true, subtree: true });
+    var brand = document.getElementById('brand-home');
+    if (brand) brand.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); brand.click(); } });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
 </script>
 </body>
