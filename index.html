@@ -3670,7 +3670,8 @@
     }
     var l = isEn() ? 'en' : 'vi';
     if (banner.getAttribute('data-l') !== l) { banner.setAttribute('data-l', l); banner.innerHTML = bannerHtml(); }
-    banner.style.display = (sev && !scr.classList.contains('hidden') && scr.getAttribute('data-skip') !== '1') ? 'flex' : 'none';
+    var care = document.getElementById('mx2-care'), careOn = !!(care && care.innerHTML.trim());
+    banner.style.display = (sev && !careOn && !scr.classList.contains('hidden') && scr.getAttribute('data-skip') !== '1') ? 'flex' : 'none';
   }
 
   function addButtons() {
