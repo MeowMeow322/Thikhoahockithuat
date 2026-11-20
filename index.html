@@ -3656,11 +3656,13 @@
 
   var banner = null;
   function bannerHtml() {
-    return '<div class="flex-1 min-w-[16rem]"><p class="font-bold text-sm">' + t('Bạn không đi một mình', "You're not alone") + '</p><p class="text-xs opacity-80">' + t('Điểm của bạn đang ở mức cao. Hãy chia sẻ với người bạn tin tưởng hoặc gọi ngay cho những số trong phần xem cách được hỗ trợ.', 'Your score is high. Please share with someone you trust or call the numbers in the Get support section right away.') + '</p></div><button type="button" data-open="sup" class="' + B + 'bg-white dark:bg-slate-800 whitespace-nowrap shrink-0">' + t('Xem cách được hỗ trợ', 'Get support') + '</button>';
+    return '<div class="flex-1 min-w-[16rem]"><p class="font-bold text-sm">' + t('Bạn không đi một mình', "You're not alone") + '</p><p class="text-xs opacity-80">' + t('Điểm của bạn đang ở mức trung bình. Hãy chia sẻ với người bạn tin tưởng, và xem các cách được hỗ trợ nếu bạn cần.', 'Your score is in the moderate range. Please share with someone you trust, and see ways to get support if you need it.') + '</p></div><button type="button" data-open="sup" class="' + B + 'bg-white dark:bg-slate-800 whitespace-nowrap shrink-0">' + t('Xem cách được hỗ trợ', 'Get support') + '</button>';
   }
   function checkSevere() {
     var scr = document.getElementById('screen-dass-result'); if (!scr) return;
-    var sev = ['label-d', 'label-a', 'label-s'].some(function (id) { var e = document.getElementById(id); return e && /nặng|severe/i.test(e.textContent); });
+    var labs = ['label-d', 'label-a', 'label-s'].map(function (id) { var e = document.getElementById(id); return e ? e.textContent : ''; });
+    var high = labs.some(function (x) { return /nặng|severe/i.test(x); });
+    var sev = !high && labs.some(function (x) { return /vừa|moderate/i.test(x); });
     if (!banner) {
       banner = document.createElement('div'); banner.id = 'mx-support';
       banner.className = 'flex-wrap items-center justify-between gap-3 text-left mb-4 px-4 py-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950 text-slate-800 dark:text-slate-100 border border-emerald-200 dark:border-emerald-800';
@@ -4705,13 +4707,15 @@
     return m;
   }
   var careEl = null, cmpEl = null;
-  function renderCare(level) {
+  function renderCare(level, byScore) {
     if (!careEl) return;
     if (level < 2) { careEl.innerHTML = ''; return; }
     var strong = level >= 3;
     careEl.innerHTML = '<div class="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-xs text-slate-700 dark:text-slate-200 leading-relaxed">' +
       '<p class="font-bold text-sm text-rose-800 dark:text-rose-200 mb-1">' + (strong ? T('Mình lo cho bạn và muốn bạn được giúp đỡ sớm', 'I am worried about you and want you to get support soon') : T('Mình muốn hỏi thăm bạn một chút', 'I would like to check in with you')) + '</p>' +
-      '<p>' + (strong
+      '<p>' + (byScore
+        ? T('Điểm tự đánh giá của bạn đang ở mức cao. Đây không phải chẩn đoán, nhưng bạn rất đáng được quan tâm. Hãy tìm một người lớn bạn tin tưởng ngay bây giờ, ở cạnh họ và cho họ biết bạn đang thế nào.', 'Your self-assessment score is high. This is not a diagnosis, but you deserve care. Please find a trusted adult right now, stay near them and let them know how you are doing.')
+        : strong
         ? T('Bạn vừa chọn mức cao nhất ở những câu nói về cảm giác rất nặng nề (như thấy mình không có giá trị hoặc cuộc sống vô nghĩa). Đây không phải chẩn đoán, nhưng bạn rất đáng được quan tâm. Hãy tìm một người lớn bạn tin tưởng ngay bây giờ, ở cạnh họ và cho họ biết bạn đang thế nào.', 'You chose the highest level on statements about very heavy feelings (such as feeling worthless or that life is meaningless). This is not a diagnosis, but you deserve care. Please find an adult you trust right now, stay near them and tell them how you are.')
         : T('Bạn có chọn một số câu nói về cảm giác nặng nề (như thấy mình không có giá trị hoặc cuộc sống vô nghĩa). Đây không phải chẩn đoán, nhưng bạn đáng được quan tâm. Hôm nay hãy nói với một người lớn bạn tin (ba mẹ, thầy cô, cô thầy phụ trách tâm lý của trường) và đừng ở một mình với cảm giác này quá lâu.', 'You chose some statements about heavy feelings (such as feeling worthless or that life is meaningless). This is not a diagnosis, but you deserve care. Today, please talk to an adult you trust (a parent, teacher or the school counselor) and try not to stay alone with this feeling for long.')) + '</p>' +
       '<div class="flex flex-wrap gap-2 mt-3"><a href="tel:111" class="' + PRI + ' no-underline">' + T('Gọi 111 (miễn phí, 24/7)', 'Call 111 (free, 24/7)') + '</a><a href="tel:115" class="' + BTN + ' no-underline bg-white dark:bg-slate-900">' + T('Gọi 115 (cấp cứu)', 'Call 115 (emergency)') + '</a><button type="button" data-a="breath" class="' + BTN + ' bg-white dark:bg-slate-900">' + T('Hít thở 1 phút', 'Breathe for 1 minute') + '</button></div>' +
@@ -4743,7 +4747,9 @@
     var cur = { t: Date.now(), v: (function () { try { return typeof activeDassVersion !== 'undefined' ? activeDassVersion : 21; } catch (_) { return 21; } })(), d: v('d'), a: v('a'), s: v('s'), name: uname() };
     window.__mx2dass = { d: cur.d, a: cur.a, s: cur.s };
     var a = dlog(); a.push(cur); sv(DLK, a.slice(-30));
-    renderCare(sensitiveMax()); renderCmp(); refreshAll();
+    var sm = sensitiveMax(), top = Math.max(lvl(cur.d, 'D'), lvl(cur.a, 'A'), lvl(cur.s, 'S'));
+    if (sm >= 2) renderCare(sm); else renderCare(top >= 3 ? 3 : 0, true);
+    renderCmp(); refreshAll();
   }
 
   var PLK = 'mindart_plan';
