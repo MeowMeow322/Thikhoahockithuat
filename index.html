@@ -106,6 +106,10 @@
     .fixed.overflow-y-auto, .overflow-y-auto { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
     #user-name-input { min-height: 3rem; }
     main section button { min-height: 2.5rem; }
+    #mx2-cmp { display: none !important; }
+    #screen-dass-result .btn-art-mode, #mx2-methods > button, #screen-dass-result .grid > button { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; }
+    #mx2-more > summary { list-style: none; }
+    #mx2-more > summary::-webkit-details-marker { display: none; }
     @media (hover: none) {
       .btn-art-mode:hover, .btn-dass-version:hover, #gallery-grid > *:hover { transform: none; box-shadow: none; }
     }
@@ -253,31 +257,31 @@
       </div>
 
       <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-3 uppercase tracking-wider">Chọn phương pháp trị liệu:</h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <button data-mode="trame" class="btn-art-mode p-4 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all">
-          <i data-lucide="circle-dot" class="w-6 h-6 text-teal-600 mb-2"></i>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-2.5">
+        <button data-mode="trame" class="btn-art-mode p-3 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all">
+          <i data-lucide="circle-dot" class="w-5 h-5 text-teal-600 mb-1.5"></i>
           <div class="font-bold text-xs mb-1">1. Vẽ Chấm Trame</div>
           <div class="text-[10px] text-slate-500">Giải tỏa căng thẳng bằng các điểm chấm kiên nhẫn.</div>
         </button>
-        <button data-mode="doodle" class="btn-art-mode p-4 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all">
-          <i data-lucide="spline" class="w-6 h-6 text-teal-600 mb-2"></i>
+        <button data-mode="doodle" class="btn-art-mode p-3 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all">
+          <i data-lucide="spline" class="w-5 h-5 text-teal-600 mb-1.5"></i>
           <div class="font-bold text-xs mb-1">2. Vẽ Tự Do</div>
           <div class="text-[10px] text-slate-500">Tự do phóng bút bộc lộ suy nghĩ miên man.</div>
         </button>
-        <button data-mode="coloring" class="btn-art-mode p-4 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all">
-          <i data-lucide="paint-bucket" class="w-6 h-6 text-teal-600 mb-2"></i>
+        <button data-mode="coloring" class="btn-art-mode p-3 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all">
+          <i data-lucide="paint-bucket" class="w-5 h-5 text-teal-600 mb-1.5"></i>
           <div class="font-bold text-xs mb-1">3. Tô Màu Mandala</div>
           <div class="text-[10px] text-slate-500">Chọn một bức tranh mình thích rồi tô màu.</div>
         </button>
       </div>
 
       <div class="mt-3">
-        <button id="mx-ai-open" type="button" class="w-full p-4 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-teal-600 mb-2 pointer-events-none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          <div class="font-bold text-xs mb-1">AI hỗ trợ tâm lý</div>
-          <div class="text-[10px] text-slate-500">Trò chuyện với trợ lý AI để được lắng nghe và gợi ý cách thư giãn.</div>
-          <div class="text-[10px] mt-2 text-amber-700 dark:text-amber-400">Lưu ý: AI chỉ hỗ trợ một phần, không thể giải quyết mọi vấn đề, không chẩn đoán và không thay thế ba mẹ, thầy cô hay chuyên gia tâm lý.</div>
+        <button id="mx-ai-open" type="button" class="w-full flex items-center gap-3 p-3 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 shrink-0 text-teal-600 pointer-events-none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <div class="min-w-0"><div class="font-bold text-xs mb-0.5">AI hỗ trợ tâm lý</div>
+          <div class="text-[10px] text-slate-500">Trò chuyện với trợ lý AI để được lắng nghe và gợi ý cách thư giãn.</div></div>
         </button>
+        <p class="text-[11px] mt-2 px-1 text-slate-400 leading-snug">Lưu ý: AI chỉ hỗ trợ một phần, không thể giải quyết mọi vấn đề, không chẩn đoán và không thay thế ba mẹ, thầy cô hay chuyên gia tâm lý.</p>
       </div>
 
       <div class="mt-4 flex justify-start">
@@ -2804,15 +2808,15 @@
       undo: ic('<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/>'),
       trash: ic('<path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>'),
       back: ic('<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>', 'w-3.5 h-3.5'),
-      music: ic('<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>', 'w-6 h-6 text-teal-600 mb-2')
+      music: ic('<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>', 'w-5 h-5 text-teal-600 mb-1.5')
     };
 
     const grid = result.querySelector('.btn-art-mode')?.parentElement;
     if (grid) {
-      grid.classList.remove('md:grid-cols-3'); grid.classList.add('md:grid-cols-4');
+      
       const card = document.createElement('button');
       card.type = 'button';
-      card.className = 'p-4 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all';
+      card.className = 'p-3 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all';
       card.innerHTML = `${ICON.music}<div class="font-bold text-xs mb-1">4. Vẽ Ra Nhạc</div>
         <div class="text-[10px] text-slate-500">Vẽ nét lên khung, thanh chạy ngang qua sẽ biến nét vẽ thành giai điệu.</div>`;
       grid.appendChild(card);
@@ -4946,14 +4950,19 @@
   progM.addEventListener('click', function (e) { if (e.target.closest('[data-a=x]')) hideM(progM); });
 
   var secEl = null;
+  var LNK = 'text-xs font-semibold text-teal-700 dark:text-teal-300 underline underline-offset-4 decoration-teal-300/60 hover:decoration-teal-500 py-1';
+  var moreOpen = false, moreEl = null;
   function renderSection() {
-    if (!secEl) return;
+    if (!secEl || !moreEl) return;
     var p = plan(), n = p ? p.done.filter(Boolean).length : 0, dc = dailyCache(), f = FEEL.filter(function (x) { return x[0] === feelSel; })[0];
-    var h = '<h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-3 mt-5 uppercase tracking-wider">' + T('Thêm phương pháp', 'More methods') + '</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-3">' +
-      '<button type="button" data-a="open:emotion" class="p-4 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all"><svg class="w-6 h-6 mb-1.5 text-teal-600 dark:text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg><div class="font-bold text-xs mb-1">' + T('Vẽ cảm xúc bằng màu', 'Draw feelings in color') + '</div><div class="text-[10px] text-slate-500">' + T('Chọn cảm xúc, tô thành màu và đặt tên cho nó.', 'Pick a feeling, turn it into color and give it a name.') + '</div></button>' +
-      '<button type="button" data-a="open:body" class="p-4 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all"><svg class="w-6 h-6 mb-1.5 text-teal-600 dark:text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="1"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/></svg><div class="font-bold text-xs mb-1">' + T('Quét cơ thể', 'Body scan') + '</div><div class="text-[10px] text-slate-500">' + T('Tô lên hình người những chỗ đang căng, nặng hoặc đau.', 'Paint the tense, heavy or painful places on a body figure.') + '</div></button></div>';
+    var mh = '' +
+      '<button type="button" data-a="open:emotion" class="btn-art-mode p-3 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all"><svg class="w-6 h-6 mb-1.5 text-teal-600 dark:text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg><div class="font-bold text-xs mb-1">' + T('5. Vẽ cảm xúc bằng màu', '5. Draw feelings in color') + '</div><div class="text-[10px] text-slate-500">' + T('Chọn cảm xúc, tô thành màu và đặt tên cho nó.', 'Pick a feeling, turn it into color and give it a name.') + '</div></button>' +
+      '<button type="button" data-a="open:body" class="btn-art-mode p-3 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all"><svg class="w-6 h-6 mb-1.5 text-teal-600 dark:text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="1"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/></svg><div class="font-bold text-xs mb-1">' + T('6. Quét cơ thể', '6. Body scan') + '</div><div class="text-[10px] text-slate-500">' + T('Tô lên hình người những chỗ đang căng, nặng hoặc đau.', 'Paint the tense, heavy or painful places on a body figure.') + '</div></button>';
+    moreEl.innerHTML = mh;
+    if (moreEl.nextSibling) moreEl.parentNode.appendChild(moreEl);
 
-    h += '<div class="' + CARD + ' mt-3"><div class="font-bold text-xs mb-2">' + T('Hôm nay bạn thấy thế nào?', 'How are you feeling today?') + '</div><div class="flex flex-wrap gap-1.5">' + FEEL.map(function (x) {
+    var h = '<details id="mx2-more" class="group mt-4"' + (moreOpen ? ' open' : '') + '><summary class="flex items-center justify-between gap-3 cursor-pointer select-none py-2"><span><span class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">' + T('Gợi ý thêm cho hôm nay', 'More ideas for today') + '</span><span class="block text-[11px] text-slate-500 dark:text-slate-400">' + T('Tâm trạng, đề bài vẽ và lộ trình 7 ngày', 'Mood, drawing prompt and 7-day plan') + '</span></span><svg class="w-4 h-4 shrink-0 text-slate-500 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>' +
+      '<div class="' + CARD + ' mt-1"><div class="font-bold text-xs mb-2">' + T('Hôm nay bạn thấy thế nào?', 'How are you feeling today?') + '</div><div class="flex flex-wrap gap-1.5">' + FEEL.map(function (x) {
       return '<button type="button" data-a="feel:' + x[0] + '" class="px-3 py-1.5 rounded-full text-[11px] border ' + (x[0] === feelSel ? 'bg-teal-600 text-white border-teal-600' : 'border-slate-200 dark:border-slate-700') + '">' + T(x[1], x[2]) + '</button>';
     }).join('') + '</div>';
     if (f) h += '<div class="mt-3 space-y-2">' + f[3].map(function (s) {
@@ -4970,7 +4979,8 @@
       (p ? T(PLANS[p.focus].vi, PLANS[p.focus].en) + ' · ' + n + '/7' : T('Mỗi ngày một hoạt động nhỏ, hợp với điểm DASS hoặc tâm trạng của bạn.', 'One small activity a day, matched to your DASS result or mood.')) + '</div></div>' +
       '<button type="button" data-a="plan" class="' + PRI + ' shrink-0">' + (p ? T('Xem', 'Open') : T('Bắt đầu', 'Start')) + '</button></div>';
 
-    h += '<div class="grid grid-cols-3 gap-2 mt-3"><button type="button" data-a="gal" class="' + BTN + '">' + T('Phòng tranh', 'Gallery') + '</button><button type="button" data-a="prog" class="' + BTN + '">' + T('Tiến triển DASS', 'DASS progress') + '</button><button type="button" data-a="sci" class="' + BTN + '">' + T('Cơ sở khoa học', 'Science') + '</button></div>';
+    h += '</details>';
+    h += '<div class="flex flex-wrap justify-center gap-x-6 gap-y-2 mt-5"><button type="button" data-a="gal" class="' + LNK + '">' + T('Phòng tranh', 'Gallery') + '</button><button type="button" data-a="prog" class="' + LNK + '">' + T('Tiến triển DASS', 'DASS progress') + '</button><button type="button" data-a="sci" class="' + LNK + '">' + T('Cơ sở khoa học', 'Science') + '</button></div>';
     secEl.innerHTML = h;
   }
   function refreshAll() { renderSection(); renderCmp(); }
@@ -5000,6 +5010,11 @@
     box.parentNode.insertBefore(careEl, box.nextSibling); box.parentNode.insertBefore(cmpEl, careEl.nextSibling);
     secEl = D.createElement('div'); secEl.id = 'mx2-sec';
     back.parentNode.parentNode.insertBefore(secEl, back.parentNode);
+    var mg = scr.querySelector('.btn-art-mode'); mg = mg && mg.parentNode;
+    moreEl = D.createElement('div'); moreEl.id = 'mx2-methods'; moreEl.className = 'contents';
+    if (mg) mg.appendChild(moreEl); else secEl.parentNode.insertBefore(moreEl, secEl);
+    moreEl.addEventListener('click', onSection);
+    secEl.addEventListener('toggle', function (e) { if (e.target && e.target.id === 'mx2-more') moreOpen = e.target.open; }, true);
     secEl.addEventListener('click', onSection); careEl.addEventListener('click', onSection);
     new MutationObserver(function () { if (!scr.classList.contains('hidden')) { renderSection(); ensureDaily(false); } }).observe(scr, { attributes: true, attributeFilter: ['class'] });
     renderSection(); renderCmp();
