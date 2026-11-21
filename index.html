@@ -253,6 +253,15 @@
 
   #calm-finish-more > summary { list-style: none; }
   #calm-finish-more > summary::-webkit-details-marker { display: none; }
+  .dass-tab-btn { padding: 0.625rem 0.875rem; font-size: 0.8125rem; font-weight: 500; color: #5f6368; border-bottom: 2px solid transparent; white-space: nowrap; border-radius: 6px 6px 0 0; min-height: 0 !important; background: transparent !important; border-top: 0 !important; border-left: 0 !important; border-right: 0 !important; }
+  .dass-tab-btn:hover { background-color: #f1f3f4 !important; color: #202124; }
+  .dass-tab-btn.is-active { color: #1a73e8 !important; border-bottom-color: #1a73e8 !important; font-weight: 600 !important; }
+  html.dark .dass-tab-btn { color: #9aa0a6; }
+  html.dark .dass-tab-btn:hover { background-color: #303134 !important; color: #e8eaed; }
+  html.dark .dass-tab-btn.is-active { color: #8ab4f8 !important; border-bottom-color: #8ab4f8 !important; }
+  #screen-dass-result .btn-art-mode { height: 100%; }
+  #screen-dass-result .rec-fit-badge { font-size: 0.6875rem !important; line-height: 1.2; padding: 0.125rem 0.375rem; border-radius: 4px; background-color: #e8f0fe !important; color: #1a73e8 !important; font-weight: 600; white-space: nowrap; }
+  html.dark #screen-dass-result .rec-fit-badge { background-color: #1e3a5f !important; color: #8ab4f8 !important; }
 </style>
 </head>
 <body class="bg-[#f8f9fa] dark:bg-[#202124] min-h-screen text-[#202124] dark:text-[#e8eaed] flex flex-col justify-between transition-colors duration-300">
@@ -345,49 +354,62 @@
       </div>
     </section>
 
-    <section id="screen-dass-result" class="hidden w-full bg-white/95 dark:bg-slate-900/95 p-4 sm:p-6 lg:p-7 rounded-3xl shadow-xl border border-teal-100/80 dark:border-slate-800 max-w-6xl my-auto overflow-x-hidden">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-3.5 mb-4 border-b border-slate-200/70 dark:border-slate-800/80 text-center sm:text-left">
-        <div>
-          <h2 id="dass-result-title" class="text-lg sm:text-xl lg:text-2xl font-extrabold tracking-tight text-teal-950 dark:text-teal-50">Kết Quả Đánh Giá Tâm Lý DASS-21</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Dành cho: <span id="res-user-name" class="font-semibold text-teal-700 dark:text-teal-300"></span></p>
+    <section id="screen-dass-result" class="hidden w-full bg-white/95 dark:bg-slate-900/95 p-4 sm:p-5 lg:p-6 rounded-3xl shadow-xl border border-teal-100/80 dark:border-slate-800 max-w-6xl my-auto overflow-x-hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-[#dadce0] dark:border-[#3c4043] text-left">
+        <div class="min-w-0">
+          <h2 id="dass-result-title" class="text-lg sm:text-xl font-semibold tracking-tight text-[#202124] dark:text-[#e8eaed]">Kết Quả Đánh Giá Tâm Lý DASS-21</h2>
+          <p class="text-xs text-[#5f6368] dark:text-[#9aa0a6] mt-0.5">Dành cho: <span id="res-user-name" class="font-semibold text-[#1a73e8] dark:text-[#8ab4f8]"></span></p>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button id="btn-dass-result-gal" type="button" data-a="gal" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-[#dadce0] dark:border-[#3c4043] text-[#202124] dark:text-[#e8eaed] text-xs font-medium hover:bg-[#f1f3f4] dark:hover:bg-[#303134]">
+            <svg class="w-3.5 h-3.5 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+            <span>Phòng tranh</span>
+          </button>
+          <button id="btn-dass-result-back" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-[#dadce0] dark:border-[#3c4043] text-[#202124] dark:text-[#e8eaed] text-xs font-medium hover:bg-[#f1f3f4] dark:hover:bg-[#303134]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 pointer-events-none"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg><span>Quay lại câu hỏi</span></button>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
-        <div id="dass-left-col" class="mx-dass-only lg:col-span-5 flex flex-col gap-3.5 min-w-0">
-          <div class="grid grid-cols-3 gap-2 sm:gap-2.5">
-            <div class="p-3 bg-[#f1f3f4] dark:bg-[#303134] border border-[#dadce0] dark:border-[#3c4043] rounded-md text-left">
-              <div class="text-xs font-semibold leading-tight text-[#5f6368] dark:text-[#9aa0a6]">Trầm cảm</div>
-              <div class="flex items-baseline justify-between gap-1.5 my-1.5">
-                <span id="score-d" class="text-xl sm:text-2xl font-bold text-[#202124] dark:text-[#e8eaed]">0</span>
-                <span id="label-d" class="text-[11px] px-2 py-0.5 rounded inline-block">Bình thường</span>
+      <div id="dass-tabs" role="tablist" class="mx-dass-only flex items-center gap-1 border-b border-[#dadce0] dark:border-[#3c4043] mb-4 overflow-x-auto">
+        <button type="button" role="tab" aria-selected="true" data-dtab="practice" class="dass-tab-btn is-active">Thực hành trị liệu</button>
+        <button type="button" role="tab" aria-selected="false" data-dtab="today" class="dass-tab-btn">Gợi ý hôm nay &amp; Lộ trình 7 ngày</button>
+        <button type="button" role="tab" aria-selected="false" data-dtab="progress" class="dass-tab-btn">Tiến triển &amp; Cơ sở khoa học</button>
+      </div>
+
+      <div id="dass-tab-practice" class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5 items-start">
+        <div id="dass-left-col" class="mx-dass-only lg:col-span-5 flex flex-col gap-3 min-w-0">
+          <div class="grid grid-cols-3 gap-2">
+            <div class="p-2.5 bg-[#f1f3f4] dark:bg-[#303134] border border-[#dadce0] dark:border-[#3c4043] rounded-md text-left">
+              <div class="flex items-center justify-between gap-1 text-xs font-semibold leading-tight text-[#5f6368] dark:text-[#9aa0a6]"><span>Trầm cảm</span><span id="delta-d" class="text-[11px] font-semibold"></span></div>
+              <div class="flex items-baseline justify-between gap-1 my-1">
+                <span id="score-d" class="text-xl font-bold text-[#202124] dark:text-[#e8eaed]">0</span>
+                <span id="label-d" class="text-[11px] px-1.5 py-0.5 rounded inline-block whitespace-nowrap">Bình thường</span>
               </div>
               <div class="w-full h-1 bg-[#dadce0] dark:bg-[#3c4043] rounded-sm overflow-hidden"><div id="bar-d" class="h-full bg-[#1a73e8]" style="width:0%"></div></div>
             </div>
-            <div class="p-3 bg-[#f1f3f4] dark:bg-[#303134] border border-[#dadce0] dark:border-[#3c4043] rounded-md text-left">
-              <div class="text-xs font-semibold leading-tight text-[#5f6368] dark:text-[#9aa0a6]">Lo âu</div>
-              <div class="flex items-baseline justify-between gap-1.5 my-1.5">
-                <span id="score-a" class="text-xl sm:text-2xl font-bold text-[#202124] dark:text-[#e8eaed]">0</span>
-                <span id="label-a" class="text-[11px] px-2 py-0.5 rounded inline-block">Bình thường</span>
+            <div class="p-2.5 bg-[#f1f3f4] dark:bg-[#303134] border border-[#dadce0] dark:border-[#3c4043] rounded-md text-left">
+              <div class="flex items-center justify-between gap-1 text-xs font-semibold leading-tight text-[#5f6368] dark:text-[#9aa0a6]"><span>Lo âu</span><span id="delta-a" class="text-[11px] font-semibold"></span></div>
+              <div class="flex items-baseline justify-between gap-1 my-1">
+                <span id="score-a" class="text-xl font-bold text-[#202124] dark:text-[#e8eaed]">0</span>
+                <span id="label-a" class="text-[11px] px-1.5 py-0.5 rounded inline-block whitespace-nowrap">Bình thường</span>
               </div>
               <div class="w-full h-1 bg-[#dadce0] dark:bg-[#3c4043] rounded-sm overflow-hidden"><div id="bar-a" class="h-full bg-[#e37400]" style="width:0%"></div></div>
             </div>
-            <div class="p-3 bg-[#f1f3f4] dark:bg-[#303134] border border-[#dadce0] dark:border-[#3c4043] rounded-md text-left">
-              <div class="text-xs font-semibold leading-tight text-[#5f6368] dark:text-[#9aa0a6]">Căng thẳng</div>
-              <div class="flex items-baseline justify-between gap-1.5 my-1.5">
-                <span id="score-s" class="text-xl sm:text-2xl font-bold text-[#202124] dark:text-[#e8eaed]">0</span>
-                <span id="label-s" class="text-[11px] px-2 py-0.5 rounded inline-block">Bình thường</span>
+            <div class="p-2.5 bg-[#f1f3f4] dark:bg-[#303134] border border-[#dadce0] dark:border-[#3c4043] rounded-md text-left">
+              <div class="flex items-center justify-between gap-1 text-xs font-semibold leading-tight text-[#5f6368] dark:text-[#9aa0a6]"><span>Căng thẳng</span><span id="delta-s" class="text-[11px] font-semibold"></span></div>
+              <div class="flex items-baseline justify-between gap-1 my-1">
+                <span id="score-s" class="text-xl font-bold text-[#202124] dark:text-[#e8eaed]">0</span>
+                <span id="label-s" class="text-[11px] px-1.5 py-0.5 rounded inline-block whitespace-nowrap">Bình thường</span>
               </div>
               <div class="w-full h-1 bg-[#dadce0] dark:bg-[#3c4043] rounded-sm overflow-hidden"><div id="bar-s" class="h-full bg-[#d93025]" style="width:0%"></div></div>
             </div>
           </div>
 
-          <div id="dass-rec-box" class="bg-[#f1f6f3] dark:bg-[#1a2823] border border-[#cde0d6] dark:border-[#2a3f37] p-4 rounded-lg flex flex-col gap-3">
-            <div class="min-w-0 text-xs text-[#1f3b31] dark:text-[#cce3d9]">
-              <div class="font-bold flex items-center mb-1"><i data-lucide="compass" class="w-4 h-4 mr-1.5 text-[#1f5c4a] dark:text-[#5eb89a] shrink-0"></i>Gợi ý liệu pháp:</div>
-              <p id="recommendation-text" class="text-slate-600 dark:text-slate-300 leading-relaxed">...</p>
+          <div id="dass-rec-box" class="bg-[#e8f0fe] dark:bg-[#303134] border border-[#d2e3fc] dark:border-[#3c4043] p-3.5 rounded-md flex flex-col gap-2.5">
+            <div class="min-w-0 text-xs text-[#202124] dark:text-[#e8eaed]">
+              <div class="font-semibold flex items-center mb-1"><i data-lucide="compass" class="w-4 h-4 mr-1.5 text-[#1a73e8] dark:text-[#8ab4f8] shrink-0"></i>Gợi ý liệu pháp:</div>
+              <p id="recommendation-text" class="text-[#5f6368] dark:text-[#9aa0a6] leading-relaxed">...</p>
             </div>
-            <button id="btn-rec-start" type="button" class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg bg-[#1f5c4a] hover:bg-[#184a3b] text-white text-xs font-bold transition-colors whitespace-nowrap">
+            <button id="btn-rec-start" type="button" class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-md bg-[#1a73e8] hover:bg-[#1557b0] text-white text-xs font-semibold transition-colors whitespace-nowrap">
               <span id="btn-rec-start-label">Bắt đầu ngay</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 pointer-events-none"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </button>
@@ -395,39 +417,37 @@
         </div>
 
         <div id="dass-right-col" class="lg:col-span-7 flex flex-col min-w-0">
-          <h3 class="text-xs font-bold text-slate-600 dark:text-slate-300 mb-2.5">Chọn phương pháp trị liệu:</h3>
+          <h3 class="text-xs font-semibold text-[#5f6368] dark:text-[#9aa0a6] mb-2">Chọn phương pháp trị liệu:</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <button data-mode="trame" class="btn-art-mode p-3 rounded-lg bg-[#faf8f4] dark:bg-[#171c1a] border border-[#e2ddd3] dark:border-[#2b3330] hover:border-[#1f5c4a] text-left transition-colors">
-              <i data-lucide="circle-dot" class="w-5 h-5 text-[#1f5c4a] dark:text-[#5eb89a] shrink-0 mt-0.5"></i>
-              <div class="min-w-0"><div class="font-bold text-xs mb-0.5 text-[#1f2421] dark:text-[#edf2ef]">1. Vẽ Chấm Trame</div>
-              <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Giải tỏa căng thẳng bằng các điểm chấm kiên nhẫn.</div></div>
+            <button data-mode="trame" class="btn-art-mode p-3 rounded-md bg-white dark:bg-[#303134] border border-[#dadce0] dark:border-[#3c4043] hover:border-[#1a73e8] text-left transition-colors">
+              <i data-lucide="circle-dot" class="w-5 h-5 text-[#202124] dark:text-[#e8eaed] shrink-0 mt-0.5"></i>
+              <div class="min-w-0 flex-1"><div class="art-card-head flex items-center justify-between gap-1.5 font-semibold text-xs mb-0.5 text-[#202124] dark:text-[#e8eaed]"><span>1. Vẽ Chấm Trame</span></div>
+              <div class="text-[11px] text-[#5f6368] dark:text-[#9aa0a6] leading-snug">Giải tỏa căng thẳng bằng các điểm chấm kiên nhẫn.</div></div>
             </button>
-            <button data-mode="doodle" class="btn-art-mode p-3 rounded-lg bg-[#faf8f4] dark:bg-[#171c1a] border border-[#e2ddd3] dark:border-[#2b3330] hover:border-[#1f5c4a] text-left transition-colors">
-              <i data-lucide="spline" class="w-5 h-5 text-[#1f5c4a] dark:text-[#5eb89a] shrink-0 mt-0.5"></i>
-              <div class="min-w-0"><div class="font-bold text-xs mb-0.5 text-[#1f2421] dark:text-[#edf2ef]">2. Vẽ Tự Do</div>
-              <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Tự do phóng bút bộc lộ suy nghĩ miên man.</div></div>
+            <button data-mode="doodle" class="btn-art-mode p-3 rounded-md bg-white dark:bg-[#303134] border border-[#dadce0] dark:border-[#3c4043] hover:border-[#1a73e8] text-left transition-colors">
+              <i data-lucide="spline" class="w-5 h-5 text-[#202124] dark:text-[#e8eaed] shrink-0 mt-0.5"></i>
+              <div class="min-w-0 flex-1"><div class="art-card-head flex items-center justify-between gap-1.5 font-semibold text-xs mb-0.5 text-[#202124] dark:text-[#e8eaed]"><span>2. Vẽ Tự Do</span></div>
+              <div class="text-[11px] text-[#5f6368] dark:text-[#9aa0a6] leading-snug">Tự do phóng bút bộc lộ suy nghĩ miên man.</div></div>
             </button>
-            <button data-mode="coloring" class="btn-art-mode p-3 rounded-lg bg-[#faf8f4] dark:bg-[#171c1a] border border-[#e2ddd3] dark:border-[#2b3330] hover:border-[#1f5c4a] text-left transition-colors">
-              <i data-lucide="paint-bucket" class="w-5 h-5 text-[#1f5c4a] dark:text-[#5eb89a] shrink-0 mt-0.5"></i>
-              <div class="min-w-0"><div class="font-bold text-xs mb-0.5 text-[#1f2421] dark:text-[#edf2ef]">3. Tô Màu Mandala</div>
-              <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Chọn một bức tranh mình thích rồi tô màu.</div></div>
+            <button data-mode="coloring" class="btn-art-mode p-3 rounded-md bg-white dark:bg-[#303134] border border-[#dadce0] dark:border-[#3c4043] hover:border-[#1a73e8] text-left transition-colors">
+              <i data-lucide="paint-bucket" class="w-5 h-5 text-[#202124] dark:text-[#e8eaed] shrink-0 mt-0.5"></i>
+              <div class="min-w-0 flex-1"><div class="art-card-head flex items-center justify-between gap-1.5 font-semibold text-xs mb-0.5 text-[#202124] dark:text-[#e8eaed]"><span>3. Tô Màu Mandala</span></div>
+              <div class="text-[11px] text-[#5f6368] dark:text-[#9aa0a6] leading-snug">Chọn một bức tranh mình thích rồi tô màu.</div></div>
             </button>
           </div>
 
           <div class="mt-2.5">
-            <button id="mx-ai-open" type="button" class="w-full flex items-center gap-3 p-3 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 hover:border-teal-500 text-left transition-all">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 shrink-0 text-teal-600 dark:text-teal-400 pointer-events-none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-              <div class="min-w-0"><div class="font-bold text-xs mb-0.5 text-slate-800 dark:text-slate-100">AI hỗ trợ tâm lý</div>
-              <div class="text-[11px] text-slate-500 dark:text-slate-400">Trò chuyện với trợ lý AI để được lắng nghe và gợi ý cách thư giãn.</div></div>
+            <button id="mx-ai-open" type="button" class="w-full flex items-center gap-3 p-3 rounded-md bg-white dark:bg-[#303134] border border-[#dadce0] dark:border-[#3c4043] hover:border-[#1a73e8] text-left transition-colors">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 shrink-0 text-[#202124] dark:text-[#e8eaed] pointer-events-none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <div class="min-w-0"><div class="font-semibold text-xs mb-0.5 text-[#202124] dark:text-[#e8eaed]">AI hỗ trợ tâm lý</div>
+              <div class="text-[11px] text-[#5f6368] dark:text-[#9aa0a6]">Trò chuyện để được lắng nghe và gợi ý thư giãn (chỉ tham khảo, không thay thế chuyên gia).</div></div>
             </button>
-            <p class="text-[11px] mt-1.5 px-1 text-slate-400 dark:text-slate-500 leading-snug">Lưu ý: AI chỉ hỗ trợ một phần, không thể giải quyết mọi vấn đề, không chẩn đoán và không thay thế ba mẹ, thầy cô hay chuyên gia tâm lý.</p>
-          </div>
-
-          <div class="mt-4 pt-2.5 border-t border-slate-200/70 dark:border-slate-800/80 flex justify-start">
-            <button id="btn-dass-result-back" type="button" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold hover:border-teal-400 hover:text-teal-700 dark:hover:text-teal-300 transition-all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 pointer-events-none"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg><span>Quay lại câu hỏi</span></button>
           </div>
         </div>
       </div>
+
+      <div id="dass-tab-today" class="hidden"></div>
+      <div id="dass-tab-progress" class="hidden"></div>
     </section>
 
     <section id="screen-gallery" class="hidden w-full bg-white/90 dark:bg-slate-900/90 p-5 md:p-6 rounded-3xl shadow-xl border border-teal-100 dark:border-slate-800 max-w-4xl my-auto">
@@ -1489,17 +1509,17 @@
         const isRec = btn.dataset.mode === recMode;
         btn.classList.toggle('border-l-[3px]', isRec);
         btn.classList.toggle('border-l-[#1a73e8]', isRec);
-        let note = btn.querySelector('.rec-fit-note');
+        let badge = btn.querySelector('.rec-fit-badge');
         if (isRec) {
-          if (!note) {
-            note = document.createElement('div');
-            note.className = 'rec-fit-note text-[11px] font-semibold text-[#1a73e8] dark:text-[#e8eaed] mt-1';
-            note.textContent = (window.__lang && window.__lang() === 'en') ? 'Matches your result' : 'Phù hợp với kết quả của bạn';
-            const holder = btn.querySelector('.min-w-0') || btn;
-            holder.appendChild(note);
+          if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'rec-fit-badge ml-auto shrink-0';
+            badge.textContent = (window.__lang && window.__lang() === 'en') ? 'Suggested' : 'Gợi ý';
+            const head = btn.querySelector('.art-card-head') || btn.querySelector('.min-w-0 > div:first-child') || btn;
+            head.appendChild(badge);
           }
-        } else if (note) {
-          note.remove();
+        } else if (badge) {
+          badge.remove();
         }
       });
       document.getElementById('screen-dass21')?.classList.add('hidden');
@@ -5101,43 +5121,65 @@
     if (!high) { careEl.innerHTML = ''; return; }
     var strong = level >= 3;
     var body = byScore
-      ? T('Điểm tự đánh giá đang ở mức cao (chỉ mang tính tham khảo, không phải chẩn đoán). Hãy chia sẻ với ba mẹ, thầy cô hoặc chuyên gia tâm lý gần bạn ngay lúc này.', 'Your self-assessment score is high (for reference only, not a diagnosis). Please reach out to a parent, teacher or trusted adult right now.')
+      ? T('Điểm tự đánh giá đang ở mức cao (chỉ mang tính tham khảo). Hãy chia sẻ với ba mẹ, thầy cô hoặc chuyên gia tâm lý gần bạn lúc này.', 'Your score is high (reference only). Please reach out to a parent, teacher or trusted adult right now.')
       : strong
-      ? T('Bạn vừa chọn mức cao nhất ở các câu về cảm giác rất nặng nề. Đây không phải chẩn đoán, nhưng bạn rất đáng được lắng nghe — hãy ở cạnh và chia sẻ với một người lớn bạn tin tưởng ngay bây giờ.', 'You selected the highest level on statements about very heavy feelings. This is not a diagnosis, but you deserve care — please stay near and talk to a trusted adult right now.')
-      : T('Bạn vừa chọn mức cao ở một số câu về cảm giác nặng nề. Đây không phải chẩn đoán, nhưng hôm nay hãy chia sẻ với ba mẹ, thầy cô hoặc cô thầy tâm lý học đường nhé.', 'You selected high levels on some statements about heavy feelings. This is not a diagnosis, but please talk to a parent, teacher or school counselor today.');
-    careEl.innerHTML = '<div class="p-4 sm:p-5 rounded-2xl bg-rose-50/90 dark:bg-rose-950/35 border border-rose-200/90 dark:border-rose-900/80 text-xs text-slate-700 dark:text-slate-200 leading-relaxed">' +
-      '<div class="flex items-start gap-2.5 mb-2">' +
-        '<span class="w-6 h-6 rounded-full bg-rose-100 dark:bg-rose-900/60 text-rose-600 dark:text-rose-300 flex items-center justify-center shrink-0 mt-0.5"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></span>' +
-        '<div class="min-w-0"><p class="font-bold text-sm text-rose-800 dark:text-rose-200 mb-1">' + (strong ? T('Bạn rất đáng được quan tâm lúc này', 'You deserve care and support right now') : T('Mình muốn hỏi thăm bạn một chút', 'Checking in with you')) + '</p>' +
-        '<p class="text-slate-600 dark:text-slate-300">' + body + '</p></div>' +
+      ? T('Bạn vừa chọn mức cao nhất ở câu về cảm giác nặng nề. Đây không phải chẩn đoán, nhưng hãy ở cạnh và chia sẻ với người lớn bạn tin ngay lúc này.', 'You chose the highest level for heavy feelings. This is not a diagnosis, but please talk to a trusted adult right now.')
+      : T('Bạn vừa chọn mức cao ở một số câu về cảm giác nặng nề. Hôm nay hãy chia sẻ với ba mẹ, thầy cô hoặc cô thầy tâm lý học đường nhé.', 'You chose high levels for some heavy feelings. Please talk to a parent, teacher or school counselor today.');
+    careEl.innerHTML = '<div class="p-3 rounded-md bg-rose-50/90 dark:bg-rose-950/35 border border-rose-200/90 dark:border-rose-900/80 text-xs text-slate-700 dark:text-slate-200 leading-snug">' +
+      '<div class="flex items-start gap-2">' +
+        '<span class="w-5 h-5 rounded bg-rose-100 dark:bg-rose-900/60 text-rose-600 dark:text-rose-300 flex items-center justify-center shrink-0 mt-0.5"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></span>' +
+        '<div class="min-w-0"><p class="font-semibold text-xs text-rose-800 dark:text-rose-200 mb-0.5">' + (strong ? T('Bạn rất đáng được quan tâm lúc này', 'You deserve care right now') : T('Mình muốn hỏi thăm bạn một chút', 'Checking in with you')) + '</p>' +
+        '<p class="text-[11px] text-slate-600 dark:text-slate-300">' + body + '</p></div>' +
       '</div>' +
-      '<div class="flex flex-wrap items-center gap-2 mt-3.5">' +
-        '<a href="tel:111" class="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-sm no-underline transition-all">' + T('Gọi 111 (miễn phí, 24/7)', 'Call 111 (free, 24/7)') + '</a>' +
-        '<button type="button" data-a="breath" class="inline-flex items-center justify-center px-3.5 py-2 rounded-xl border border-rose-200 dark:border-rose-800/80 bg-white/90 dark:bg-slate-900/80 text-slate-700 dark:text-slate-200 hover:border-rose-400 text-xs font-semibold transition-all">' + T('Hít thở 1 phút', 'Breathe for 1 minute') + '</button>' +
-        '<a href="tel:115" class="inline-flex items-center justify-center px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/60 text-slate-600 dark:text-slate-300 hover:border-rose-400 text-xs font-semibold no-underline transition-all">' + T('Gọi 115 (cấp cứu)', 'Call 115 (emergency)') + '</a>' +
-      '</div>' +
-      '<p class="mt-3 pt-2.5 border-t border-rose-200/60 dark:border-rose-900/60 text-[11px] text-rose-700/80 dark:text-rose-300/80">' + T('Nếu thấy không an toàn hoặc có ý định làm hại bản thân, hãy gọi 115 hoặc nhờ người lớn gần bạn giúp ngay.', 'If you feel unsafe or have thoughts of self-harm, call 115 or ask a nearby adult for help right away.') + '</p></div>';
+      '<div class="flex flex-wrap items-center gap-1.5 mt-2.5">' +
+        '<a href="tel:111" class="inline-flex items-center justify-center px-3 py-1.5 rounded-md bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-semibold no-underline whitespace-nowrap">' + T('Gọi 111 (24/7)', 'Call 111 (24/7)') + '</a>' +
+        '<button type="button" data-a="breath" class="inline-flex items-center justify-center px-2.5 py-1.5 rounded-md border border-rose-200 dark:border-rose-800/80 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 text-[11px] font-medium whitespace-nowrap">' + T('Hít thở 1 phút', 'Breathe 1 min') + '</button>' +
+        '<a href="tel:115" class="inline-flex items-center justify-center px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 text-[11px] font-medium no-underline whitespace-nowrap">' + T('Gọi 115', 'Call 115') + '</a>' +
+      '</div></div>';
   }
   function renderCmp() {
-    if (!cmpEl) return;
     var a = myLogs();
-    if (a.length < 2) { cmpEl.innerHTML = ''; return; }
-    var cur = a[a.length - 1], prev = a[a.length - 2], days = Math.max(0, Math.round((cur.t - prev.t) / 86400000));
-    var dims = [['d', 'Trầm cảm', 'Depression'], ['a', 'Lo âu', 'Anxiety'], ['s', 'Căng thẳng', 'Stress']], down = 0, up = 0;
-    var cols = dims.map(function (d) {
-      var k = d[0], diff = cur[k] - prev[k], cls = 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300', arrow = '→';
-      if (diff <= -3) { cls = 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300'; arrow = '↓'; down++; }
-      else if (diff >= 3) { cls = 'bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300'; arrow = '↑'; up++; }
-      return '<div class="p-2.5 bg-white/70 dark:bg-slate-800/60 rounded-xl text-center"><div class="text-[10px] font-bold uppercase text-slate-400">' + T(d[1], d[2]) + '</div>' +
-        '<div class="text-sm font-extrabold my-0.5">' + prev[k] + ' → ' + cur[k] + '</div><span class="text-[10px] px-2 py-0.5 rounded-full inline-block ' + cls + '">' + arrow + ' ' + (diff > 0 ? '+' : '') + diff + '</span>' +
-        '<div class="text-[10px] text-slate-400 mt-1">' + lvlName(lvl(prev[k], k.toUpperCase())) + ' → ' + lvlName(lvl(cur[k], k.toUpperCase())) + '</div></div>';
-    }).join('');
-    var msg = up === 0 && down > 0 ? T('Có dấu hiệu nhẹ nhõm hơn so với lần trước. Hãy tiếp tục những hoạt động đang giúp bạn.', 'There are signs of feeling lighter than last time. Keep up what has been helping you.')
-      : up > 0 && down === 0 ? T('Điểm cao hơn lần trước. Điều này có thể do tuần học nhiều áp lực, bài kiểm tra hoặc mệt mỏi. Nếu kéo dài, hãy chia sẻ với người lớn bạn tin.', 'Scores are higher than last time. This may come from a stressful week, exams or tiredness. If it lasts, please share it with an adult you trust.')
-      : T('Mức điểm gần như ổn định so với lần trước.', 'Scores are about the same as last time.');
-    cmpEl.innerHTML = '<div class="p-4 bg-teal-50/80 dark:bg-teal-950/40 rounded-2xl"><div class="font-bold text-xs flex items-center mb-2 text-teal-900 dark:text-teal-200">' + T('So với lần làm trước', 'Compared with last time') + ' <span class="ml-2 font-normal text-slate-500 dark:text-slate-400">' + (days ? days + ' ' + T('ngày trước', 'days ago') : T('hôm nay', 'today')) + '</span></div>' +
-      '<div class="grid grid-cols-3 gap-2">' + cols + '</div><p class="text-xs mt-3 text-slate-600 dark:text-slate-300 leading-relaxed">' + msg + '</p>' +
-      '<p class="text-[10px] mt-1 text-slate-400">' + T('Điểm tự đánh giá có thể dao động theo từng thời điểm, chỉ để tham khảo, không phải chẩn đoán.', 'Self-report scores fluctuate over time. For reference only, not a diagnosis.') + '</p></div>';
+    ['d', 'a', 's'].forEach(function (k) {
+      var dl = $('delta-' + k);
+      if (!dl) return;
+      if (a.length < 2) { dl.textContent = ''; dl.className = 'text-[11px] font-semibold'; return; }
+      var diff = a[a.length - 1][k] - a[a.length - 2][k];
+      if (diff === 0) { dl.textContent = ''; return; }
+      dl.textContent = (diff < 0 ? '↓' : '↑') + Math.abs(diff);
+      dl.className = 'text-[11px] font-semibold ' + (diff < 0 ? 'text-[#137333] dark:text-[#81c995]' : 'text-[#c5221f] dark:text-[#f28b82]');
+    });
+    if (!cmpEl) return;
+    var progHtml = '';
+    if (a.length < 2) {
+      progHtml = '<div class="' + CARD + '"><div class="font-semibold text-xs mb-1">' + T('Tiến triển điểm DASS', 'DASS progress') + '</div><p class="text-xs text-slate-500 dark:text-slate-400">' + T('Bạn cần làm bài đánh giá ít nhất 2 lần để so sánh tiến triển theo thời gian.', 'Take the assessment at least twice to compare progress over time.') + '</p></div>';
+    } else {
+      var cur = a[a.length - 1], prev = a[a.length - 2], days = Math.max(0, Math.round((cur.t - prev.t) / 86400000));
+      var dims = [['d', 'Trầm cảm', 'Depression'], ['a', 'Lo âu', 'Anxiety'], ['s', 'Căng thẳng', 'Stress']], down = 0, up = 0;
+      var cols = dims.map(function (d) {
+        var k = d[0], diff = cur[k] - prev[k], cls = 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300', arrow = '→';
+        if (diff <= -3) { cls = 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300'; arrow = '↓'; down++; }
+        else if (diff >= 3) { cls = 'bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300'; arrow = '↑'; up++; }
+        return '<div class="p-2.5 bg-white dark:bg-[#292a2d] border border-[#dadce0] dark:border-[#3c4043] rounded-md text-center"><div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">' + T(d[1], d[2]) + '</div>' +
+          '<div class="text-sm font-bold my-0.5">' + prev[k] + ' → ' + cur[k] + '</div><span class="text-[11px] px-2 py-0.5 rounded inline-block ' + cls + '">' + arrow + ' ' + (diff > 0 ? '+' : '') + diff + '</span></div>';
+      }).join('');
+      var msg = up === 0 && down > 0 ? T('Có dấu hiệu nhẹ nhõm hơn so với lần trước. Hãy tiếp tục những hoạt động đang giúp bạn.', 'Signs of feeling lighter than last time. Keep up what has been helping.')
+        : up > 0 && down === 0 ? T('Điểm cao hơn lần trước. Nếu kéo dài, hãy chia sẻ với người lớn bạn tin.', 'Scores are higher than last time. If it persists, talk to a trusted adult.')
+        : T('Mức điểm gần như ổn định so với lần trước.', 'Scores are about the same as last time.');
+      var r = a.slice(-10), W = 320, Hh = 120, px = function (i) { return 24 + i * (W - 48) / (r.length - 1); }, py = function (v) { return 100 - Math.min(v, 42) / 42 * 82; };
+      var line = function (k, c) { var pts = r.map(function (x, i) { return [px(i), py(x[k])]; }); return '<polyline fill="none" stroke="' + c + '" stroke-width="2" points="' + pts.map(function (q) { return q.join(','); }).join(' ') + '"/>' + pts.map(function (q) { return '<circle cx="' + q[0] + '" cy="' + q[1] + '" r="3" fill="' + c + '"/>'; }).join(''); };
+      var grid = [0, 14, 28, 42].map(function (v) { return '<line x1="14" x2="' + (W - 8) + '" y1="' + py(v) + '" y2="' + py(v) + '" stroke="#94a3b8" stroke-opacity=".25"/><text x="0" y="' + (py(v) + 4) + '" font-size="9" fill="#94a3b8">' + v + '</text>'; }).join('');
+      progHtml = '<div class="' + CARD + '"><div class="flex items-center justify-between gap-2 mb-2"><div class="font-semibold text-xs">' + T('So với lần làm trước', 'Compared with last time') + ' <span class="ml-1 font-normal text-slate-500 dark:text-slate-400">(' + (days ? days + ' ' + T('ngày trước', 'days ago') : T('hôm nay', 'today')) + ')</span></div>' +
+        '<button type="button" data-a="prog" class="text-xs underline text-[#1a73e8] dark:text-[#8ab4f8]">' + T('Xem chi tiết', 'Details') + '</button></div>' +
+        '<div class="grid grid-cols-3 gap-2">' + cols + '</div>' +
+        '<svg viewBox="0 0 ' + W + ' ' + Hh + '" class="w-full mt-3">' + grid + line('d', '#1a73e8') + line('a', '#e37400') + line('s', '#d93025') + '</svg>' +
+        '<div class="flex justify-center gap-4 text-[11px] mb-2"><span style="color:#1a73e8">' + T('Trầm cảm', 'Depression') + '</span><span style="color:#e37400">' + T('Lo âu', 'Anxiety') + '</span><span style="color:#d93025">' + T('Căng thẳng', 'Stress') + '</span></div>' +
+        '<p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">' + msg + '</p></div>';
+    }
+    var sciCard = '<div class="' + CARD + ' flex flex-col justify-between gap-3"><div><div class="font-semibold text-xs mb-1.5">' + T('Cơ sở khoa học', 'Scientific background') + '</div>' +
+      '<p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-2">' + T('Thang đo DASS-21/42 (Lovibond & Lovibond, 1995) kết hợp các phương pháp hội họa trị liệu như Mandala (Curry & Kasser, 2005), Vẽ tự do/Chấm định tâm và Quét cơ thể giúp thư giãn, điều hòa cảm xúc ngắn hạn.', 'DASS-21/42 (Lovibond & Lovibond, 1995) paired with art-based relaxation such as Mandala coloring (Curry & Kasser, 2005), mindful drawing, and body scan.') + '</p>' +
+      '<p class="text-[11px] text-slate-500 dark:text-slate-400">' + T('Lưu ý: Toàn bộ điểm số và hoạt động chỉ mang tính tham khảo và hỗ trợ thư giãn, không phải chẩn đoán y khoa.', 'Note: Scores and activities are for self-reflection and relaxation only, not medical diagnosis.') + '</p></div>' +
+      '<div><button type="button" data-a="sci" class="' + PRI + '">' + T('Xem đầy đủ tài liệu tham khảo', 'View full scientific references') + '</button></div></div>';
+    cmpEl.innerHTML = '<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">' + progHtml + sciCard + '</div>';
   }
   function afterDass() {
     var v = function (k) { return parseInt(($('score-' + k) || {}).textContent, 10) || 0; };
@@ -5375,32 +5417,33 @@
     moreEl.innerHTML = mh;
     if (moreEl.nextSibling) moreEl.parentNode.appendChild(moreEl);
 
-    var h = '<details id="mx2-more" class="group mt-4 pt-3 border-t border-slate-200/70 dark:border-slate-800/80"' + (moreOpen ? ' open' : '') + '><summary class="flex items-center justify-between gap-3 cursor-pointer select-none py-1.5"><span><span class="block text-xs font-bold text-slate-600 dark:text-slate-300">' + T('Gợi ý thêm cho hôm nay', 'More ideas for today') + '</span><span class="block text-[11px] text-slate-500 dark:text-slate-400">' + T('Tâm trạng, đề bài vẽ và lộ trình 7 ngày', 'Mood, drawing prompt and 7-day plan') + '</span></span><svg class="w-4 h-4 shrink-0 text-slate-500 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>' +
-      '<div class="' + CARD + ' mt-1"><div class="font-bold text-xs mb-2">' + T('Hôm nay bạn thấy thế nào?', 'How are you feeling today?') + '</div><div class="flex flex-wrap gap-1.5">' + FEEL.map(function (x) {
+    var h = '<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">' +
+      '<div class="' + CARD + '"><div class="font-semibold text-xs mb-2">' + T('Hôm nay bạn thấy thế nào?', 'How are you feeling today?') + '</div><div class="flex flex-wrap gap-1.5">' + FEEL.map(function (x) {
       return '<button type="button" data-a="feel:' + x[0] + '" class="px-3 py-1.5 rounded-md text-[11px] border ' + (x[0] === feelSel ? 'bg-[#1a73e8] text-white border-[#1a73e8] dark:bg-[#8ab4f8] dark:text-[#202124] dark:border-[#8ab4f8] font-semibold' : 'border-[#dadce0] dark:border-[#3c4043]') + '">' + T(x[1], x[2]) + '</button>';
     }).join('') + '</div>';
     if (f) h += '<div class="mt-3 space-y-2">' + f[3].map(function (s) {
-      return '<div class="flex items-center justify-between gap-3 p-2.5 rounded-md bg-[#f0ece1] dark:bg-[#262c28]"><div class="text-xs"><b>' + modeName(s[0]) + '</b><br><span class="text-slate-500 dark:text-slate-400">' + T(s[1], s[2]) + '</span></div><button type="button" data-a="open:' + s[0] + '" class="' + PRI + ' shrink-0">' + T('Vẽ', 'Draw') + '</button></div>';
+      return '<div class="flex items-center justify-between gap-3 p-2.5 rounded-md bg-[#f1f3f4] dark:bg-[#292a2d] border border-[#dadce0] dark:border-[#3c4043]"><div class="text-xs"><b>' + modeName(s[0]) + '</b><br><span class="text-slate-500 dark:text-slate-400">' + T(s[1], s[2]) + '</span></div><button type="button" data-a="open:' + s[0] + '" class="' + PRI + ' shrink-0">' + T('Vẽ', 'Draw') + '</button></div>';
     }).join('') + '</div>';
     h += '</div>';
 
-    h += '<div class="' + CARD + ' mt-3"><div class="flex items-center justify-between gap-2 mb-1"><div class="font-bold text-xs">' + T('Đề bài gợi ý hôm nay', 'Suggested prompt today') + (f ? ' <span class="font-normal text-[11px] px-2 py-0.5 rounded bg-[#e6efe9] dark:bg-[#26362f] text-[#1f5c4a] dark:text-[#9dd3be]">' + T(f[1], f[2]) + '</span>' : '') + '</div>' +
+    h += '<div class="flex flex-col gap-4"><div class="' + CARD + '"><div class="flex items-center justify-between gap-2 mb-1"><div class="font-semibold text-xs">' + T('Đề bài gợi ý hôm nay', 'Suggested prompt today') + (f ? ' <span class="font-normal text-[11px] px-2 py-0.5 rounded bg-[#e8f0fe] dark:bg-[#303134] text-[#1a73e8] dark:text-[#8ab4f8]">' + T(f[1], f[2]) + '</span>' : '') + '</div>' +
       '<button type="button" data-a="newprompt" ' + (dailyBusy ? 'disabled' : '') + ' class="text-[11px] underline text-slate-500 dark:text-slate-400 disabled:opacity-40">' + T('Đổi đề khác', 'Another prompt') + '</button></div>' +
-      '<p id="mx2-daily-text" class="text-sm font-semibold text-[#1f2421] dark:text-[#e5e2dc] mb-3">' + (dailyBusy ? T('Đang nghĩ đề bài cho bạn...', 'Thinking of a prompt for you...') : esc(dailyText())) + '</p>' +
+      '<p id="mx2-daily-text" class="text-sm font-semibold text-[#202124] dark:text-[#e8eaed] mb-3">' + (dailyBusy ? T('Đang nghĩ đề bài cho bạn...', 'Thinking of a prompt for you...') : esc(dailyText())) + '</p>' +
       '<button type="button" data-a="open:prompt" ' + (dailyBusy ? 'disabled' : '') + ' class="' + PRI + '">' + T('Vẽ theo đề này', 'Draw this prompt') + '</button></div>';
 
-    h += '<div class="' + CARD + ' mt-3 flex items-center justify-between gap-3"><div class="text-xs"><div class="font-bold">' + T('Lộ trình 7 ngày', '7-day plan') + '</div><div class="text-slate-500 dark:text-slate-400">' +
+    h += '<div class="' + CARD + ' flex items-center justify-between gap-3"><div class="text-xs"><div class="font-semibold">' + T('Lộ trình 7 ngày', '7-day plan') + '</div><div class="text-slate-500 dark:text-slate-400">' +
       (p ? T(PLANS[p.focus].vi, PLANS[p.focus].en) + ' · ' + n + '/7' : T('Mỗi ngày một hoạt động nhỏ, hợp với điểm DASS hoặc tâm trạng của bạn.', 'One small activity a day, matched to your DASS result or mood.')) + '</div></div>' +
-      '<button type="button" data-a="plan" class="' + PRI + ' shrink-0">' + (p ? T('Xem', 'Open') : T('Bắt đầu', 'Start')) + '</button></div>';
-
-    h += '</details>';
-    var qBtn = 'inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 hover:border-teal-500 hover:bg-teal-50/60 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-teal-700 dark:hover:text-teal-300 transition-all';
-    h += '<div class="flex flex-wrap justify-center gap-2.5 mt-4">' +
-      '<button type="button" data-a="gal" class="' + qBtn + '"><svg class="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg><span>' + T('Phòng tranh', 'Gallery') + '</span></button>' +
-      '<button type="button" data-a="prog" class="' + qBtn + '"><svg class="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg><span>' + T('Tiến triển DASS', 'DASS progress') + '</span></button>' +
-      '<button type="button" data-a="sci" class="' + qBtn + '"><svg class="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg><span>' + T('Cơ sở khoa học', 'Science') + '</span></button>' +
-      '</div>';
+      '<button type="button" data-a="plan" class="' + PRI + ' shrink-0">' + (p ? T('Xem', 'Open') : T('Bắt đầu', 'Start')) + '</button></div></div></div>';
     secEl.innerHTML = h;
+    var tabs = $('dass-tabs');
+    if (tabs) {
+      var tBtns = tabs.querySelectorAll('[data-dtab]');
+      if (tBtns[0]) tBtns[0].textContent = T('Thực hành trị liệu', 'Therapy practice');
+      if (tBtns[1]) tBtns[1].textContent = T('Gợi ý hôm nay & Lộ trình 7 ngày', "Today's ideas & 7-day plan");
+      if (tBtns[2]) tBtns[2].textContent = T('Tiến triển & Cơ sở khoa học', 'Progress & Science');
+    }
+    var gTop = $('btn-dass-result-gal');
+    if (gTop && gTop.querySelector('span')) gTop.querySelector('span').textContent = T('Phòng tranh', 'Gallery');
   }
   function refreshAll() { renderSection(); renderCmp(); }
   function onSection(e) {
@@ -5420,22 +5463,47 @@
     var o = window[name]; if (typeof o !== 'function') return;
     window[name] = function () { var r = o.apply(this, arguments); try { fn(); } catch (e) { if (window.console) console.warn(e); } return r; };
   }
+  function setDassTab(tab) {
+    var tabs = $('dass-tabs'), p1 = $('dass-tab-practice'), p2 = $('dass-tab-today'), p3 = $('dass-tab-progress');
+    if (p1) p1.classList.toggle('hidden', tab !== 'practice');
+    if (p2) p2.classList.toggle('hidden', tab !== 'today');
+    if (p3) p3.classList.toggle('hidden', tab !== 'progress');
+    if (tabs) {
+      tabs.querySelectorAll('[data-dtab]').forEach(function (b) {
+        var on = b.getAttribute('data-dtab') === tab;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+    }
+  }
   function mount() {
-    var scr = $('screen-dass-result'), back = $('btn-dass-result-back'), rec = $('recommendation-text');
-    if (!scr || !back || !rec) return;
+    var scr = $('screen-dass-result'), rec = $('recommendation-text');
+    if (!scr || !rec) return;
     var box = $('dass-rec-box') || rec.closest('.mx-dass-only') || rec.parentNode;
     careEl = D.createElement('div'); careEl.id = 'mx2-care'; careEl.className = 'empty:hidden';
+    box.parentNode.insertBefore(careEl, box);
     cmpEl = D.createElement('div'); cmpEl.id = 'mx2-cmp'; cmpEl.className = 'empty:hidden';
-    box.parentNode.insertBefore(careEl, box); box.parentNode.insertBefore(cmpEl, box.nextSibling);
+    var tabProg = $('dass-tab-progress');
+    if (tabProg) tabProg.appendChild(cmpEl); else box.parentNode.insertBefore(cmpEl, box.nextSibling);
     secEl = D.createElement('div'); secEl.id = 'mx2-sec';
-    back.parentNode.parentNode.insertBefore(secEl, back.parentNode);
+    var tabToday = $('dass-tab-today');
+    if (tabToday) tabToday.appendChild(secEl);
     var mg = scr.querySelector('.btn-art-mode'); mg = mg && mg.parentNode;
     moreEl = D.createElement('div'); moreEl.id = 'mx2-methods'; moreEl.className = 'contents';
-    if (mg) mg.appendChild(moreEl); else secEl.parentNode.insertBefore(moreEl, secEl);
+    if (mg) mg.appendChild(moreEl); else if (secEl.parentNode) secEl.parentNode.insertBefore(moreEl, secEl);
     moreEl.addEventListener('click', onSection);
-    secEl.addEventListener('toggle', function (e) { if (e.target && e.target.id === 'mx2-more') moreOpen = e.target.open; }, true);
-    secEl.addEventListener('click', onSection); careEl.addEventListener('click', onSection);
-    new MutationObserver(function () { if (!scr.classList.contains('hidden')) { renderSection(); ensureDaily(false); } }).observe(scr, { attributes: true, attributeFilter: ['class'] });
+    secEl.addEventListener('click', onSection);
+    cmpEl.addEventListener('click', onSection);
+    careEl.addEventListener('click', onSection);
+    var gTop = $('btn-dass-result-gal');
+    if (gTop) gTop.addEventListener('click', openGallery);
+    var tabs = $('dass-tabs');
+    if (tabs) tabs.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-dtab]'); if (!b) return;
+      setDassTab(b.getAttribute('data-dtab'));
+    });
+    new MutationObserver(function () { if (!scr.classList.contains('hidden')) { setDassTab('practice'); renderSection(); renderCmp(); ensureDaily(false); } }).observe(scr, { attributes: true, attributeFilter: ['class'] });
+    setDassTab('practice');
     renderSection(); renderCmp();
   }
   function aiResultButton() {
