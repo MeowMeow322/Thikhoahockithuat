@@ -1304,7 +1304,12 @@
     function answerDASS(score) {
       if (dassLock) return;
       dassLock = true;
-      setTimeout(() => { dassLock = false; }, 300);
+      const optBox = document.getElementById('dass-options-container');
+      if (optBox) optBox.style.pointerEvents = 'none';
+      setTimeout(() => {
+        dassLock = false;
+        if (optBox) optBox.style.pointerEvents = '';
+      }, 500);
       dassAnswers[currentQuestion] = score;
       dassAnswered[currentQuestion] = true;
       if (currentQuestion < activeQuestions.length - 1) {
@@ -4736,8 +4741,16 @@
     return String(txt || '').split(/\n+/).map(function (l) { return l.replace(/^\s*(?:[-*•]|\d+[.)])\s*/, '').replace(/^["“]|["”]$/g, '').trim(); })
       .filter(function (l) { return l.length > 8 && l.length < 220; }).slice(0, 3);
   }
+  function setBgModalInert(on) {
+    var m = $('ai-result-modal');
+    if (!m) return;
+    if (on) { m.setAttribute('aria-hidden', 'true'); m.inert = true; }
+    else { m.removeAttribute('aria-hidden'); m.inert = false; }
+  }
+  aiM.querySelector('.mx2-x')?.addEventListener('click', function () { setBgModalInert(false); });
   function askAI(ctx) {
     mb(aiM).innerHTML = '<h3 class="' + H3 + '">' + T('Câu hỏi gợi mở', 'Open questions') + '</h3><p class="text-sm py-6 text-center text-slate-500">' + T('Đang suy nghĩ vài câu hỏi cho bạn...', 'Thinking of a few questions for you...') + '</p>';
+    setBgModalInert(true);
     showM(aiM);
     var num = function (v) { return typeof v === 'number' && v >= 1 && v <= 5 ? v : null; };
     callWorker({ task: 'art_questions', mode: ctx.mode, title: ctx.title || '', note: ctx.note || '', before: num(ctx.before), after: num(ctx.after) }, 25000)
@@ -4760,6 +4773,7 @@
     mb(aiM).onclick = function (e) {
       var b = e.target.closest('[data-a]'); if (!b) return;
       hideM(aiM);
+      setBgModalInert(false);
       if (b.getAttribute('data-a') === 'chat' && window.mxChat) { if (S) { } window.mxChat.open(); }
     };
   }
@@ -4799,9 +4813,8 @@
     }).catch(function () { toast(T('Trình duyệt không cho lưu tranh vào phòng tranh.', 'Your browser would not save the drawing to the gallery.')); });
   }
   function galFromCanvas(t, mode) {
-    var cv = null;
-    try { cv = typeof canvas !== 'undefined' ? canvas : null; } catch (_) {}
-    if (!cv || !cv.width) return;
+    var cv = D.getElementById('art-canvas');
+    if (!cv || !cv.width || !cv.height) return;
     try {
       var c = D.createElement('canvas'); c.width = cv.width; c.height = cv.height;
       var x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(cv, 0, 0);
@@ -5339,14 +5352,25 @@
   function init() {
     mount(); aiResultButton(); headerButton(); aboutButton(); injectListen();
     wrap('processDASSResults', afterDass);
+    var lastSavedTs = 0;
     wrap('openAIResult', function () {
       aiResultButton();
       var h = hist(), r = h[h.length - 1];
       var m = null;
       try { m = typeof activeArtMode !== 'undefined' ? activeArtMode : (r ? r.mode : 'doodle'); } catch (_) { m = r ? r.mode : 'doodle'; }
       var ts = r && r.t ? r.t : Date.now();
+      lastSavedTs = ts;
       galFromCanvas(ts, m); planAuto(m); refreshAll();
     });
+    var doneBtn = $('btn-ai-result-done');
+    if (doneBtn) doneBtn.addEventListener('click', function () {
+      var m = null;
+      try { m = typeof activeArtMode !== 'undefined' ? activeArtMode : 'doodle'; } catch (_) { m = 'doodle'; }
+      if (!lastSavedTs || Date.now() - lastSavedTs > 3000) {
+        lastSavedTs = Date.now();
+        galFromCanvas(lastSavedTs, m);
+      }
+    }, true);
     wrap('__clearDass', function () { window.__mx2dass = null; renderCare(0); renderCmp(); });
     var lb = $('btn-lang'); if (lb) lb.addEventListener('click', function () { setTimeout(relabel, 120); });
     D.addEventListener('keydown', function (e) { if (e.key === 'Escape' && root && !root.classList.contains('hidden') && fin && fin.classList.contains('hidden') && S && S.started === false) closeStudio(); });
@@ -5668,19 +5692,22 @@
         'Mèo ngủ': 'Sleeping cat',
         'Bạn hãy nhập ý tưởng tranh Mandala nhé.': 'Please enter a mandala idea.'
       };
+      var EXTRA_VI = {};
+      Object.keys(EXTRA_EN).forEach(function (k) { EXTRA_VI[EXTRA_EN[k].trim()] = k; });
       var tx = function () {
-        if (!window.__lang || window.__lang() !== 'en') return;
+        var isEn = !!(window.__lang && window.__lang() === 'en');
+        var map = isEn ? EXTRA_EN : EXTRA_VI;
         var w = D.createTreeWalker(D.body, NodeFilter.SHOW_TEXT, null);
         var n;
         while ((n = w.nextNode())) {
           var s = n.nodeValue, tr = s.trim();
-          if (EXTRA_EN[tr]) n.nodeValue = s.replace(tr, EXTRA_EN[tr]);
-          else if (EXTRA_EN[s]) n.nodeValue = EXTRA_EN[s];
+          if (map[tr]) n.nodeValue = s.replace(tr, map[tr]);
+          else if (map[s]) n.nodeValue = map[s];
         }
         var ph = D.getElementById('ai-mandala-input');
-        if (ph) ph.placeholder = 'Enter an idea (e.g. lotus, ocean waves, sleeping cat)...';
+        if (ph) ph.placeholder = isEn ? 'Enter an idea (e.g. lotus, ocean waves, sleeping cat)...' : 'Nhập ý tưởng (ví dụ: hoa sen, sóng biển, mèo ngủ)...';
         var un = D.getElementById('user-name-input');
-        if (un) un.placeholder = 'e.g. Minh...';
+        if (un) un.placeholder = isEn ? 'e.g. Minh...' : 'Ví dụ: Minh...';
       };
       var lb = D.getElementById('btn-lang');
       if (lb) lb.addEventListener('click', function () { setTimeout(tx, 160); });
