@@ -144,7 +144,7 @@
   body { background-image: none !important; background-color: #f8f9fa !important; color: #202124 !important; font-family: 'Be Vietnam Pro', 'Roboto', Arial, sans-serif !important; }
   h1, h2, h3, h4, #dass-question-text, #mx2-daily-text { font-family: 'Be Vietnam Pro', 'Roboto', Arial, sans-serif !important; font-weight: 600; }
   header, footer { background-color: #ffffff !important; border-color: #dadce0 !important; }
-  header p { color: #5f6368 !important; }
+  html:not(.dark) header #brand-home p { color: #5f6368 !important; }
   footer a { color: #1a73e8 !important; }
   *, *::before, *::after { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
   main > section, #ai-result-modal > div, .mx2-modal > div, .fx-modal > div, div.fixed.inset-0 > div, #music-panel, #calm-menu-panel, #custom-color-panel { background-color: #ffffff !important; border: 1px solid #dadce0 !important; border-radius: 8px !important; box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.1), 0 1px 3px 1px rgba(60, 64, 67, 0.06) !important; }
@@ -160,12 +160,14 @@
   #screen-dass-result .btn-art-mode svg, #calm-grid svg, #mx-ai-open svg { color: #202124 !important; }
   #screen-dass-result .rec-fit-note { color: #1a73e8 !important; }
   #screen-dass-result .btn-art-mode:hover, #calm-grid > button:hover, #mx-ai-open:hover, #screen-dass-choice .btn-dass-version:hover, #dass-options-container > button:hover { border-color: #1a73e8 !important; background-color: #f8fafe !important; }
-  #btn-start-dass, #btn-finish, #btn-ai-result-done, #ai-mandala-btn, #ai-send, #music-url-play, #btn-rec-start, #btn-add-custom-color, #btn-change-pattern, button[class*="bg-teal-6"], button[class*="bg-teal-7"], button[class*="bg-emerald-6"], button[class*="bg-emerald-7"], button[class*="bg-[#1f5c4a]"], a[class*="bg-teal-6"], a[class*="bg-teal-7"], a[class*="bg-emerald-6"] { background-color: #1a73e8 !important; color: #ffffff !important; border: 1px solid #1a73e8 !important; font-weight: 500 !important; }
+  #btn-start-dass, #btn-finish, #btn-ai-result-done, #ai-mandala-btn, #ai-send, #music-url-play, #btn-rec-start, #btn-add-custom-color, #btn-change-pattern, button[class*="bg-teal-6"], button[class*="bg-teal-7"], button[class*="bg-emerald-6"], button[class*="bg-emerald-7"], button[class*="bg-[#1f5c4a]"], a[class*="bg-teal-6"], a[class*="bg-teal-7"], a[class*="bg-emerald-6"], span[class*="bg-teal-6"], span[class*="bg-teal-7"], #screen-dass-choice span[class*="bg-[#1f5c4a]"] { background-color: #1a73e8 !important; color: #ffffff !important; border: 1px solid #1a73e8 !important; font-weight: 500 !important; }
+  #screen-dass-choice span[class*="bg-[#eae6de]"] { background-color: #f1f3f4 !important; color: #5f6368 !important; border: 1px solid #dadce0 !important; }
   #btn-start-dass:hover, #btn-finish:hover, #btn-ai-result-done:hover, #ai-mandala-btn:hover, #ai-send:hover, #music-url-play:hover, #btn-rec-start:hover, #btn-add-custom-color:hover, #btn-change-pattern:hover, button[class*="bg-teal-6"]:hover, button[class*="bg-teal-7"]:hover, button[class*="bg-emerald-6"]:hover, button[class*="bg-emerald-7"]:hover, button[class*="bg-[#1f5c4a]"]:hover { background-color: #1557b0 !important; border-color: #1557b0 !important; }
   header > div:last-child > button { width: 40px !important; height: 40px !important; border-radius: 8px !important; background-color: transparent !important; border: 1px solid transparent !important; color: #5f6368 !important; }
   header > div:last-child > button:hover { background-color: #f1f3f4 !important; color: #202124 !important; }
   #calm-menu-panel [data-calm-row] > button { background-color: #f1f3f4 !important; border: 1px solid #dadce0 !important; color: #202124 !important; border-radius: 6px !important; }
-  #dass-progress-bar, #ai-relief-bar, #ai-result-relax-bar { background-color: #1a73e8 !important; }
+  #screen-dass21 #dass-progress-bar, #dass-progress-bar, #ai-relief-bar, #ai-result-relax-bar { background-color: #1a73e8 !important; }
+  .mx2-sw.on { border-color: #1a73e8 !important; box-shadow: 0 0 0 2px #1a73e8 !important; }
   #btn-grid-toggle[aria-pressed="true"], #btn-symmetry-toggle[aria-pressed="true"] { background-color: #1a73e8 !important; color: #ffffff !important; border-color: #1a73e8 !important; }
   input:not([type="range"]):not([type="checkbox"]):not([type="radio"]), textarea, select { background-color: #ffffff !important; border: 1px solid #80868b !important; color: #202124 !important; border-radius: 6px !important; }
   input:not([type="range"]):focus, textarea:focus, select:focus { border-color: #1a73e8 !important; box-shadow: 0 0 0 1px #1a73e8 !important; outline: none !important; }
@@ -191,12 +193,14 @@
   html.dark [class*="text-slate-4"], html.dark [class*="text-slate-5"], html.dark footer { color: #9aa0a6 !important; }
   html.dark [class*="ring-teal-"], html.dark [class*="ring-emerald-"] { --tw-ring-color: #8ab4f8 !important; }
   html.dark input[type="range"] { accent-color: #8ab4f8 !important; }
-  html.dark #btn-start-dass, html.dark #btn-finish, html.dark #btn-ai-result-done, html.dark #ai-mandala-btn, html.dark #ai-send, html.dark #music-url-play, html.dark #btn-rec-start, html.dark #btn-add-custom-color, html.dark #btn-change-pattern, html.dark button[class*="bg-teal-6"], html.dark button[class*="bg-teal-7"], html.dark button[class*="bg-emerald-6"], html.dark button[class*="bg-emerald-7"], html.dark button[class*="bg-[#1f5c4a]"], html.dark a[class*="bg-teal-6"], html.dark a[class*="bg-teal-7"], html.dark a[class*="bg-emerald-6"] { background-color: #8ab4f8 !important; color: #202124 !important; border: 1px solid #8ab4f8 !important; font-weight: 600 !important; }
+  html.dark #btn-start-dass, html.dark #btn-finish, html.dark #btn-ai-result-done, html.dark #ai-mandala-btn, html.dark #ai-send, html.dark #music-url-play, html.dark #btn-rec-start, html.dark #btn-add-custom-color, html.dark #btn-change-pattern, html.dark button[class*="bg-teal-6"], html.dark button[class*="bg-teal-7"], html.dark button[class*="bg-emerald-6"], html.dark button[class*="bg-emerald-7"], html.dark button[class*="bg-[#1f5c4a]"], html.dark a[class*="bg-teal-6"], html.dark a[class*="bg-teal-7"], html.dark a[class*="bg-emerald-6"], html.dark span[class*="bg-teal-6"], html.dark span[class*="bg-teal-7"], html.dark #screen-dass-choice span[class*="bg-[#1f5c4a]"] { background-color: #8ab4f8 !important; color: #202124 !important; border: 1px solid #8ab4f8 !important; font-weight: 600 !important; }
+  html.dark #screen-dass-choice span[class*="bg-[#eae6de]"] { background-color: #303134 !important; color: #e8eaed !important; border: 1px solid #3c4043 !important; }
   html.dark #btn-start-dass:hover, html.dark #btn-finish:hover, html.dark #btn-ai-result-done:hover, html.dark #ai-mandala-btn:hover, html.dark #ai-send:hover, html.dark #music-url-play:hover, html.dark #btn-rec-start:hover, html.dark #btn-add-custom-color:hover, html.dark #btn-change-pattern:hover, html.dark button[class*="bg-teal-6"]:hover, html.dark button[class*="bg-teal-7"]:hover, html.dark button[class*="bg-emerald-6"]:hover, html.dark button[class*="bg-emerald-7"]:hover, html.dark button[class*="bg-[#1f5c4a]"]:hover { background-color: #aecbfa !important; border-color: #aecbfa !important; color: #202124 !important; }
   html.dark #music-toggle-btn { background-color: #303134 !important; color: #e8eaed !important; border: 1px solid #3c4043 !important; box-shadow: none !important; }
   html.dark #music-toggle-btn:hover { background-color: #35363a !important; border-color: #8ab4f8 !important; }
   html.dark #music-preset-lofi, html.dark #music-panel button:not(#music-url-play):not(#music-panel-close) { background-color: #303134 !important; color: #e8eaed !important; border-color: #3c4043 !important; }
-  html.dark #dass-progress-bar, html.dark #ai-relief-bar, html.dark #ai-result-relax-bar { background-color: #8ab4f8 !important; }
+  html.dark #screen-dass21 #dass-progress-bar, html.dark #dass-progress-bar, html.dark #ai-relief-bar, html.dark #ai-result-relax-bar { background-color: #8ab4f8 !important; }
+  html.dark .mx2-sw.on { border-color: #8ab4f8 !important; box-shadow: 0 0 0 2px #8ab4f8 !important; }
   html.dark #btn-grid-toggle[aria-pressed="true"], html.dark #btn-symmetry-toggle[aria-pressed="true"] { background-color: #8ab4f8 !important; color: #202124 !important; border-color: #8ab4f8 !important; }
   html.dark #mx2-care > div { background-color: #3c2222 !important; border-color: #663030 !important; }
   html.dark #mx2-care a[href="tel:111"] { background-color: #d93025 !important; color: #ffffff !important; border-color: #d93025 !important; }
@@ -205,9 +209,10 @@
 
   .rounded-3xl { border-radius: 8px !important; }
   .rounded-2xl, .rounded-xl, .rounded-lg { border-radius: 6px !important; }
-  button.rounded-full:not(.btn-palette):not(#btn-open-custom-color):not([data-color]), a.rounded-full, span.rounded-full:not([data-color]):not(.w-6), div.rounded-full:not([data-color]):not(.w-6):not(.w-7):not(.w-8) { border-radius: 6px !important; }
+  button.rounded-full:not(.btn-palette):not(#btn-open-custom-color):not([data-color]):not([data-c]), a.rounded-full, span.rounded-full:not([data-color]):not(.w-6), div.rounded-full:not([data-color]):not(.w-6):not(.w-7):not(.w-8) { border-radius: 6px !important; }
   .btn-palette, #btn-open-custom-color, #palette-row button[data-color] { min-height: 0 !important; min-width: 0 !important; width: 1.5rem !important; height: 1.5rem !important; border-radius: 9999px !important; padding: 0 !important; flex: none !important; }
-  #ml-colors button { min-height: 0 !important; min-width: 0 !important; width: 1.75rem !important; height: 1.75rem !important; border-radius: 9999px !important; padding: 0 !important; border: 1px solid rgba(0, 0, 0, .18) !important; }
+  #ml-colors button, #ml-colors button.rounded-full { min-height: 0 !important; min-width: 0 !important; width: 1.75rem !important; height: 1.75rem !important; border-radius: 9999px !important; padding: 0 !important; border: 1px solid rgba(0, 0, 0, .18) !important; }
+  @media (max-width: 639px) { #screen-dass-result [id^="label-"] { font-size: 0.6875rem !important; padding: 0.125rem 0.375rem !important; white-space: nowrap !important; } #screen-dass-result .grid.grid-cols-3 > div > div.flex { flex-wrap: wrap !important; gap: 0.25rem !important; } }
   html.dark #ml-colors button, html.dark .btn-palette, html.dark button[data-color] { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .32) !important; }
   #screen-canvas, #screen-canvas > div { max-width: 100% !important; box-sizing: border-box !important; }
   #art-canvas { max-width: 100% !important; height: auto !important; }
