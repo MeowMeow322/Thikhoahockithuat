@@ -108,12 +108,15 @@ export default {
       let imgPrompt = `symmetrical circular mandala coloring book page inspired by ${topic}, clean bold black ink outlines on pure white background, no shading, no gray, no color, simple closed regions for coloring, centered, minimalist line art`;
       if (env.GEMINI_API_KEY) {
         const gAsk = `Rewrite this student theme into ONE short English image prompt (max 35 words) for a symmetrical circular mandala coloring page: "${topic}". Requirements: calm, safe, positive, pure white background, crisp bold black ink outlines, closed shapes easy to color, strictly no shading, no grayscale, no colors, no text. Return only the English prompt.`;
-        const gOut = await callModel(env, [
-          { role: "user", parts: [{ text: TASK_SYSTEM }] },
-          { role: "model", parts: [{ text: "Mình hiểu và sẽ chỉ trả về nội dung được yêu cầu." }] },
-          { role: "user", parts: [{ text: gAsk }] },
-        ], { temperature: 0.7, maxOutputTokens: 120 });
-        if (gOut.reply) {
+        const gOut = await Promise.race([
+          callModel(env, [
+            { role: "user", parts: [{ text: TASK_SYSTEM }] },
+            { role: "model", parts: [{ text: "Mình hiểu và sẽ chỉ trả về nội dung được yêu cầu." }] },
+            { role: "user", parts: [{ text: gAsk }] },
+          ], { temperature: 0.7, maxOutputTokens: 120 }),
+          new Promise((r) => setTimeout(() => r({}), 6000)),
+        ]);
+        if (gOut && gOut.reply) {
           const clean = String(gOut.reply).split(/\n/)[0].replace(/^["“\s]+|["”\s]+$/g, "").slice(0, 260);
           if (clean.length >= 12) imgPrompt = `${clean}, black and white coloring book line art, pure white background, clean bold black outlines, no shading, no color, no text`;
         }
@@ -124,8 +127,9 @@ export default {
           return json({ image: "data:image/jpeg;base64," + res.image, prompt: imgPrompt }, 200, cors);
         }
         return json({ error: lang === "en" ? "Could not generate image right now. Please try again." : "Không tạo được ảnh lúc này, bạn thử lại sau nhé." }, 502, cors);
-      } catch (_) {
-        return json({ error: lang === "en" ? "Image model is busy or reached daily free limit. Please try again later." : "Mô hình tạo ảnh đang bận hoặc đã hết lượt miễn phí hôm nay, bạn thử lại sau nhé." }, 502, cors);
+      } catch (err) {
+        const detail = err && err.message ? " (" + String(err.message).slice(0, 80) + ")" : "";
+        return json({ error: (lang === "en" ? "Image model is busy or reached daily free limit." : "Mô hình tạo ảnh đang bận hoặc chưa sẵn sàng.") + detail }, 502, cors);
       }
     }
 

@@ -5381,7 +5381,7 @@
     if (btn) { btn.disabled = true; btn.textContent = T('Đang tạo tranh...', 'Generating...'); }
     setMsg(T('Đang tạo tranh Mandala cho bạn...', 'Generating your Mandala line art...'), false);
     var ac = typeof AbortController === 'function' ? new AbortController() : null;
-    var tm = ac ? setTimeout(function () { ac.abort(); }, 35000) : null;
+    var tm = ac ? setTimeout(function () { ac.abort(); }, 65000) : null;
     fetch(API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
