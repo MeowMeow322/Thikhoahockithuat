@@ -149,6 +149,8 @@
   #screen-welcome, #screen-dass-choice, #screen-dass21, #screen-dass-result { border-top: 4px solid #1a73e8 !important; }
   #dass-rec-box, #ai-mandala-box { background-color: #e8f0fe !important; border: 1px solid #d2e3fc !important; }
   #screen-dass-result .btn-art-mode, #calm-grid > button, #mx-ai-open, #screen-dass-choice .btn-dass-version, #dass-options-container > button { background-color: #ffffff !important; border: 1px solid #dadce0 !important; color: #202124 !important; }
+  #screen-dass-result .btn-art-mode svg, #calm-grid svg, #mx-ai-open svg { color: #202124 !important; }
+  #screen-dass-result .rec-fit-note { color: #1a73e8 !important; }
   #screen-dass-result .btn-art-mode:hover, #calm-grid > button:hover, #mx-ai-open:hover, #screen-dass-choice .btn-dass-version:hover, #dass-options-container > button:hover { border-color: #1a73e8 !important; background-color: #f8fafe !important; }
   #btn-start-dass, #btn-finish, #btn-ai-result-done, #ai-mandala-btn, #ai-send, #music-url-play, #btn-rec-start.bg-\[\#1f5c4a\], #btn-rec-start.bg-teal-600, #btn-add-custom-color, #btn-change-pattern { background-color: #1a73e8 !important; color: #ffffff !important; border: 1px solid #1a73e8 !important; font-weight: 500 !important; }
   #btn-start-dass:hover, #btn-finish:hover, #btn-ai-result-done:hover, #ai-mandala-btn:hover, #ai-send:hover, #music-url-play:hover, #btn-rec-start.bg-\[\#1f5c4a\]:hover, #btn-rec-start.bg-teal-600:hover, #btn-add-custom-color:hover, #btn-change-pattern:hover { background-color: #1557b0 !important; border-color: #1557b0 !important; }
@@ -169,7 +171,7 @@
   html.dark #screen-dass-result .btn-art-mode:hover, html.dark #calm-grid > button:hover, html.dark #mx-ai-open:hover, html.dark #screen-dass-choice button:hover, html.dark #screen-dass21 #dass-options-container > button:hover { border-color: #8ab4f8 !important; background-color: #35363a !important; }
   html.dark header > div:last-child > button { background-color: transparent !important; border-color: transparent !important; color: #9aa0a6 !important; }
   html.dark header > div:last-child > button:hover { background-color: #303134 !important; color: #e8eaed !important; }
-  html.dark h1, html.dark h2, html.dark h3, html.dark h4, html.dark #res-user-name, html.dark [class*="text-teal-"], html.dark [class*="text-slate-1"], html.dark [class*="text-slate-2"], html.dark [class*="text-slate-3"], html.dark [class*="text-[#edf2ef]"], html.dark [class*="text-[#1f2421]"] { color: #e8eaed !important; }
+  html.dark h1, html.dark h2, html.dark h3, html.dark h4, html.dark #res-user-name, html.dark [class*="text-teal-"], html.dark [class*="text-slate-1"], html.dark [class*="text-slate-2"], html.dark [class*="text-slate-3"], html.dark [class*="text-[#edf2ef]"], html.dark [class*="text-[#1f2421]"], html.dark #screen-dass-result .btn-art-mode svg, html.dark #calm-grid svg, html.dark #mx-ai-open svg, html.dark #screen-dass-result .rec-fit-note, html.dark #dass-rec-box svg { color: #e8eaed !important; }
   html.dark [class*="text-slate-4"], html.dark [class*="text-slate-5"], html.dark footer { color: #9aa0a6 !important; }
   html.dark #btn-start-dass, html.dark #btn-finish, html.dark #btn-ai-result-done, html.dark #ai-mandala-btn, html.dark #ai-send, html.dark #music-url-play, html.dark #btn-rec-start.bg-teal-600, html.dark #btn-rec-start.bg-\[\#1f5c4a\], html.dark #btn-add-custom-color, html.dark #btn-change-pattern { background-color: #8ab4f8 !important; color: #202124 !important; border: 1px solid #8ab4f8 !important; font-weight: 600 !important; }
   html.dark #btn-start-dass:hover, html.dark #btn-finish:hover, html.dark #btn-ai-result-done:hover, html.dark #ai-mandala-btn:hover, html.dark #ai-send:hover, html.dark #music-url-play:hover, html.dark #btn-rec-start.bg-teal-600:hover, html.dark #btn-rec-start.bg-\[\#1f5c4a\]:hover, html.dark #btn-add-custom-color:hover, html.dark #btn-change-pattern:hover { background-color: #aecbfa !important; border-color: #aecbfa !important; color: #202124 !important; }
@@ -1446,12 +1448,12 @@
       document.querySelectorAll('#screen-dass-result .btn-art-mode[data-mode]').forEach(btn => {
         const isRec = btn.dataset.mode === recMode;
         btn.classList.toggle('border-l-[3px]', isRec);
-        btn.classList.toggle('border-l-[#1f5c4a]', isRec);
+        btn.classList.toggle('border-l-[#1a73e8]', isRec);
         let note = btn.querySelector('.rec-fit-note');
         if (isRec) {
           if (!note) {
             note = document.createElement('div');
-            note.className = 'rec-fit-note text-[11px] font-semibold text-[#1f5c4a] dark:text-[#66b89e] mt-1';
+            note.className = 'rec-fit-note text-[11px] font-semibold text-[#1a73e8] dark:text-[#e8eaed] mt-1';
             note.textContent = (window.__lang && window.__lang() === 'en') ? 'Matches your result' : 'Phù hợp với kết quả của bạn';
             const holder = btn.querySelector('.min-w-0') || btn;
             holder.appendChild(note);
