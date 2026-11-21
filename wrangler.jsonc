@@ -4,5 +4,8 @@
   "compatibility_date": "2026-11-14",
   "placement": {
     "region": "aws:us-east-1"
+  },
+  "ai": {
+    "binding": "AI"
   }
 }
