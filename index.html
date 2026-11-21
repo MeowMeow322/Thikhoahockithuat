@@ -171,7 +171,7 @@
         <label class="block text-xs font-semibold text-[#1f2421] dark:text-slate-200 mb-1.5">
           Tên hoặc biệt danh của bạn:
         </label>
-        <input type="text" id="user-name-input" autocomplete="off" enterkeyhint="go" placeholder="Ví dụ: Minh..." class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#d6d1c7] dark:border-[#343e3a] bg-[#faf8f4] dark:bg-[#141716] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1f5c4a]">
+        <input type="text" id="user-name-input" maxlength="60" autocomplete="off" enterkeyhint="go" placeholder="Ví dụ: Minh..." class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#d6d1c7] dark:border-[#343e3a] bg-[#faf8f4] dark:bg-[#141716] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1f5c4a]">
         <p id="name-error-msg" class="hidden text-rose-600 text-[11px] font-medium mt-1.5 flex items-center">
           <i data-lucide="alert-circle" class="w-3.5 h-3.5 mr-1"></i> Vui lòng nhập tên để bắt đầu.
         </p>
@@ -385,6 +385,9 @@
             <button id="btn-eraser" title="Tẩy" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-600 dark:text-slate-300">
               <i data-lucide="eraser" class="w-4 h-4"></i>
             </button>
+            <button id="btn-undo" title="Hoàn tác" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-600 dark:text-slate-300">
+              <i data-lucide="undo-2" class="w-4 h-4"></i>
+            </button>
             <button id="btn-clear" title="Xóa tất cả" class="p-2 rounded-xl border border-red-100 dark:border-red-900/50 text-red-500">
               <i data-lucide="trash-2" class="w-4 h-4"></i>
             </button>
@@ -443,10 +446,13 @@
   </main>
 
   <div id="ai-result-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-    <div class="bg-white dark:bg-[#1c211f] rounded-xl shadow-xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto border border-[#e2ddd3] dark:border-[#2b3330]">
-      <div class="flex items-center gap-2 mb-4">
-        <i data-lucide="check-circle-2" class="w-5 h-5 text-[#1f5c4a] dark:text-[#5eb89a]"></i>
-        <h3 class="font-bold text-[#1f2421] dark:text-[#edf2ef]">Nhận xét về tranh của bạn</h3>
+    <div class="bg-white dark:bg-[#1c211f] rounded-xl shadow-xl max-w-md w-full p-5 sm:p-6 max-h-[85dvh] overflow-y-auto border border-[#e2ddd3] dark:border-[#2b3330]">
+      <div class="flex items-center justify-between gap-2 mb-4">
+        <div class="flex items-center gap-2">
+          <i data-lucide="check-circle-2" class="w-5 h-5 text-[#1f5c4a] dark:text-[#5eb89a]"></i>
+          <h3 class="font-bold text-[#1f2421] dark:text-[#edf2ef]">Nhận xét về tranh của bạn</h3>
+        </div>
+        <button id="btn-ai-result-x" type="button" onclick="document.getElementById('ai-result-modal').classList.add('hidden')" class="w-8 h-8 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-500 hover:text-slate-800 dark:text-slate-300" aria-label="Đóng" title="Đóng"><svg class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
       </div>
 
       <p id="ai-result-compliment" class="text-sm text-slate-700 dark:text-slate-200 mb-4 leading-relaxed"></p>
@@ -475,7 +481,7 @@
     </div>
   </div>
 
-  <footer class="bg-white dark:bg-[#1c211f] border-t border-[#e2ddd3] dark:border-[#2b3330] px-4 py-4 text-xs text-slate-600 dark:text-slate-400">
+  <footer class="bg-white dark:bg-[#1c211f] border-t border-[#e2ddd3] dark:border-[#2b3330] px-4 pt-4 pb-20 sm:pb-5 sm:pr-20 text-xs text-slate-600 dark:text-slate-400">
     <div class="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div class="space-y-0.5 text-left">
         <div class="font-semibold text-[#1f2421] dark:text-[#edf2ef]">Dự án KHKT Học sinh THPT — Tự đánh giá DASS &amp; Hội họa trị liệu</div>
@@ -499,12 +505,25 @@
     if (_mandalasPromise) return _mandalasPromise;
     _mandalasPromise = new Promise((resolve, reject) => {
       const s = document.createElement('script');
+      let done = false;
+      const fail = (err) => {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
+        _mandalasPromise = null;
+        if (s.parentNode) s.parentNode.removeChild(s);
+        reject(err || new Error('timeout'));
+      };
+      const timer = setTimeout(() => fail(new Error('timeout')), 15000);
       s.src = 'mandalas_data.js';
       s.onload = () => {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
         patternImages = window.patternImages || [];
-        resolve(patternImages);
+        if (patternImages.length) resolve(patternImages); else fail(new Error('empty'));
       };
-      s.onerror = (e) => { _mandalasPromise = null; reject(e); };
+      s.onerror = (e) => fail(e);
       document.head.appendChild(s);
     });
     return _mandalasPromise;
@@ -925,18 +944,38 @@
         ensureMandalas().then(() => {
           if (patternImages.length) renderGallery();
         }).catch(() => {
-          grid.innerHTML = '<div class="col-span-full py-10 text-center text-xs text-rose-500">Không tải được tranh mẫu. Hãy kiểm tra mạng và thử lại.</div>';
+          grid.innerHTML = '';
+          const wrap = document.createElement('div');
+          wrap.className = 'col-span-full py-8 text-center space-y-2';
+          const p = document.createElement('p');
+          p.className = 'text-xs text-rose-600 dark:text-rose-400';
+          p.textContent = 'Không tải được bộ tranh mẫu (mạng chậm hoặc bị gián đoạn).';
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 text-xs font-semibold hover:border-teal-500';
+          btn.textContent = 'Thử lại';
+          btn.addEventListener('click', renderGallery);
+          wrap.appendChild(p);
+          wrap.appendChild(btn);
+          grid.appendChild(wrap);
         });
         return;
       }
       grid.innerHTML = '';
       patternImages.forEach((p, i) => {
         const card = document.createElement('button');
+        card.type = 'button';
         card.className = 'group flex flex-col items-center p-2 rounded-2xl border border-teal-100 dark:border-slate-700 hover:border-teal-500 hover:shadow-md transition-all bg-white dark:bg-slate-800';
-        card.innerHTML = `
-          <img src="${p.url}" alt="${p.name}" class="w-full aspect-square object-contain rounded-xl mb-2 bg-white" loading="lazy">
-          <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200 text-center leading-tight">${p.name}</span>
-        `;
+        const img = document.createElement('img');
+        img.src = p.url;
+        img.alt = String(p.name || '');
+        img.className = 'w-full aspect-square object-contain rounded-xl mb-2 bg-white';
+        img.loading = 'lazy';
+        const sp = document.createElement('span');
+        sp.className = 'text-[11px] font-semibold text-slate-700 dark:text-slate-200 text-center leading-tight break-words w-full';
+        sp.textContent = String(p.name || '');
+        card.appendChild(img);
+        card.appendChild(sp);
         card.addEventListener('click', () => selectPattern(i));
         grid.appendChild(card);
       });
@@ -1240,7 +1279,11 @@
       }
     }
 
+    let dassLock = false;
     function answerDASS(score) {
+      if (dassLock) return;
+      dassLock = true;
+      setTimeout(() => { dassLock = false; }, 300);
       dassAnswers[currentQuestion] = score;
       dassAnswered[currentQuestion] = true;
       if (currentQuestion < activeQuestions.length - 1) {
@@ -1874,13 +1917,14 @@
     <i data-lucide="music-2" class="w-5 h-5 pointer-events-none"></i>
   </button>
 
-  <div id="music-panel" class="hidden fixed bottom-20 right-5 z-40 w-80 max-w-[calc(100vw-2.5rem)] max-h-[70vh] overflow-y-auto bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 p-4">
-    <div class="flex items-center justify-between mb-1">
+  <div id="music-panel" class="hidden fixed bottom-20 right-4 sm:right-5 z-40 w-80 max-w-[calc(100vw-2rem)] max-h-[75dvh] flex flex-col overflow-hidden bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700">
+    <div class="flex items-center justify-between px-4 pt-3.5 pb-2.5 border-b border-slate-100 dark:border-slate-800 shrink-0">
       <h4 class="font-bold text-sm text-teal-950 dark:text-teal-100">Phát nhạc</h4>
-      <button id="music-panel-close" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+      <button id="music-panel-close" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" aria-label="Đóng" title="Đóng">
         <i data-lucide="x" class="w-4 h-4 pointer-events-none"></i>
       </button>
     </div>
+    <div id="music-panel-body" class="overflow-y-auto flex-1 px-4 py-3">
     <p class="text-[11px] text-slate-400 mb-2">Dán nhiều link YouTube: bài thêm sau sẽ xếp hàng đợi và tự phát khi bài trước kết thúc.</p>
     <label class="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 mb-3 cursor-pointer">
       <input type="checkbox" id="music-mix" class="accent-teal-600"> Phát nhiều bài cùng lúc (không xếp hàng)
@@ -1900,6 +1944,7 @@
     <div id="music-list" class="space-y-2 mt-2"></div>
     <p id="music-empty" class="text-[11px] text-slate-400 text-center py-2">Chưa có bài nào.</p>
     <button id="music-stop-all" class="hidden w-full mt-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-600 text-xs font-semibold text-slate-600 dark:text-slate-300">Dừng tất cả</button>
+    </div>
   </div>
   <div id="music-hidden" aria-hidden="true" style="position:fixed;left:-9999px;top:0;width:200px;height:200px;overflow:hidden"></div>
 
@@ -3462,15 +3507,19 @@
     var a = AUD[k];
     if (a) { a.volume = vol; var p0 = a.play(); if (p0 && p0.catch) p0.catch(function (e) { if (!(e && e.name === 'AbortError') && playing === k && AUD[k] === a) failPlay(); }); return; }
     a = AUD[k] = new Audio(); a.preload = 'auto'; a.loop = true; a.volume = vol;
+    var sndTimer = null;
     sndBuf = k; renderSnd();
-    a.addEventListener('playing', function () { if (sndBuf === k) { sndBuf = null; renderSnd(); } });
+    if (window.__sndTimer) clearTimeout(window.__sndTimer);
+    window.__sndTimer = setTimeout(function () { if (sndBuf === k && playing === k) { sndWhy = 'timeout'; failPlay(); } }, 10000);
+    a.addEventListener('playing', function () { if (window.__sndTimer) { clearTimeout(window.__sndTimer); window.__sndTimer = null; } if (sndBuf === k) { sndBuf = null; renderSnd(); } });
     a.addEventListener('waiting', function () { if (playing === k) { sndBuf = k; renderSnd(); } });
-    var bad = function (e) { if (e && e.name === 'AbortError') return; sndWhy = e && e.name ? e.name : (a.error ? 'media-' + a.error.code : 'error'); if (playing === k && AUD[k] === a) failPlay(); };
+    var bad = function (e) { if (e && e.name === 'AbortError') return; if (window.__sndTimer) { clearTimeout(window.__sndTimer); window.__sndTimer = null; } sndWhy = e && e.name ? e.name : (a.error ? 'media-' + a.error.code : 'error'); if (playing === k && AUD[k] === a) failPlay(); };
     a.addEventListener('error', function () { bad(); });
     a.src = k + '.mp3';
     var p = a.play(); if (p && p.catch) p.catch(bad);
   }
   function playSnd(k) {
+    if (window.__sndTimer) { clearTimeout(window.__sndTimer); window.__sndTimer = null; }
     var prev = playing;
     if (prev && AUD[prev]) { AUD[prev].pause(); AUD[prev].currentTime = 0; }
     if (prev) stopSynth(prev);
@@ -3516,7 +3565,7 @@
     sndBox.innerHTML = h;
   }
   function mountSounds() {
-    var panel = document.getElementById('music-panel');
+    var panel = document.getElementById('music-panel-body') || document.getElementById('music-panel');
     if (!panel || sndBox) return;
     sndBox = document.createElement('div'); sndBox.id = 'mx-sounds';
     sndBox.className = 'mt-4 pt-4 border-t border-slate-200 dark:border-slate-700';
@@ -3836,7 +3885,7 @@
             '<span id="ai-listen-badge" class="hidden shrink-0 px-2.5 py-1 rounded-full bg-teal-100 dark:bg-teal-950 text-teal-800 dark:text-teal-300 border border-teal-300/70 dark:border-teal-800 text-[11px] font-semibold"></span>' +
             '<button type="button" data-a="sup" class="px-3 py-2 rounded-xl border border-teal-200 dark:border-slate-700 text-xs font-semibold hover:bg-teal-50 dark:hover:bg-slate-800"><span data-t="help"></span></button>' +
           '</div>' +
-          '<div id="ai-sc" class="flex-1 overflow-y-auto"><div id="ai-log" class="max-w-3xl mx-auto px-4 py-5 space-y-4"></div></div>' +
+          '<div id="ai-sc" class="flex-1 overflow-y-auto overflow-x-hidden"><div id="ai-log" class="max-w-3xl mx-auto px-4 py-5 space-y-4 overflow-x-hidden"></div></div>' +
           '<div class="px-3 pt-2 pb-3 border-t border-teal-100 dark:border-slate-800"><div class="max-w-3xl mx-auto">' +
             '<p id="ai-err" class="hidden text-sm text-rose-500 mb-2"></p>' +
             '<div class="flex items-end gap-2 rounded-3xl border border-teal-200 dark:border-slate-700 bg-teal-50/50 dark:bg-slate-800 px-3 py-2 focus-within:border-teal-500">' +
@@ -3926,8 +3975,8 @@
     }).join('') + '</div>';
   }
   function bubble(m, i) {
-    if (m.role === 'user') return '<div class="aim flex justify-end"><div class="max-w-[85%] px-4 py-2.5 rounded-3xl rounded-br-lg bg-teal-700 text-white text-[15px] leading-relaxed">' + fmt(m.text) + '</div></div>';
-    return '<div class="aim flex gap-2.5">' + bot('w-8 h-8 rounded-xl mt-0.5', 'w-5 h-5') + '<div class="min-w-0 flex-1"><div class="inline-block max-w-full px-4 py-2.5 rounded-3xl rounded-tl-lg bg-teal-50 dark:bg-slate-800 border border-teal-100 dark:border-slate-700 text-[15px] leading-relaxed text-slate-700 dark:text-slate-200">' + fmt(m.text) + '</div>' +
+    if (m.role === 'user') return '<div class="aim flex justify-end"><div class="max-w-[85%] px-4 py-2.5 rounded-3xl rounded-br-lg bg-teal-700 text-white text-[15px] leading-relaxed break-words [overflow-wrap:anywhere]">' + fmt(m.text) + '</div></div>';
+    return '<div class="aim flex gap-2.5"><span class="shrink-0">' + bot('w-8 h-8 rounded-xl mt-0.5', 'w-5 h-5') + '</span><div class="min-w-0 flex-1"><div class="inline-block max-w-full px-4 py-2.5 rounded-3xl rounded-tl-lg bg-teal-50 dark:bg-slate-800 border border-teal-100 dark:border-slate-700 text-[15px] leading-relaxed text-slate-700 dark:text-slate-200 break-words [overflow-wrap:anywhere]">' + fmt(m.text) + '</div>' +
       (m.crisis ? '<div><button type="button" data-a="sup" class="mt-2 px-3 py-1.5 rounded-lg bg-rose-600 text-white text-sm font-semibold">' + T('Xem cách được hỗ trợ', 'Get support') + '</button></div>' : '') +
       aiActions(m.text) +
       '<div class="mt-1"><button type="button" data-copy="' + i + '" class="px-2 py-1 rounded-md text-xs text-slate-400 hover:bg-teal-50 dark:hover:bg-slate-800">' + T('Sao chép', 'Copy') + '</button></div></div></div>';
@@ -4119,7 +4168,7 @@
     o.id = id;
     o.className = 'mx2-modal hidden fixed inset-0 flex items-center justify-center bg-black/40 p-4';
     o.style.zIndex = z || 65;
-    o.innerHTML = '<div class="relative max-w-md w-full"><div class="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl w-full p-6 max-h-[90vh] overflow-y-auto text-slate-700 dark:text-slate-200"></div><button type="button" class="mx2-x absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-200 shadow-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-teal-50 dark:hover:bg-slate-700" aria-label="Đóng" title="Đóng"><svg class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>';
+    o.innerHTML = '<div class="relative max-w-md w-full"><div class="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl w-full p-6 pr-12 max-h-[90vh] overflow-y-auto text-slate-700 dark:text-slate-200"></div><button type="button" class="mx2-x absolute top-3 right-3 w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-200 border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-teal-50 dark:hover:bg-slate-700" aria-label="Đóng" title="Đóng"><svg class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>';
     D.body.appendChild(o);
     o.addEventListener('click', function (e) { if (e.target === o && !o.getAttribute('data-sticky')) hideM(o); });
     o.querySelector('.mx2-x').addEventListener('click', function () { if (!o.getAttribute('data-sticky')) hideM(o); });
@@ -4595,7 +4644,7 @@
     mb(aiM).innerHTML = '<h3 class="' + H3 + '">' + T('Câu hỏi gợi mở', 'Open questions') + '</h3><p class="text-sm py-6 text-center text-slate-500">' + T('Đang suy nghĩ vài câu hỏi cho bạn...', 'Thinking of a few questions for you...') + '</p>';
     showM(aiM);
     var num = function (v) { return typeof v === 'number' && v >= 1 && v <= 5 ? v : null; };
-    callWorker({ task: 'art_questions', mode: ctx.mode, title: ctx.title || '', note: ctx.note || '', before: num(ctx.before), after: num(ctx.after) })
+    callWorker({ task: 'art_questions', mode: ctx.mode, title: ctx.title || '', note: ctx.note || '', before: num(ctx.before), after: num(ctx.after) }, 25000)
       .then(function (j) {
         if (j.crisis) { renderAsk(null, false, j.reply); return; }
         var q = parseQs(j.reply);
@@ -5195,8 +5244,12 @@
     mount(); aiResultButton(); headerButton(); aboutButton(); injectListen();
     wrap('processDASSResults', afterDass);
     wrap('openAIResult', function () {
-      var h = hist(), r = h[h.length - 1]; if (!r) return;
-      var m = r.mode; galFromCanvas(r.t, m); planAuto(m); refreshAll();
+      aiResultButton();
+      var h = hist(), r = h[h.length - 1];
+      var m = null;
+      try { m = typeof activeArtMode !== 'undefined' ? activeArtMode : (r ? r.mode : 'doodle'); } catch (_) { m = r ? r.mode : 'doodle'; }
+      var ts = r && r.t ? r.t : Date.now();
+      galFromCanvas(ts, m); planAuto(m); refreshAll();
     });
     wrap('__clearDass', function () { window.__mx2dass = null; renderCare(0); renderCmp(); });
     var lb = $('btn-lang'); if (lb) lb.addEventListener('click', function () { setTimeout(relabel, 120); });
@@ -5331,10 +5384,16 @@
     menuBtn.addEventListener('click', function (e) {
       e.stopPropagation();
       var open = panel.classList.contains('hidden');
-      if (open) refreshLabels();
+      if (open) {
+        refreshLabels();
+        var mp = D.getElementById('music-panel');
+        if (mp) mp.classList.add('hidden');
+      }
       panel.classList.toggle('hidden', !open);
       menuBtn.setAttribute('aria-expanded', String(open));
     });
+    var mtb = D.getElementById('music-toggle-btn');
+    if (mtb) mtb.addEventListener('click', function () { closeMenu(); }, true);
     D.addEventListener('click', function (e) { if (!panel.contains(e.target) && e.target !== menuBtn) closeMenu(); });
     D.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
     new MutationObserver(function (muts) {
@@ -5425,7 +5484,7 @@
       var img = new Image();
       img.onload = function () {
         var cleanUrl = typeof window.__toLineArt === 'function' ? window.__toLineArt(img) : j.image;
-        var item = { name: 'AI: ' + topic.slice(0, 28), url: cleanUrl, aiGen: true };
+        var item = { name: 'AI: ' + topic.slice(0, 60), url: cleanUrl, aiGen: true };
         var idx = patternImages.findIndex(function (p) { return p.aiGen; });
         if (idx >= 0) patternImages[idx] = item; else idx = patternImages.push(item) - 1;
         setMsg('', false);
@@ -5457,6 +5516,90 @@
     });
   }
   if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', bind); else bind();
+})();
+</script>
+<script>
+(function () {
+  var D = document, undoStack = [];
+  function snap() {
+    var cv = D.getElementById('art-canvas');
+    if (!cv || !cv.width || !cv.height) return;
+    try {
+      var x = cv.getContext('2d');
+      undoStack.push(x.getImageData(0, 0, cv.width, cv.height));
+      if (undoStack.length > 20) undoStack.shift();
+    } catch (_) {}
+  }
+  function undo() {
+    var cv = D.getElementById('art-canvas');
+    if (!cv || !undoStack.length) return;
+    try {
+      var img = undoStack.pop();
+      cv.getContext('2d').putImageData(img, 0, 0);
+    } catch (_) {}
+  }
+  function setup() {
+    var cv = D.getElementById('art-canvas'), ub = D.getElementById('btn-undo'), cb = D.getElementById('btn-clear');
+    if (cv) {
+      cv.addEventListener('mousedown', snap, true);
+      cv.addEventListener('touchstart', snap, { capture: true, passive: true });
+    }
+    if (ub) ub.addEventListener('click', undo);
+    if (cb) cb.addEventListener('click', function () { undoStack = []; }, true);
+    if (typeof window.initCanvas === 'function') {
+      var orig = window.initCanvas;
+      window.initCanvas = function () { undoStack = []; return orig.apply(this, arguments); };
+    }
+    if (window.EN2 || true) {
+      var EXTRA_EN = {
+        'Bắt đầu phiên tự đánh giá': 'Start self-assessment',
+        'Công cụ tự đánh giá theo thang DASS kết hợp hoạt động vẽ thư giãn. Mọi dữ liệu chỉ lưu trên máy của bạn.': 'DASS self-assessment paired with relaxing art activities. All data stays on your device.',
+        'Tên hoặc biệt danh của bạn:': 'Your name or nickname:',
+        'Vui lòng nhập tên để bắt đầu.': 'Please enter your name to begin.',
+        'Tiếp tục': 'Continue',
+        'Phổ biến': 'Popular',
+        'Đầy đủ': 'Full',
+        'Bỏ qua, vào thẳng hoạt động vẽ': 'Skip straight to drawing activities',
+        '21 câu hỏi — khoảng 3–5 phút': '21 questions — about 3–5 minutes',
+        '42 câu hỏi — khoảng 7–10 phút': '42 questions — about 7–10 minutes',
+        'Bản rút gọn, tiết kiệm thời gian nhưng vẫn cho độ tin cậy tương đương DASS-42.': 'Short version, faster with reliability comparable to DASS-42.',
+        'Bản đầy đủ với nhiều câu hỏi hơn cho mỗi khía cạnh nếu bạn có thêm thời gian.': 'Full version with more items per dimension if you have extra time.',
+        'Dự án KHKT Học sinh THPT — Tự đánh giá DASS & Hội họa trị liệu': 'High School Science Fair Project — DASS Self-Assessment & Art Therapy',
+        'Quyền riêng tư: Dữ liệu chỉ lưu cục bộ trên thiết bị của bạn. Kết quả chỉ mang tính tham khảo, không thay thế chẩn đoán y khoa.': 'Privacy: Data is stored locally on your device only. Results are for reference and do not replace medical diagnosis.',
+        'Hỗ trợ 24/7: ': '24/7 Support: ',
+        'Tổng đài 111': 'Hotline 111',
+        'Cấp cứu 115': 'Emergency 115',
+        'Tạo tranh Mandala riêng bằng AI': 'Generate a custom Mandala with AI',
+        'Tạo tranh AI': 'Generate AI',
+        'Hoa sen': 'Lotus',
+        'Sóng biển': 'Ocean waves',
+        'Bầu trời sao': 'Starry sky',
+        'Mèo ngủ': 'Sleeping cat',
+        'Bạn hãy nhập ý tưởng tranh Mandala nhé.': 'Please enter a mandala idea.'
+      };
+      var tx = function () {
+        if (!window.__lang || window.__lang() !== 'en') return;
+        var w = D.createTreeWalker(D.body, NodeFilter.SHOW_TEXT, null);
+        var n;
+        while ((n = w.nextNode())) {
+          var s = n.nodeValue, tr = s.trim();
+          if (EXTRA_EN[tr]) n.nodeValue = s.replace(tr, EXTRA_EN[tr]);
+          else if (EXTRA_EN[s]) n.nodeValue = EXTRA_EN[s];
+        }
+        var ph = D.getElementById('ai-mandala-input');
+        if (ph) ph.placeholder = 'Enter an idea (e.g. lotus, ocean waves, sleeping cat)...';
+        var un = D.getElementById('user-name-input');
+        if (un) un.placeholder = 'e.g. Minh...';
+      };
+      var lb = D.getElementById('btn-lang');
+      if (lb) lb.addEventListener('click', function () { setTimeout(tx, 160); });
+      setTimeout(tx, 300);
+    }
+    var dockStyle = D.createElement('style');
+    dockStyle.textContent = '#mx-ai-dock{padding-bottom:4.5rem!important}#mx-ai-dock [data-a="dexp"]{margin-right:3.25rem}';
+    D.head.appendChild(dockStyle);
+  }
+  if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', setup); else setup();
 })();
 </script>
 </body>
