@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="vi" class="dark">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#0f766e">
+  <meta name="theme-color" content="#1f5c4a">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="icon-192.png">
   <meta name="description" content="Đánh giá sức khỏe tinh thần theo thang DASS và thư giãn bằng hội họa trị liệu dành cho học sinh.">
@@ -16,14 +16,14 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = { darkMode: 'class' }
-    try { if (localStorage.getItem('mindart_theme') === 'light') document.documentElement.classList.remove('dark'); } catch (_) {}
+    try { if (localStorage.getItem('mindart_theme') === 'dark') document.documentElement.classList.add('dark'); } catch (_) {}
   </script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { font-family: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #f0fdf4; }
     .dark ::-webkit-scrollbar-track { background: #020617; }
@@ -108,7 +108,7 @@
     button, a, [role="button"], summary { touch-action: manipulation; }
     main section button { min-height: 2.5rem; }
     #mx2-cmp { display: none !important; }
-    #screen-dass-result .btn-art-mode, #mx2-methods > button, #screen-dass-result .grid > button { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; }
+    #screen-dass-result .btn-art-mode, #mx2-methods > button, #calm-grid > button { display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-start; gap: 0.75rem; }
     #screen-dass-result[data-skip="1"] #dass-right-col { grid-column: 1 / -1; }
     .mx2-modal[data-sticky] .mx2-x { display: none; }
     #mx2-more > summary { list-style: none; }
@@ -144,7 +144,7 @@
 <body class="bg-gradient-to-br from-emerald-50 via-teal-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-teal-950 min-h-screen text-slate-700 dark:text-slate-200 flex flex-col justify-between transition-colors duration-300">
   <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-xl focus:bg-teal-700 focus:text-white focus:text-sm focus:font-semibold">Bỏ qua đến nội dung chính</a>
 
-  <header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-teal-100/80 dark:border-slate-800 px-4 py-3 flex items-center justify-between shadow-sm">
+  <header class="sticky top-0 z-50 bg-white dark:bg-[#1c211f] border-b border-[#e2ddd3] dark:border-[#2b3330] px-4 py-3 flex items-center justify-between">
     <div id="brand-home" role="button" tabindex="0" title="Về trang đăng nhập" class="flex items-center gap-3 cursor-pointer select-none">
       <img src="data:image/png;base64,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" alt="Logo trường" class="h-11 sm:h-12 w-auto shrink-0">
       <div>
@@ -163,56 +163,50 @@
 
   <main id="main-content" tabindex="-1" class="flex-1 max-w-6xl w-full mx-auto p-4 flex flex-col justify-center items-center">
 
-    <section id="screen-welcome" class="w-full bg-white/90 dark:bg-slate-900/90 p-6 md:p-8 rounded-3xl shadow-xl border border-teal-100 dark:border-slate-800 text-center max-w-md my-auto">
-      <div class="w-16 h-16 bg-teal-100 dark:bg-teal-950 text-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-        <i data-lucide="heart-handshake" class="w-8 h-8"></i>
-      </div>
-      <h2 class="text-2xl font-bold text-teal-950 dark:text-teal-100 mb-2">Xin chào bạn!</h2>
-      <p class="text-xs text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">Đánh giá sức khỏe tinh thần theo thang DASS và thư giãn với các phương pháp hội họa trị liệu.</p>
+    <section id="screen-welcome" class="w-full bg-white dark:bg-[#1c211f] p-6 md:p-8 rounded-xl border border-[#e2ddd3] dark:border-[#2b3330] text-left max-w-md my-auto">
+      <h2 class="text-xl font-bold text-[#1f2421] dark:text-[#edf2ef] mb-1.5">Bắt đầu phiên tự đánh giá</h2>
+      <p class="text-xs text-slate-600 dark:text-slate-400 mb-5 leading-relaxed">Công cụ tự đánh giá theo thang DASS kết hợp hoạt động vẽ thư giãn. Mọi dữ liệu chỉ lưu trên máy của bạn.</p>
 
-      <div class="text-left mb-6">
-        <label class="block text-xs font-semibold text-teal-900 dark:text-teal-200 mb-1.5">
-          Tên hoặc Biệt danh của bạn:
+      <div class="text-left mb-5">
+        <label class="block text-xs font-semibold text-[#1f2421] dark:text-slate-200 mb-1.5">
+          Tên hoặc biệt danh của bạn:
         </label>
-        <input type="text" id="user-name-input" autocomplete="off" enterkeyhint="go" placeholder="Ví dụ: Nguyễn Văn A..." class="w-full px-4 py-3 text-sm rounded-xl border border-teal-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500">
-        <p id="name-error-msg" class="hidden text-rose-500 text-[11px] font-medium mt-1.5 flex items-center">
-          <i data-lucide="alert-circle" class="w-3.5 h-3.5 mr-1"></i> Vui lòng nhập tên để bắt đầu!
+        <input type="text" id="user-name-input" autocomplete="off" enterkeyhint="go" placeholder="Ví dụ: Minh..." class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#d6d1c7] dark:border-[#343e3a] bg-[#faf8f4] dark:bg-[#141716] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#1f5c4a]">
+        <p id="name-error-msg" class="hidden text-rose-600 text-[11px] font-medium mt-1.5 flex items-center">
+          <i data-lucide="alert-circle" class="w-3.5 h-3.5 mr-1"></i> Vui lòng nhập tên để bắt đầu.
         </p>
       </div>
 
-      <button id="btn-start-dass" class="w-full py-3.5 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-xl text-sm shadow-lg flex items-center justify-center">
-        Bắt đầu Đánh giá Tâm lý <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+      <button id="btn-start-dass" class="w-full py-3 bg-[#1f5c4a] hover:bg-[#184a3b] text-white font-semibold rounded-lg text-sm flex items-center justify-center">
+        Tiếp tục <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
       </button>
     </section>
 
-    <section id="screen-dass-choice" class="hidden w-full bg-white/90 dark:bg-slate-900/90 p-6 md:p-8 rounded-3xl shadow-xl border border-teal-100 dark:border-slate-800 max-w-2xl my-auto">
-      <h2 class="text-xl font-bold text-teal-950 dark:text-teal-100 mb-1.5 text-center">Chọn phiên bản đánh giá</h2>
-      <p class="text-xs text-slate-500 dark:text-slate-400 mb-6 text-center leading-relaxed">
+    <section id="screen-dass-choice" class="hidden w-full bg-white dark:bg-[#1c211f] p-6 md:p-8 rounded-xl border border-[#e2ddd3] dark:border-[#2b3330] max-w-2xl my-auto">
+      <h2 class="text-xl font-bold text-[#1f2421] dark:text-[#edf2ef] mb-1.5 text-left">Chọn phiên bản đánh giá</h2>
+      <p class="text-xs text-slate-600 dark:text-slate-400 mb-5 text-left leading-relaxed">
         Cả hai đều là thang đo DASS chính thức, cho kết quả tương đương nhau — chỉ khác số lượng câu hỏi.
       </p>
 
-      <div class="grid sm:grid-cols-2 gap-4">
-        <button data-version="21" class="btn-dass-version relative text-left p-5 rounded-2xl border-2 border-teal-500 bg-teal-50/60 dark:bg-teal-950/40 hover:shadow-md transition-all">
-          <span class="absolute top-3 right-3 bg-teal-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Khuyên dùng</span>
-          <div class="font-bold text-teal-900 dark:text-teal-200 mb-1">DASS-21</div>
-          <div class="text-xs text-slate-600 dark:text-slate-300 mb-2">21 câu hỏi — khoảng 3-5 phút</div>
-          <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">Phiên bản rút gọn, tiết kiệm thời gian hơn nhưng vẫn cho kết quả đáng tin cậy tương đương DASS-42.</p>
+      <div class="grid sm:grid-cols-2 gap-3.5">
+        <button data-version="21" class="btn-dass-version relative text-left p-4 rounded-lg border-2 border-[#1f5c4a] bg-[#f1f6f3] dark:bg-[#1a2b25] transition-colors">
+          <span class="inline-block mb-2 bg-[#1f5c4a] text-white text-[10px] font-semibold px-2 py-0.5 rounded">Phổ biến</span>
+          <div class="font-bold text-[#1f2421] dark:text-[#edf2ef] mb-1">DASS-21</div>
+          <div class="text-xs text-slate-600 dark:text-slate-300 mb-1.5">21 câu hỏi — khoảng 3–5 phút</div>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">Bản rút gọn, tiết kiệm thời gian nhưng vẫn cho độ tin cậy tương đương DASS-42.</p>
         </button>
 
-        <button data-version="42" class="btn-dass-version text-left p-5 rounded-2xl border-2 border-slate-200 dark:border-slate-700 hover:border-teal-400 hover:shadow-md transition-all">
-          <div class="font-bold text-slate-800 dark:text-slate-100 mb-1">DASS-42</div>
-          <div class="text-xs text-slate-600 dark:text-slate-300 mb-2">42 câu hỏi — khoảng 7-10 phút</div>
-          <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">Phiên bản đầy đủ, chi tiết hơn với nhiều câu hỏi hơn cho mỗi khía cạnh, nếu bạn có thời gian và muốn kết quả chi tiết hơn.</p>
+        <button data-version="42" class="btn-dass-version text-left p-4 rounded-lg border border-[#d6d1c7] dark:border-[#343e3a] hover:border-[#1f5c4a] transition-colors">
+          <span class="inline-block mb-2 bg-[#eae6de] dark:bg-[#262d2a] text-slate-700 dark:text-slate-300 text-[10px] font-semibold px-2 py-0.5 rounded">Đầy đủ</span>
+          <div class="font-bold text-[#1f2421] dark:text-[#edf2ef] mb-1">DASS-42</div>
+          <div class="text-xs text-slate-600 dark:text-slate-300 mb-1.5">42 câu hỏi — khoảng 7–10 phút</div>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">Bản đầy đủ với nhiều câu hỏi hơn cho mỗi khía cạnh nếu bạn có thêm thời gian.</p>
         </button>
       </div>
 
-      <div class="mt-4 text-center">
-        <button id="btn-dass-skip" type="button" class="px-5 py-2.5 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 text-xs font-semibold hover:border-teal-500 transition-all">Bỏ qua bài kiểm tra</button>
-        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-2">Vào thẳng phần chọn hoạt động: vẽ, tô màu, vẽ ra nhạc hoặc trò chuyện với AI.</p>
-      </div>
-
-      <div class="mt-5 flex justify-center">
-        <button id="btn-dass-choice-back" type="button" class="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-teal-200 dark:border-slate-700 text-teal-800 dark:text-teal-200 text-xs font-semibold hover:bg-teal-50 dark:hover:bg-slate-800 transition-all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 pointer-events-none"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg><span>Quay lại</span></button>
+      <div class="mt-4 pt-4 border-t border-[#e8e4dc] dark:border-[#2b3330] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <button id="btn-dass-choice-back" type="button" class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg border border-[#d6d1c7] dark:border-[#343e3a] text-slate-700 dark:text-slate-200 text-xs font-semibold hover:border-[#1f5c4a]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 pointer-events-none"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg><span>Quay lại</span></button>
+        <button id="btn-dass-skip" type="button" class="px-4 py-2 rounded-lg border border-dashed border-[#c5bfb3] dark:border-[#3d4743] text-slate-600 dark:text-slate-300 text-xs font-semibold hover:border-[#1f5c4a]">Bỏ qua, vào thẳng hoạt động vẽ</button>
       </div>
     </section>
 
@@ -265,12 +259,12 @@
             </div>
           </div>
 
-          <div id="dass-rec-box" class="bg-teal-50/80 dark:bg-teal-950/40 border border-teal-200/70 dark:border-teal-800/60 p-4 rounded-2xl flex flex-col gap-3">
-            <div class="min-w-0 text-xs text-teal-900 dark:text-teal-200">
-              <div class="font-bold flex items-center mb-1"><i data-lucide="sparkles" class="w-4 h-4 mr-1.5 text-teal-600 dark:text-teal-400 shrink-0"></i>Gợi ý liệu pháp:</div>
+          <div id="dass-rec-box" class="bg-[#f1f6f3] dark:bg-[#1a2823] border border-[#cde0d6] dark:border-[#2a3f37] p-4 rounded-lg flex flex-col gap-3">
+            <div class="min-w-0 text-xs text-[#1f3b31] dark:text-[#cce3d9]">
+              <div class="font-bold flex items-center mb-1"><i data-lucide="compass" class="w-4 h-4 mr-1.5 text-[#1f5c4a] dark:text-[#5eb89a] shrink-0"></i>Gợi ý liệu pháp:</div>
               <p id="recommendation-text" class="text-slate-600 dark:text-slate-300 leading-relaxed">...</p>
             </div>
-            <button id="btn-rec-start" type="button" class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold shadow-sm transition-all whitespace-nowrap">
+            <button id="btn-rec-start" type="button" class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg bg-[#1f5c4a] hover:bg-[#184a3b] text-white text-xs font-bold transition-colors whitespace-nowrap">
               <span id="btn-rec-start-label">Bắt đầu ngay</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 pointer-events-none"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </button>
@@ -278,22 +272,22 @@
         </div>
 
         <div id="dass-right-col" class="lg:col-span-7 flex flex-col min-w-0">
-          <h3 class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-2.5 uppercase tracking-wider">Chọn phương pháp trị liệu:</h3>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-            <button data-mode="trame" class="btn-art-mode p-3 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 hover:border-teal-500 text-left transition-all">
-              <i data-lucide="circle-dot" class="w-4 h-4 text-teal-600 dark:text-teal-400 mb-1.5"></i>
-              <div class="font-bold text-xs mb-0.5 text-slate-800 dark:text-slate-100">1. Vẽ Chấm Trame</div>
-              <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Giải tỏa căng thẳng bằng các điểm chấm kiên nhẫn.</div>
+          <h3 class="text-xs font-bold text-slate-600 dark:text-slate-300 mb-2.5">Chọn phương pháp trị liệu:</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button data-mode="trame" class="btn-art-mode p-3 rounded-lg bg-[#faf8f4] dark:bg-[#171c1a] border border-[#e2ddd3] dark:border-[#2b3330] hover:border-[#1f5c4a] text-left transition-colors">
+              <i data-lucide="circle-dot" class="w-5 h-5 text-[#1f5c4a] dark:text-[#5eb89a] shrink-0 mt-0.5"></i>
+              <div class="min-w-0"><div class="font-bold text-xs mb-0.5 text-[#1f2421] dark:text-[#edf2ef]">1. Vẽ Chấm Trame</div>
+              <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Giải tỏa căng thẳng bằng các điểm chấm kiên nhẫn.</div></div>
             </button>
-            <button data-mode="doodle" class="btn-art-mode p-3 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 hover:border-teal-500 text-left transition-all">
-              <i data-lucide="spline" class="w-4 h-4 text-teal-600 dark:text-teal-400 mb-1.5"></i>
-              <div class="font-bold text-xs mb-0.5 text-slate-800 dark:text-slate-100">2. Vẽ Tự Do</div>
-              <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Tự do phóng bút bộc lộ suy nghĩ miên man.</div>
+            <button data-mode="doodle" class="btn-art-mode p-3 rounded-lg bg-[#faf8f4] dark:bg-[#171c1a] border border-[#e2ddd3] dark:border-[#2b3330] hover:border-[#1f5c4a] text-left transition-colors">
+              <i data-lucide="spline" class="w-5 h-5 text-[#1f5c4a] dark:text-[#5eb89a] shrink-0 mt-0.5"></i>
+              <div class="min-w-0"><div class="font-bold text-xs mb-0.5 text-[#1f2421] dark:text-[#edf2ef]">2. Vẽ Tự Do</div>
+              <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Tự do phóng bút bộc lộ suy nghĩ miên man.</div></div>
             </button>
-            <button data-mode="coloring" class="btn-art-mode p-3 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 hover:border-teal-500 text-left transition-all">
-              <i data-lucide="paint-bucket" class="w-4 h-4 text-teal-600 dark:text-teal-400 mb-1.5"></i>
-              <div class="font-bold text-xs mb-0.5 text-slate-800 dark:text-slate-100">3. Tô Màu Mandala</div>
-              <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Chọn một bức tranh mình thích rồi tô màu.</div>
+            <button data-mode="coloring" class="btn-art-mode p-3 rounded-lg bg-[#faf8f4] dark:bg-[#171c1a] border border-[#e2ddd3] dark:border-[#2b3330] hover:border-[#1f5c4a] text-left transition-colors">
+              <i data-lucide="paint-bucket" class="w-5 h-5 text-[#1f5c4a] dark:text-[#5eb89a] shrink-0 mt-0.5"></i>
+              <div class="min-w-0"><div class="font-bold text-xs mb-0.5 text-[#1f2421] dark:text-[#edf2ef]">3. Tô Màu Mandala</div>
+              <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Chọn một bức tranh mình thích rồi tô màu.</div></div>
             </button>
           </div>
 
@@ -440,8 +434,8 @@
           </div>
         </div>
 
-        <button id="btn-finish" class="w-full mt-4 py-3 bg-teal-800 hover:bg-teal-900 text-white font-semibold rounded-xl text-xs flex items-center justify-center shadow-md">
-          <i data-lucide="sparkles" class="w-4 h-4 mr-1.5"></i> Hoàn thành
+        <button id="btn-finish" class="w-full mt-4 py-3 bg-[#1f5c4a] hover:bg-[#184a3b] text-white font-semibold rounded-lg text-xs flex items-center justify-center">
+          <i data-lucide="check" class="w-4 h-4 mr-1.5"></i> Hoàn thành
         </button>
       </div>
     </section>
@@ -449,10 +443,10 @@
   </main>
 
   <div id="ai-result-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-    <div class="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
+    <div class="bg-white dark:bg-[#1c211f] rounded-xl shadow-xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto border border-[#e2ddd3] dark:border-[#2b3330]">
       <div class="flex items-center gap-2 mb-4">
-        <i data-lucide="sparkles" class="w-5 h-5 text-teal-600"></i>
-        <h3 class="font-bold text-teal-950 dark:text-teal-100">Nhận xét về tranh của bạn</h3>
+        <i data-lucide="check-circle-2" class="w-5 h-5 text-[#1f5c4a] dark:text-[#5eb89a]"></i>
+        <h3 class="font-bold text-[#1f2421] dark:text-[#edf2ef]">Nhận xét về tranh của bạn</h3>
       </div>
 
       <p id="ai-result-compliment" class="text-sm text-slate-700 dark:text-slate-200 mb-4 leading-relaxed"></p>
@@ -481,8 +475,16 @@
     </div>
   </div>
 
-  <footer class="py-3 text-center text-[11px] text-slate-400 border-t border-slate-100 dark:border-slate-800">
-    Chúc bạn có một ngày tốt lành và hãy giữ tâm trạng mình thật tốt nhé!
+  <footer class="bg-white dark:bg-[#1c211f] border-t border-[#e2ddd3] dark:border-[#2b3330] px-4 py-4 text-xs text-slate-600 dark:text-slate-400">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div class="space-y-0.5 text-left">
+        <div class="font-semibold text-[#1f2421] dark:text-[#edf2ef]">Dự án KHKT Học sinh THPT — Tự đánh giá DASS &amp; Hội họa trị liệu</div>
+        <div class="text-[11px] text-slate-500 dark:text-slate-400">Quyền riêng tư: Dữ liệu chỉ lưu cục bộ trên thiết bị của bạn. Kết quả chỉ mang tính tham khảo, không thay thế chẩn đoán y khoa.</div>
+      </div>
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] shrink-0">
+        <span>Hỗ trợ 24/7: <a href="tel:111" class="font-semibold text-[#1f5c4a] dark:text-[#5eb89a] underline">Tổng đài 111</a> · <a href="tel:115" class="font-semibold text-[#1f5c4a] dark:text-[#5eb89a] underline">Cấp cứu 115</a></span>
+      </div>
+    </div>
   </footer>
 
   <script>
@@ -2876,9 +2878,9 @@
       
       const card = document.createElement('button');
       card.type = 'button';
-      card.className = 'p-3.5 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 hover:border-teal-500 text-left transition-all';
-      card.innerHTML = `${ICON.music}<div class="font-bold text-xs mb-1 text-slate-800 dark:text-slate-100">4. Vẽ Ra Nhạc</div>
-        <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Vẽ nét lên khung, thanh chạy ngang qua sẽ biến nét vẽ thành giai điệu.</div>`;
+      card.className = 'p-3 rounded-lg bg-[#faf8f4] dark:bg-[#171c1a] border border-[#e2ddd3] dark:border-[#2b3330] hover:border-[#1f5c4a] text-left transition-colors';
+      card.innerHTML = `${ICON.music}<div class="min-w-0"><div class="font-bold text-xs mb-0.5 text-[#1f2421] dark:text-[#edf2ef]">4. Vẽ Ra Nhạc</div>
+        <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Vẽ nét lên khung, thanh chạy ngang qua sẽ biến nét vẽ thành giai điệu.</div></div>`;
       grid.appendChild(card);
       card.addEventListener('click', openScreen);
     }
@@ -5087,8 +5089,8 @@
     if (!secEl || !moreEl) return;
     var p = plan(), n = p ? p.done.filter(Boolean).length : 0, dc = dailyCache(), f = FEEL.filter(function (x) { return x[0] === feelSel; })[0];
     var mh = '' +
-      '<button type="button" data-a="open:emotion" class="btn-art-mode p-3.5 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 hover:border-teal-500 text-left transition-all"><svg class="w-5 h-5 mb-2 text-teal-600 dark:text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg><div class="font-bold text-xs mb-1 text-slate-800 dark:text-slate-100">' + T('5. Vẽ cảm xúc bằng màu', '5. Draw feelings in color') + '</div><div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">' + T('Chọn cảm xúc, tô thành màu và đặt tên cho nó.', 'Pick a feeling, turn it into color and give it a name.') + '</div></button>' +
-      '<button type="button" data-a="open:body" class="btn-art-mode p-3.5 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 hover:border-teal-500 text-left transition-all"><svg class="w-5 h-5 mb-2 text-teal-600 dark:text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="1"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/></svg><div class="font-bold text-xs mb-1 text-slate-800 dark:text-slate-100">' + T('6. Quét cơ thể', '6. Body scan') + '</div><div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">' + T('Tô lên hình người những chỗ đang căng, nặng hoặc đau.', 'Paint the tense, heavy or painful places on a body figure.') + '</div></button>';
+      '<button type="button" data-a="open:emotion" class="btn-art-mode p-3 rounded-lg bg-[#faf8f4] dark:bg-[#171c1a] border border-[#e2ddd3] dark:border-[#2b3330] hover:border-[#1f5c4a] text-left transition-colors"><svg class="w-5 h-5 shrink-0 mt-0.5 text-[#1f5c4a] dark:text-[#5eb89a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg><div class="min-w-0"><div class="font-bold text-xs mb-0.5 text-[#1f2421] dark:text-[#edf2ef]">' + T('5. Vẽ cảm xúc bằng màu', '5. Draw feelings in color') + '</div><div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">' + T('Chọn cảm xúc, tô thành màu và đặt tên cho nó.', 'Pick a feeling, turn it into color and give it a name.') + '</div></div></button>' +
+      '<button type="button" data-a="open:body" class="btn-art-mode p-3 rounded-lg bg-[#faf8f4] dark:bg-[#171c1a] border border-[#e2ddd3] dark:border-[#2b3330] hover:border-[#1f5c4a] text-left transition-colors"><svg class="w-5 h-5 shrink-0 mt-0.5 text-[#1f5c4a] dark:text-[#5eb89a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="1"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/></svg><div class="min-w-0"><div class="font-bold text-xs mb-0.5 text-[#1f2421] dark:text-[#edf2ef]">' + T('6. Quét cơ thể', '6. Body scan') + '</div><div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">' + T('Tô lên hình người những chỗ đang căng, nặng hoặc đau.', 'Paint the tense, heavy or painful places on a body figure.') + '</div></div></button>';
     moreEl.innerHTML = mh;
     if (moreEl.nextSibling) moreEl.parentNode.appendChild(moreEl);
 
@@ -5221,14 +5223,23 @@
 })();
 </script>
 <style id="calm-mode">
-  body { background-image: none !important; background-color: #f4f8f7 !important; }
-  html.dark body { background-color: #0f172a !important; }
+  body { background-image: none !important; background-color: #f6f4ef !important; color: #1f2421 !important; }
+  html.dark body { background-color: #141716 !important; color: #e6ece8 !important; }
+  *, *::before, *::after { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+  main > section, #ai-result-modal > div, .mx2-modal > div, #music-panel { background-color: #ffffff !important; border-color: #e2ddd3 !important; box-shadow: 0 1px 3px rgba(31, 36, 33, .06) !important; }
+  html.dark main > section, html.dark #ai-result-modal > div, html.dark .mx2-modal > div, html.dark #music-panel { background-color: #1c211f !important; border-color: #2b3330 !important; box-shadow: none !important; }
 
-  main > section:not(.hidden) { animation: fade .3s ease backwards !important; }
-  .q-swap { animation: fade .3s ease !important; }
+  .rounded-3xl { border-radius: 0.75rem !important; }
+  .rounded-2xl { border-radius: 0.5rem !important; }
+  .rounded-xl { border-radius: 0.375rem !important; }
+  button.rounded-full, a.rounded-full, span.rounded-full:not([data-color]):not(.w-6) { border-radius: 0.375rem !important; }
+  #music-fab { border-radius: 0.625rem !important; }
+
+  main > section:not(.hidden) { animation: fade .25s ease backwards !important; }
+  .q-swap { animation: fade .25s ease !important; }
   #ai-result-modal:not(.hidden) > div, .fx-modal:not(.hidden) > div, .mx2-modal:not(.hidden) > div,
-  #music-panel:not(.hidden), #custom-color-panel:not(.hidden), #rest-toast:not(.hidden) { animation: fade .25s ease !important; }
-  html .btn-art-mode:hover, html .btn-dass-version:hover, html #gallery-grid > *:hover { transform: none !important; box-shadow: none !important; }
+  #music-panel:not(.hidden), #custom-color-panel:not(.hidden), #rest-toast:not(.hidden) { animation: fade .2s ease !important; }
+  html .btn-art-mode:hover, html .btn-dass-version:hover, html #gallery-grid > *:hover, html #mx-ai-open:hover, html #screen-dass-result .grid > button:hover { transform: none !important; box-shadow: none !important; }
   html button:not(#_):active, html #gallery-grid > *:active { transform: none !important; }
 
   html .text-\[10px\] { font-size: .8125rem !important; line-height: 1.45; }
