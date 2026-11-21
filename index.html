@@ -19,11 +19,12 @@
     try { if (localStorage.getItem('mindart_theme') === 'dark') document.documentElement.classList.add('dark'); } catch (_) {}
   </script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Lora:wght@500;600;700&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
     body { font-family: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif; }
+    h1, h2, #dass-question-text, #mx2-daily-text { font-family: 'Lora', Georgia, serif; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #f0fdf4; }
     .dark ::-webkit-scrollbar-track { background: #020617; }
@@ -107,7 +108,6 @@
     #user-name-input { min-height: 3rem; }
     button, a, [role="button"], summary { touch-action: manipulation; }
     main section button { min-height: 2.5rem; }
-    #mx2-cmp { display: none !important; }
     #screen-dass-result .btn-art-mode, #mx2-methods > button, #calm-grid > button { display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-start; gap: 0.75rem; }
     #screen-dass-result[data-skip="1"] #dass-right-col { grid-column: 1 / -1; }
     .mx2-modal[data-sticky] .mx2-x { display: none; }
@@ -242,20 +242,29 @@
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
         <div id="dass-left-col" class="mx-dass-only lg:col-span-5 flex flex-col gap-3.5 min-w-0">
           <div class="grid grid-cols-3 gap-2 sm:gap-2.5">
-            <div class="p-2.5 sm:p-3 bg-slate-50/90 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-800 rounded-2xl text-center">
-              <div class="text-[10px] font-bold uppercase tracking-normal leading-tight text-slate-400">Trầm cảm</div>
-              <div id="score-d" class="text-xl sm:text-2xl font-extrabold my-1 text-slate-800 dark:text-slate-100">0</div>
-              <span id="label-d" class="text-[10px] px-2 py-0.5 rounded-full inline-block">Bình thường</span>
+            <div class="p-3 bg-[#f0ece1] dark:bg-[#262c28] border border-[#d8d1c5] dark:border-[#38403c] rounded-md text-left">
+              <div class="text-xs font-semibold leading-tight text-[#575c58] dark:text-[#b7b3ab]">Trầm cảm</div>
+              <div class="flex items-baseline justify-between gap-1.5 my-1.5">
+                <span id="score-d" class="text-xl sm:text-2xl font-bold text-[#1f2421] dark:text-[#e5e2dc]">0</span>
+                <span id="label-d" class="text-[11px] px-2 py-0.5 rounded inline-block">Bình thường</span>
+              </div>
+              <div class="w-full h-1 bg-[#dcd6ca] dark:bg-[#38403c] rounded-sm overflow-hidden"><div id="bar-d" class="h-full bg-[#2e6b8a]" style="width:0%"></div></div>
             </div>
-            <div class="p-2.5 sm:p-3 bg-slate-50/90 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-800 rounded-2xl text-center">
-              <div class="text-[10px] font-bold uppercase tracking-normal leading-tight text-slate-400">Lo âu</div>
-              <div id="score-a" class="text-xl sm:text-2xl font-extrabold my-1 text-slate-800 dark:text-slate-100">0</div>
-              <span id="label-a" class="text-[10px] px-2 py-0.5 rounded-full inline-block">Bình thường</span>
+            <div class="p-3 bg-[#f0ece1] dark:bg-[#262c28] border border-[#d8d1c5] dark:border-[#38403c] rounded-md text-left">
+              <div class="text-xs font-semibold leading-tight text-[#575c58] dark:text-[#b7b3ab]">Lo âu</div>
+              <div class="flex items-baseline justify-between gap-1.5 my-1.5">
+                <span id="score-a" class="text-xl sm:text-2xl font-bold text-[#1f2421] dark:text-[#e5e2dc]">0</span>
+                <span id="label-a" class="text-[11px] px-2 py-0.5 rounded inline-block">Bình thường</span>
+              </div>
+              <div class="w-full h-1 bg-[#dcd6ca] dark:bg-[#38403c] rounded-sm overflow-hidden"><div id="bar-a" class="h-full bg-[#b8862d]" style="width:0%"></div></div>
             </div>
-            <div class="p-2.5 sm:p-3 bg-slate-50/90 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-800 rounded-2xl text-center">
-              <div class="text-[10px] font-bold uppercase tracking-normal leading-tight text-slate-400">Căng thẳng</div>
-              <div id="score-s" class="text-xl sm:text-2xl font-extrabold my-1 text-slate-800 dark:text-slate-100">0</div>
-              <span id="label-s" class="text-[10px] px-2 py-0.5 rounded-full inline-block">Bình thường</span>
+            <div class="p-3 bg-[#f0ece1] dark:bg-[#262c28] border border-[#d8d1c5] dark:border-[#38403c] rounded-md text-left">
+              <div class="text-xs font-semibold leading-tight text-[#575c58] dark:text-[#b7b3ab]">Căng thẳng</div>
+              <div class="flex items-baseline justify-between gap-1.5 my-1.5">
+                <span id="score-s" class="text-xl sm:text-2xl font-bold text-[#1f2421] dark:text-[#e5e2dc]">0</span>
+                <span id="label-s" class="text-[11px] px-2 py-0.5 rounded inline-block">Bình thường</span>
+              </div>
+              <div class="w-full h-1 bg-[#dcd6ca] dark:bg-[#38403c] rounded-sm overflow-hidden"><div id="bar-s" class="h-full bg-[#b84a39]" style="width:0%"></div></div>
             </div>
           </div>
 
@@ -322,10 +331,10 @@
           <button id="ai-mandala-btn" type="button" class="shrink-0 px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 disabled:opacity-50 text-white text-xs font-bold transition-all whitespace-nowrap">Tạo tranh AI</button>
         </div>
         <div class="flex flex-wrap gap-1.5 mt-2.5" id="ai-mandala-chips">
-          <button type="button" data-mtopic="Hoa sen bình yên" class="px-3 py-1 rounded-full text-xs border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/60 text-slate-600 dark:text-slate-300 hover:border-teal-500 transition-all">Hoa sen</button>
-          <button type="button" data-mtopic="Sóng biển nhẹ nhàng" class="px-3 py-1 rounded-full text-xs border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/60 text-slate-600 dark:text-slate-300 hover:border-teal-500 transition-all">Sóng biển</button>
-          <button type="button" data-mtopic="Bầu trời sao và mặt trăng" class="px-3 py-1 rounded-full text-xs border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/60 text-slate-600 dark:text-slate-300 hover:border-teal-500 transition-all">Bầu trời sao</button>
-          <button type="button" data-mtopic="Mèo con đang ngủ" class="px-3 py-1 rounded-full text-xs border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/60 text-slate-600 dark:text-slate-300 hover:border-teal-500 transition-all">Mèo ngủ</button>
+          <button type="button" data-mtopic="Hoa sen bình yên" class="px-3 py-1 rounded-md text-xs border border-[#d8d1c5] dark:border-[#38403c] bg-[#faf8f3] dark:bg-[#1f2421] text-slate-600 dark:text-slate-300 hover:border-[#1f5c4a] transition-colors">Hoa sen</button>
+          <button type="button" data-mtopic="Sóng biển nhẹ nhàng" class="px-3 py-1 rounded-md text-xs border border-[#d8d1c5] dark:border-[#38403c] bg-[#faf8f3] dark:bg-[#1f2421] text-slate-600 dark:text-slate-300 hover:border-[#1f5c4a] transition-colors">Sóng biển</button>
+          <button type="button" data-mtopic="Bầu trời sao và mặt trăng" class="px-3 py-1 rounded-md text-xs border border-[#d8d1c5] dark:border-[#38403c] bg-[#faf8f3] dark:bg-[#1f2421] text-slate-600 dark:text-slate-300 hover:border-[#1f5c4a] transition-colors">Bầu trời sao</button>
+          <button type="button" data-mtopic="Mèo con đang ngủ" class="px-3 py-1 rounded-md text-xs border border-[#d8d1c5] dark:border-[#38403c] bg-[#faf8f3] dark:bg-[#1f2421] text-slate-600 dark:text-slate-300 hover:border-[#1f5c4a] transition-colors">Mèo ngủ</button>
         </div>
         <p id="ai-mandala-msg" class="hidden mt-2 text-xs text-rose-600 dark:text-rose-400"></p>
       </div>
@@ -346,14 +355,20 @@
             <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> <span>Đổi phương pháp</span>
           </button>
 
-          <div id="palette-row" class="flex items-center space-x-1.5 relative">
-            <button data-color="#2dd4bf" class="btn-palette w-6 h-6 rounded-full bg-teal-400 ring-2 ring-offset-1 ring-transparent focus:ring-teal-500"></button>
-            <button data-color="#387478" class="btn-palette w-6 h-6 rounded-full bg-[#387478] ring-2 ring-offset-1 ring-transparent focus:ring-teal-500"></button>
-            <button data-color="#88AB8E" class="btn-palette w-6 h-6 rounded-full bg-[#88AB8E] ring-2 ring-offset-1 ring-transparent focus:ring-teal-500"></button>
-            <button data-color="#f472b6" class="btn-palette w-6 h-6 rounded-full bg-pink-400 ring-2 ring-offset-1 ring-transparent focus:ring-teal-500"></button>
-            <button data-color="#fbbf24" class="btn-palette w-6 h-6 rounded-full bg-amber-400 ring-2 ring-offset-1 ring-transparent focus:ring-teal-500"></button>
+          <div id="palette-row" class="flex flex-wrap items-center gap-1.5 relative">
+            <select id="palette-preset" aria-label="Chọn gam màu khoáng" class="text-xs px-2 py-1 rounded-md border border-[#d8d1c5] dark:border-[#38403c] bg-[#faf8f3] dark:bg-[#181c1a] text-[#1f2421] dark:text-[#e5e2dc] mr-1">
+              <option value="pine">Gam Rừng thông</option>
+              <option value="earth">Gam Đất ấm</option>
+              <option value="mist">Gam Sương sớm</option>
+            </select>
+            <button data-color="#1f5c4a" style="background:#1f5c4a" class="btn-palette w-6 h-6 rounded-full ring-2 ring-offset-1 ring-transparent focus:ring-[#1f5c4a]"></button>
+            <button data-color="#387478" style="background:#387478" class="btn-palette w-6 h-6 rounded-full ring-2 ring-offset-1 ring-transparent focus:ring-[#1f5c4a]"></button>
+            <button data-color="#6b9080" style="background:#6b9080" class="btn-palette w-6 h-6 rounded-full ring-2 ring-offset-1 ring-transparent focus:ring-[#1f5c4a]"></button>
+            <button data-color="#a4c3b2" style="background:#a4c3b2" class="btn-palette w-6 h-6 rounded-full ring-2 ring-offset-1 ring-transparent focus:ring-[#1f5c4a]"></button>
+            <button data-color="#d4a373" style="background:#d4a373" class="btn-palette w-6 h-6 rounded-full ring-2 ring-offset-1 ring-transparent focus:ring-[#1f5c4a]"></button>
+            <button data-color="#b8543b" style="background:#b8543b" class="btn-palette w-6 h-6 rounded-full ring-2 ring-offset-1 ring-transparent focus:ring-[#1f5c4a]"></button>
 
-            <button id="btn-open-custom-color" title="tự pha màu" class="w-6 h-6 rounded-full border-2 border-dashed border-slate-300 dark:border-slate-600 flex items-center justify-center text-slate-400 hover:border-teal-400 hover:text-teal-500">
+            <button id="btn-open-custom-color" title="Tự pha màu" class="w-6 h-6 rounded-full border-2 border-dashed border-slate-400 dark:border-slate-500 flex items-center justify-center text-slate-500 hover:border-[#1f5c4a]">
               <i data-lucide="plus" class="w-3.5 h-3.5 pointer-events-none"></i>
             </button>
 
@@ -385,10 +400,16 @@
             <button id="btn-eraser" title="Tẩy" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-600 dark:text-slate-300">
               <i data-lucide="eraser" class="w-4 h-4"></i>
             </button>
-            <button id="btn-undo" title="Hoàn tác" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-600 dark:text-slate-300">
+            <button id="btn-undo" title="Hoàn tác" class="p-2 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-600 dark:text-slate-300">
               <i data-lucide="undo-2" class="w-4 h-4"></i>
             </button>
-            <button id="btn-clear" title="Xóa tất cả" class="p-2 rounded-xl border border-red-100 dark:border-red-900/50 text-red-500">
+            <button id="btn-grid-toggle" type="button" title="Lưới chấm dẫn hướng" aria-pressed="false" class="p-2 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-600 dark:text-slate-300">
+              <svg class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="5" r="1.6"/><circle cx="12" cy="5" r="1.6"/><circle cx="19" cy="5" r="1.6"/><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/><circle cx="5" cy="19" r="1.6"/><circle cx="12" cy="19" r="1.6"/><circle cx="19" cy="19" r="1.6"/></svg>
+            </button>
+            <button id="btn-symmetry-toggle" type="button" title="Đối xứng 6 trục" aria-pressed="false" class="p-2 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-600 dark:text-slate-300">
+              <svg class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="2" x2="12" y2="22"/><line x1="3.34" y1="7" x2="20.66" y2="17"/><line x1="20.66" y1="7" x2="3.34" y2="17"/></svg>
+            </button>
+            <button id="btn-clear" title="Xóa tất cả" class="p-2 rounded-md border border-red-100 dark:border-red-900/50 text-red-500">
               <i data-lucide="trash-2" class="w-4 h-4"></i>
             </button>
           </div>
@@ -1312,6 +1333,10 @@
       document.getElementById('score-d').innerText = d;
       document.getElementById('score-a').innerText = a;
       document.getElementById('score-s').innerText = s;
+      const bd = document.getElementById('bar-d'), ba = document.getElementById('bar-a'), bs = document.getElementById('bar-s');
+      if (bd) bd.style.width = Math.min(100, Math.round((d / 42) * 100)) + '%';
+      if (ba) ba.style.width = Math.min(100, Math.round((a / 42) * 100)) + '%';
+      if (bs) bs.style.width = Math.min(100, Math.round((s / 42) * 100)) + '%';
 
       setLabel('label-d', getSeverity(d, 'D'));
       setLabel('label-a', getSeverity(a, 'A'));
@@ -1341,8 +1366,20 @@
       }
       document.querySelectorAll('#screen-dass-result .btn-art-mode[data-mode]').forEach(btn => {
         const isRec = btn.dataset.mode === recMode;
-        btn.classList.toggle('ring-1', isRec);
-        btn.classList.toggle('ring-teal-500/70', isRec);
+        btn.classList.toggle('border-l-[3px]', isRec);
+        btn.classList.toggle('border-l-[#1f5c4a]', isRec);
+        let note = btn.querySelector('.rec-fit-note');
+        if (isRec) {
+          if (!note) {
+            note = document.createElement('div');
+            note.className = 'rec-fit-note text-[11px] font-semibold text-[#1f5c4a] dark:text-[#66b89e] mt-1';
+            note.textContent = (window.__lang && window.__lang() === 'en') ? 'Matches your result' : 'Phù hợp với kết quả của bạn';
+            const holder = btn.querySelector('.min-w-0') || btn;
+            holder.appendChild(note);
+          }
+        } else if (note) {
+          note.remove();
+        }
       });
       document.getElementById('screen-dass21')?.classList.add('hidden');
       document.getElementById('screen-dass-result')?.classList.remove('hidden');
@@ -1352,7 +1389,7 @@
       const el = document.getElementById(id);
       if (!el || !obj) return;
       el.innerText = obj.text;
-      el.className = `text-[10px] px-2 py-0.5 rounded-full font-medium inline-block ${obj.cls}`;
+      el.className = `text-[11px] px-2 py-0.5 rounded font-medium inline-block ${obj.cls}`;
     }
 
     function selectArtMode(mode) {
@@ -1571,6 +1608,7 @@
       isDrawing = true;
       ctx.beginPath();
       ctx.moveTo(pos.x, pos.y);
+      window.__sym6Prev = { x: pos.x, y: pos.y };
       if (window.__symStart) window.__symStart(pos);
       strokeCount++;
       updateAI();
@@ -1584,21 +1622,44 @@
 
       if (activeArtMode === 'trame') {
         ctx.fillStyle = currentTool === 'eraser' ? '#ffffff' : currentColor;
+        const cx = canvas.width / 2, cy = canvas.height / 2;
+        const folds = window.__sym6On ? 6 : 1;
         for (let i = 0; i < 3; i++) {
           const offsetX = (Math.random() - 0.5) * size * 2;
           const offsetY = (Math.random() - 0.5) * size * 2;
-          ctx.beginPath();
-          ctx.arc(pos.x + offsetX, pos.y + offsetY, size / 3, 0, Math.PI * 2);
-          ctx.fill();
+          const dx = pos.x + offsetX - cx, dy = pos.y + offsetY - cy;
+          for (let f = 0; f < folds; f++) {
+            const ang = (Math.PI * 2 * f) / folds;
+            const rx = cx + dx * Math.cos(ang) - dy * Math.sin(ang);
+            const ry = cy + dx * Math.sin(ang) + dy * Math.cos(ang);
+            ctx.beginPath();
+            ctx.arc(rx, ry, size / 3, 0, Math.PI * 2);
+            ctx.fill();
+          }
         }
       } else {
         ctx.lineWidth = size;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
         ctx.strokeStyle = currentTool === 'eraser' ? '#ffffff' : currentColor;
-        ctx.lineTo(pos.x, pos.y);
-        ctx.stroke();
-        if (window.__symDraw) window.__symDraw(pos);
+        if (window.__sym6On && window.__sym6Prev) {
+          const cx = canvas.width / 2, cy = canvas.height / 2;
+          const x0 = window.__sym6Prev.x - cx, y0 = window.__sym6Prev.y - cy;
+          const x1 = pos.x - cx, y1 = pos.y - cy;
+          for (let f = 0; f < 6; f++) {
+            const ang = (Math.PI * 2 * f) / 6;
+            const c = Math.cos(ang), s = Math.sin(ang);
+            ctx.beginPath();
+            ctx.moveTo(cx + x0 * c - y0 * s, cy + x0 * s + y0 * c);
+            ctx.lineTo(cx + x1 * c - y1 * s, cy + x1 * s + y1 * c);
+            ctx.stroke();
+          }
+          window.__sym6Prev = { x: pos.x, y: pos.y };
+        } else {
+          ctx.lineTo(pos.x, pos.y);
+          ctx.stroke();
+          if (window.__symDraw) window.__symDraw(pos);
+        }
       }
     }
 
@@ -1875,40 +1936,75 @@
 
       const exportCanvas = document.createElement('canvas');
       const expCtx = exportCanvas.getContext('2d');
-      exportCanvas.width = 600;
-      exportCanvas.height = 750;
+      exportCanvas.width = 640;
+      exportCanvas.height = 820;
 
+      expCtx.fillStyle = '#faf8f3';
+      expCtx.fillRect(0, 0, 640, 820);
+      expCtx.strokeStyle = '#dcd6ca';
+      expCtx.lineWidth = 2;
+      expCtx.strokeRect(12, 12, 616, 796);
+
+      const sc = Math.min(580 / canvas.width, 580 / canvas.height), dw = canvas.width * sc, dh = canvas.height * sc;
       expCtx.fillStyle = '#ffffff';
-      expCtx.fillRect(0, 0, 600, 750);
-
-      expCtx.fillStyle = '#0f766e';
-      expCtx.fillRect(0, 0, 600, 80);
-
-      expCtx.fillStyle = '#ffffff';
-      expCtx.font = 'bold 20px "Plus Jakarta Sans", sans-serif';
-      expCtx.fillText(window.__tr ? window.__tr('BÁO CÁO TRỊ LIỆU HỘI HỌA & DASS') : 'BÁO CÁO TRỊ LIỆU HỘI HỌA & DASS', 30, 45);
-
-      expCtx.font = '12px "Plus Jakarta Sans", sans-serif';
-      const isEn = (window.__lang && window.__lang() === 'en');
-      expCtx.fillText(`${isEn ? 'Prepared by' : 'Người thực hiện'}: ${userName || (isEn ? 'Guest' : 'Khách')} | ${isEn ? 'Date' : 'Ngày'}: ${new Date().toLocaleDateString(isEn ? 'en-GB' : 'vi-VN')}`, 30, 65);
-
-      const sc = Math.min(540 / canvas.width, 540 / canvas.height), dw = canvas.width * sc, dh = canvas.height * sc;
+      expCtx.fillRect(30, 30, 580, 580);
+      expCtx.strokeStyle = '#e2ddd3';
+      expCtx.lineWidth = 1;
+      expCtx.strokeRect(30, 30, 580, 580);
       expCtx.imageSmoothingQuality = 'high';
-      expCtx.drawImage(canvas, 30 + (540 - dw) / 2, 100 + (540 - dh) / 2, dw, dh);
+      expCtx.drawImage(canvas, 30 + (580 - dw) / 2, 30 + (580 - dh) / 2, dw, dh);
 
-      expCtx.fillStyle = '#f0fdf4';
-      expCtx.fillRect(30, 655, 540, 65);
+      expCtx.beginPath();
+      expCtx.moveTo(30, 632);
+      expCtx.lineTo(610, 632);
+      expCtx.strokeStyle = '#dcd6ca';
+      expCtx.stroke();
 
-      expCtx.fillStyle = '#134e4a';
-      expCtx.font = 'bold 13px "Plus Jakarta Sans", sans-serif';
-      expCtx.fillText(`${isEn ? 'Engagement level' : 'Mức độ gắn kết'}: ${reliefScore}% | ${isEn ? 'Method' : 'Phương pháp'}: ${activeArtMode.toUpperCase()}`, 45, 680);
+      const isEn = (window.__lang && window.__lang() === 'en');
+      const now = new Date();
+      const pad2 = (v) => String(v).padStart(2, '0');
+      const dtStr = `${pad2(now.getDate())}/${pad2(now.getMonth() + 1)}/${now.getFullYear()} ${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
+      const modeMap = { trame: isEn ? 'Trame Dot Drawing' : 'Vẽ Chấm Trame', doodle: isEn ? 'Free Drawing' : 'Vẽ Tự Do', coloring: isEn ? 'Mandala Coloring' : 'Tô Màu Mandala' };
+      const modeTitle = modeMap[activeArtMode] || activeArtMode;
 
-      expCtx.font = '11px "Plus Jakarta Sans", sans-serif';
-      expCtx.fillStyle = '#334155';
-      expCtx.fillText(isEn ? 'Art-therapy artwork saved automatically.' : `Tác phẩm nghệ thuật trị liệu tinh thần được lưu trữ tự động.`, 45, 702);
+      expCtx.fillStyle = '#1f2421';
+      expCtx.font = '600 18px "Lora", Georgia, serif';
+      expCtx.fillText(`${modeTitle}`, 34, 666);
+
+      expCtx.fillStyle = '#575c58';
+      expCtx.font = '13px "Be Vietnam Pro", sans-serif';
+      expCtx.fillText(`${isEn ? 'Completed' : 'Thời gian'}: ${dtStr}   ·   ${userName || (isEn ? 'Guest' : 'Học sinh')}`, 34, 692);
+
+      let moodLine = '';
+      try {
+        const histRaw = JSON.parse(localStorage.getItem('mindart_history') || '[]');
+        const last = Array.isArray(histRaw) && histRaw.length ? histRaw[histRaw.length - 1] : null;
+        if (last && last.before && last.after) {
+          moodLine = isEn ? `Mood: Before ${last.before}/5 -> After ${last.after}/5` : `Tâm trạng: Trước khi vẽ ${last.before}/5 → Sau khi vẽ ${last.after}/5`;
+        } else if (last && last.after) {
+          moodLine = isEn ? `Mood after drawing: ${last.after}/5` : `Tâm trạng sau khi vẽ: ${last.after}/5`;
+        }
+      } catch (_) {}
+      if (moodLine) {
+        expCtx.fillStyle = '#1f5c4a';
+        expCtx.font = '600 13px "Be Vietnam Pro", sans-serif';
+        expCtx.fillText(moodLine, 34, 718);
+      }
+
+      const noteEl = document.getElementById('diary-note');
+      const noteTxt = noteEl && noteEl.value ? noteEl.value.trim().slice(0, 88) : '';
+      if (noteTxt) {
+        expCtx.fillStyle = '#1f2421';
+        expCtx.font = 'italic 13px "Lora", Georgia, serif';
+        expCtx.fillText(`“${noteTxt}”`, 34, moodLine ? 744 : 722);
+      }
+
+      expCtx.fillStyle = '#6f746f';
+      expCtx.font = '11px "Be Vietnam Pro", sans-serif';
+      expCtx.fillText(isEn ? 'Personal record slip · High School Science Fair DASS & Art Therapy Project' : 'Phiếu lưu cá nhân · Dự án KHKT Tự đánh giá DASS & Hội họa trị liệu', 34, 788);
 
       const link = document.createElement('a');
-      link.download = isEn ? 'Art therapy.png' : 'Trị liệu bằng hội họa.png';
+      link.download = isEn ? 'Art-therapy-record.png' : 'Phieu-luu-tranh-KHKT.png';
       link.href = exportCanvas.toDataURL('image/png');
       link.click();
     }
@@ -2330,8 +2426,8 @@
         return `<polyline fill="none" stroke="${col}" stroke-width="2" points="${pts.map(q => q.join(',')).join(' ')}"/>` + pts.map(q => `<circle cx="${q[0]}" cy="${q[1]}" r="3" fill="${col}"/>`).join('');
       };
       const grid = [0, 14, 28, 42].map(v => `<line x1="14" x2="${W - 8}" y1="${py(v)}" y2="${py(v)}" stroke="#94a3b8" stroke-opacity=".25"/><text x="0" y="${py(v) + 4}" font-size="9" fill="#94a3b8">${v}</text>`).join('');
-      return `<div class="text-xs font-semibold mt-5 mb-1">Điểm DASS theo các lần vẽ</div><svg viewBox="0 0 ${W} ${Hh}" class="w-full">${grid}${line('d', '#818cf8')}${line('a', '#f59e0b')}${line('s', '#f43f5e')}</svg>
-        <div class="flex justify-center gap-3 text-[11px]"><span style="color:#818cf8">Trầm cảm</span><span style="color:#f59e0b">Lo âu</span><span style="color:#f43f5e">Căng thẳng</span></div>`;
+      return `<div class="text-xs font-semibold mt-5 mb-1">Điểm DASS theo các lần vẽ</div><svg viewBox="0 0 ${W} ${Hh}" class="w-full">${grid}${line('d', '#2e6b8a')}${line('a', '#b8862d')}${line('s', '#b84a39')}</svg>
+        <div class="flex justify-center gap-3 text-[11px]"><span style="color:#2e6b8a">Trầm cảm</span><span style="color:#b8862d">Lo âu</span><span style="color:#b84a39">Căng thẳng</span></div>`;
     }
     const repEl = document.createElement('div');
     repEl.id = 'report-print';
@@ -5121,8 +5217,8 @@
       var r = a.slice(-10), W = 320, Hh = 130, px = function (i) { return 24 + i * (W - 48) / (r.length - 1); }, py = function (v) { return 108 - Math.min(v, 42) / 42 * 90; };
       var line = function (k, c) { var pts = r.map(function (x, i) { return [px(i), py(x[k])]; }); return '<polyline fill="none" stroke="' + c + '" stroke-width="2" points="' + pts.map(function (q) { return q.join(','); }).join(' ') + '"/>' + pts.map(function (q) { return '<circle cx="' + q[0] + '" cy="' + q[1] + '" r="3" fill="' + c + '"/>'; }).join(''); };
       var grid = [0, 14, 28, 42].map(function (v) { return '<line x1="14" x2="' + (W - 8) + '" y1="' + py(v) + '" y2="' + py(v) + '" stroke="#94a3b8" stroke-opacity=".25"/><text x="0" y="' + (py(v) + 4) + '" font-size="9" fill="#94a3b8">' + v + '</text>'; }).join('');
-      h += '<svg viewBox="0 0 ' + W + ' ' + Hh + '" class="w-full">' + grid + line('d', '#818cf8') + line('a', '#f59e0b') + line('s', '#f43f5e') + '</svg>' +
-        '<div class="flex justify-center gap-3 text-[11px] mb-3"><span style="color:#818cf8">' + T('Trầm cảm', 'Depression') + '</span><span style="color:#f59e0b">' + T('Lo âu', 'Anxiety') + '</span><span style="color:#f43f5e">' + T('Căng thẳng', 'Stress') + '</span></div>' +
+      h += '<svg viewBox="0 0 ' + W + ' ' + Hh + '" class="w-full">' + grid + line('d', '#2e6b8a') + line('a', '#b8862d') + line('s', '#b84a39') + '</svg>' +
+        '<div class="flex justify-center gap-3 text-[11px] mb-3"><span style="color:#2e6b8a">' + T('Trầm cảm', 'Depression') + '</span><span style="color:#b8862d">' + T('Lo âu', 'Anxiety') + '</span><span style="color:#b84a39">' + T('Căng thẳng', 'Stress') + '</span></div>' +
         '<div class="space-y-1.5">' + a.slice(-6).reverse().map(function (x) { return '<div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-xs flex justify-between gap-2"><span>' + fmtDate(x.t) + ' · DASS-' + x.v + '</span><span>D ' + x.d + ' · A ' + x.a + ' · S ' + x.s + '</span></div>'; }).join('') + '</div>' +
         '<p class="text-[11px] text-slate-400 mt-3">' + T('Thang điểm 0 đến 42 cho cả hai phiên bản. Chỉ để tham khảo, không phải chẩn đoán.', 'Both versions use a 0 to 42 scale. For reference only, not a diagnosis.') + '</p>';
     }
@@ -5143,18 +5239,18 @@
     moreEl.innerHTML = mh;
     if (moreEl.nextSibling) moreEl.parentNode.appendChild(moreEl);
 
-    var h = '<details id="mx2-more" class="group mt-4 pt-3 border-t border-slate-200/70 dark:border-slate-800/80"' + (moreOpen ? ' open' : '') + '><summary class="flex items-center justify-between gap-3 cursor-pointer select-none py-1.5"><span><span class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">' + T('Gợi ý thêm cho hôm nay', 'More ideas for today') + '</span><span class="block text-[11px] text-slate-500 dark:text-slate-400">' + T('Tâm trạng, đề bài vẽ và lộ trình 7 ngày', 'Mood, drawing prompt and 7-day plan') + '</span></span><svg class="w-4 h-4 shrink-0 text-slate-500 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>' +
+    var h = '<details id="mx2-more" class="group mt-4 pt-3 border-t border-slate-200/70 dark:border-slate-800/80"' + (moreOpen ? ' open' : '') + '><summary class="flex items-center justify-between gap-3 cursor-pointer select-none py-1.5"><span><span class="block text-xs font-bold text-slate-600 dark:text-slate-300">' + T('Gợi ý thêm cho hôm nay', 'More ideas for today') + '</span><span class="block text-[11px] text-slate-500 dark:text-slate-400">' + T('Tâm trạng, đề bài vẽ và lộ trình 7 ngày', 'Mood, drawing prompt and 7-day plan') + '</span></span><svg class="w-4 h-4 shrink-0 text-slate-500 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>' +
       '<div class="' + CARD + ' mt-1"><div class="font-bold text-xs mb-2">' + T('Hôm nay bạn thấy thế nào?', 'How are you feeling today?') + '</div><div class="flex flex-wrap gap-1.5">' + FEEL.map(function (x) {
-      return '<button type="button" data-a="feel:' + x[0] + '" class="px-3 py-1.5 rounded-full text-[11px] border ' + (x[0] === feelSel ? 'bg-teal-600 text-white border-teal-600' : 'border-slate-200 dark:border-slate-700') + '">' + T(x[1], x[2]) + '</button>';
+      return '<button type="button" data-a="feel:' + x[0] + '" class="px-3 py-1.5 rounded-md text-[11px] border ' + (x[0] === feelSel ? 'bg-[#1f5c4a] text-white border-[#1f5c4a]' : 'border-[#d8d1c5] dark:border-[#38403c]') + '">' + T(x[1], x[2]) + '</button>';
     }).join('') + '</div>';
     if (f) h += '<div class="mt-3 space-y-2">' + f[3].map(function (s) {
-      return '<div class="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-teal-50/70 dark:bg-slate-800/60"><div class="text-xs"><b>' + modeName(s[0]) + '</b><br><span class="text-slate-500 dark:text-slate-400">' + T(s[1], s[2]) + '</span></div><button type="button" data-a="open:' + s[0] + '" class="' + PRI + ' shrink-0">' + T('Vẽ', 'Draw') + '</button></div>';
+      return '<div class="flex items-center justify-between gap-3 p-2.5 rounded-md bg-[#f0ece1] dark:bg-[#262c28]"><div class="text-xs"><b>' + modeName(s[0]) + '</b><br><span class="text-slate-500 dark:text-slate-400">' + T(s[1], s[2]) + '</span></div><button type="button" data-a="open:' + s[0] + '" class="' + PRI + ' shrink-0">' + T('Vẽ', 'Draw') + '</button></div>';
     }).join('') + '</div>';
     h += '</div>';
 
-    h += '<div class="' + CARD + ' mt-3"><div class="flex items-center justify-between gap-2 mb-1"><div class="font-bold text-xs">' + T('Đề bài hôm nay', 'Today\'s prompt') + (f ? ' <span class="font-normal text-[10px] px-2 py-0.5 rounded-full bg-teal-100 dark:bg-teal-950 text-teal-800 dark:text-teal-300">' + T(f[1], f[2]) + '</span>' : (dc && dc.src === 'ai' ? ' <span class="font-normal text-[10px] text-teal-700 dark:text-teal-300">· AI</span>' : '')) + '</div>' +
+    h += '<div class="' + CARD + ' mt-3"><div class="flex items-center justify-between gap-2 mb-1"><div class="font-bold text-xs">' + T('Đề bài gợi ý hôm nay', 'Suggested prompt today') + (f ? ' <span class="font-normal text-[11px] px-2 py-0.5 rounded bg-[#e6efe9] dark:bg-[#26362f] text-[#1f5c4a] dark:text-[#9dd3be]">' + T(f[1], f[2]) + '</span>' : '') + '</div>' +
       '<button type="button" data-a="newprompt" ' + (dailyBusy ? 'disabled' : '') + ' class="text-[11px] underline text-slate-500 dark:text-slate-400 disabled:opacity-40">' + T('Đổi đề khác', 'Another prompt') + '</button></div>' +
-      '<p class="text-sm font-semibold text-teal-900 dark:text-teal-100 mb-3">' + (dailyBusy ? T('Đang nghĩ đề bài cho bạn...', 'Thinking of a prompt for you...') : esc(dailyText())) + '</p>' +
+      '<p id="mx2-daily-text" class="text-sm font-semibold text-[#1f2421] dark:text-[#e5e2dc] mb-3">' + (dailyBusy ? T('Đang nghĩ đề bài cho bạn...', 'Thinking of a prompt for you...') : esc(dailyText())) + '</p>' +
       '<button type="button" data-a="open:prompt" ' + (dailyBusy ? 'disabled' : '') + ' class="' + PRI + '">' + T('Vẽ theo đề này', 'Draw this prompt') + '</button></div>';
 
     h += '<div class="' + CARD + ' mt-3 flex items-center justify-between gap-3"><div class="text-xs"><div class="font-bold">' + T('Lộ trình 7 ngày', '7-day plan') + '</div><div class="text-slate-500 dark:text-slate-400">' +
@@ -5276,36 +5372,40 @@
 })();
 </script>
 <style id="calm-mode">
-  body { background-image: none !important; background-color: #f6f4ef !important; color: #1f2421 !important; }
+  body { background-image: none !important; background-color: #f3efe6 !important; color: #1f2421 !important; }
+  header, footer { background-color: #faf8f3 !important; border-color: #dcd6ca !important; }
   *, *::before, *::after { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
-  main > section, #ai-result-modal > div, .mx2-modal > div, #music-panel { background-color: #ffffff !important; border-color: #e2ddd3 !important; box-shadow: 0 1px 3px rgba(31, 36, 33, .06) !important; }
+  main > section, #ai-result-modal > div, .mx2-modal > div, #music-panel, #calm-menu-panel { background-color: #faf8f3 !important; border-color: #dcd6ca !important; box-shadow: 0 1px 2px rgba(28, 33, 30, .05) !important; }
+  #dass-rec-box, #ai-mandala-box, #screen-dass-result .btn-art-mode, #calm-grid > button, #mx-ai-open { background-color: #f0ece1 !important; border-color: #d8d1c5 !important; }
+  #screen-dass-result .btn-art-mode:hover, #calm-grid > button:hover, #mx-ai-open:hover { border-color: #1f5c4a !important; background-color: #e9e4d7 !important; }
+  #btn-start-dass, #btn-finish, #btn-ai-result-done, #ai-mandala-btn, #ai-send, #music-url-play, #btn-rec-start.bg-\[\#1f5c4a\] { background-color: #1f5c4a !important; color: #ffffff !important; border-color: #1f5c4a !important; }
+  #btn-start-dass:hover, #btn-finish:hover, #btn-ai-result-done:hover, #ai-mandala-btn:hover, #ai-send:hover, #music-url-play:hover, #btn-rec-start.bg-\[\#1f5c4a\]:hover { background-color: #174739 !important; }
 
-  html.dark body { background-color: #000000 !important; color: #ffffff !important; }
-  html.dark header, html.dark footer { background-color: #000000 !important; border-color: #262626 !important; }
-  html.dark main > section, html.dark #ai-result-modal > div, html.dark .mx2-modal > div, html.dark #music-panel, html.dark #calm-menu-panel, html.dark #ai-side, html.dark #screen-ai .overflow-hidden { background-color: #0a0a0a !important; border-color: #262626 !important; box-shadow: none !important; }
-  html.dark main > section [class*="bg-slate-8"], html.dark main > section [class*="bg-slate-9"], html.dark main > section [class*="bg-teal-9"], html.dark main > section [class*="bg-[#171c1a]"], html.dark main > section [class*="bg-[#1a2823]"], html.dark main > section [class*="bg-[#1a2b25]"], html.dark main > section [class*="bg-[#1c211f]"], html.dark header button, html.dark #ai-mandala-box, html.dark #dass-rec-box { background-color: #121212 !important; border-color: #2a2a2a !important; }
-  html.dark #screen-dass-result .btn-art-mode:hover, html.dark #calm-grid > button:hover, html.dark #mx-ai-open:hover, html.dark #screen-dass-choice button:hover, html.dark #screen-dass21 #dass-options-container > button:hover { border-color: #ffffff !important; background-color: #1a1a1a !important; }
-  html.dark h1, html.dark h2, html.dark h3, html.dark h4, html.dark #res-user-name, html.dark [class*="text-teal-"], html.dark [class*="text-slate-1"], html.dark [class*="text-slate-2"], html.dark [class*="text-slate-3"], html.dark [class*="text-[#edf2ef]"], html.dark [class*="text-[#5eb89a]"], html.dark [class*="text-[#cce3d9]"] { color: #ffffff !important; }
-  html.dark [class*="text-slate-4"], html.dark [class*="text-slate-5"], html.dark footer { color: #a3a3a3 !important; }
-  html.dark header svg, html.dark main svg:not(.mx2-keep-color), html.dark footer svg, html.dark #screen-ai svg, html.dark #music-fab svg { color: #ffffff !important; stroke: currentColor; }
-  html.dark #btn-start-dass, html.dark #btn-finish, html.dark #btn-ai-result-done, html.dark #ai-mandala-btn, html.dark #ai-send, html.dark #music-url-play, html.dark #btn-rec-start.bg-teal-600, html.dark #btn-rec-start.bg-\[\#1f5c4a\] { background-color: #ffffff !important; color: #000000 !important; border-color: #ffffff !important; }
-  html.dark #btn-start-dass svg, html.dark #btn-finish svg, html.dark #ai-send svg, html.dark #btn-rec-start.bg-teal-600 svg, html.dark #btn-rec-start.bg-\[\#1f5c4a\] svg { color: #000000 !important; }
-  #music-toggle-btn { background-color: #1f5c4a !important; color: #ffffff !important; border: 1px solid #1f5c4a !important; box-shadow: 0 2px 8px rgba(0, 0, 0, .15) !important; }
-  html.dark #music-toggle-btn { background-color: #121212 !important; color: #ffffff !important; border: 1px solid #2a2a2a !important; box-shadow: none !important; }
-  html.dark #music-toggle-btn:hover { background-color: #1f1f1f !important; border-color: #ffffff !important; }
-  html.dark #music-toggle-btn svg { color: #ffffff !important; }
-  html.dark #music-preset-lofi, html.dark #music-panel button:not(#music-url-play):not(#music-panel-close) { background-color: #121212 !important; color: #ffffff !important; border-color: #2a2a2a !important; }
-  html.dark #dass-progress-bar { background-color: #ffffff !important; }
-  html.dark #mx2-care > div { background-color: #121212 !important; border-color: #3f3f46 !important; }
-  html.dark #mx2-care a[href="tel:111"] { background-color: #dc2626 !important; color: #ffffff !important; border-color: #dc2626 !important; }
-  html.dark input, html.dark textarea { background-color: #0a0a0a !important; color: #ffffff !important; border-color: #333333 !important; }
-  html.dark input:focus, html.dark textarea:focus { border-color: #ffffff !important; }
+  html.dark body { background-color: #161917 !important; color: #e5e2dc !important; }
+  html.dark header, html.dark footer { background-color: #1b1f1c !important; border-color: #2c322e !important; }
+  html.dark main > section, html.dark #ai-result-modal > div, html.dark .mx2-modal > div, html.dark #music-panel, html.dark #calm-menu-panel, html.dark #ai-side, html.dark #screen-ai .overflow-hidden { background-color: #1f2421 !important; border-color: #313834 !important; box-shadow: none !important; }
+  html.dark main > section [class*="bg-slate-8"], html.dark main > section [class*="bg-slate-9"], html.dark main > section [class*="bg-teal-9"], html.dark main > section [class*="bg-[#f0ece1]"], html.dark main > section [class*="bg-[#faf8f4]"], html.dark main > section [class*="bg-[#171c1a]"], html.dark main > section [class*="bg-[#1a2823]"], html.dark main > section [class*="bg-[#1a2b25]"], html.dark main > section [class*="bg-[#1c211f]"], html.dark header button, html.dark #ai-mandala-box, html.dark #dass-rec-box, html.dark #screen-dass-result .btn-art-mode, html.dark #calm-grid > button, html.dark #mx-ai-open { background-color: #262c28 !important; border-color: #38403c !important; }
+  html.dark #screen-dass-result .btn-art-mode:hover, html.dark #calm-grid > button:hover, html.dark #mx-ai-open:hover, html.dark #screen-dass-choice button:hover, html.dark #screen-dass21 #dass-options-container > button:hover { border-color: #529e86 !important; background-color: #2c342f !important; }
+  html.dark h1, html.dark h2, html.dark h3, html.dark h4, html.dark #res-user-name, html.dark [class*="text-teal-"], html.dark [class*="text-slate-1"], html.dark [class*="text-slate-2"], html.dark [class*="text-slate-3"], html.dark [class*="text-[#edf2ef]"], html.dark [class*="text-[#1f2421]"] { color: #e5e2dc !important; }
+  html.dark [class*="text-slate-4"], html.dark [class*="text-slate-5"], html.dark footer { color: #a7a39b !important; }
+  html.dark #btn-start-dass, html.dark #btn-finish, html.dark #btn-ai-result-done, html.dark #ai-mandala-btn, html.dark #ai-send, html.dark #music-url-play, html.dark #btn-rec-start.bg-teal-600, html.dark #btn-rec-start.bg-\[\#1f5c4a\] { background-color: #2a6f5a !important; color: #f5f2eb !important; border: 1px solid #36856d !important; }
+  html.dark #btn-start-dass:hover, html.dark #btn-finish:hover, html.dark #btn-ai-result-done:hover, html.dark #ai-mandala-btn:hover, html.dark #ai-send:hover, html.dark #music-url-play:hover, html.dark #btn-rec-start.bg-\[\#1f5c4a\]:hover { background-color: #235d4b !important; }
+  #music-toggle-btn { background-color: #1f5c4a !important; color: #ffffff !important; border: 1px solid #1f5c4a !important; box-shadow: 0 2px 6px rgba(28, 33, 30, .16) !important; }
+  html.dark #music-toggle-btn { background-color: #262c28 !important; color: #e5e2dc !important; border: 1px solid #38403c !important; box-shadow: none !important; }
+  html.dark #music-toggle-btn:hover { background-color: #2c342f !important; border-color: #529e86 !important; }
+  html.dark #music-preset-lofi, html.dark #music-panel button:not(#music-url-play):not(#music-panel-close) { background-color: #262c28 !important; color: #e5e2dc !important; border-color: #38403c !important; }
+  html.dark #dass-progress-bar { background-color: #529e86 !important; }
+  html.dark #mx2-care > div { background-color: #282020 !important; border-color: #523838 !important; }
+  html.dark #mx2-care a[href="tel:111"] { background-color: #b84a39 !important; color: #ffffff !important; border-color: #b84a39 !important; }
+  html.dark input, html.dark textarea, html.dark select { background-color: #181c1a !important; color: #e5e2dc !important; border-color: #38403c !important; }
+  html.dark input:focus, html.dark textarea:focus, html.dark select:focus { border-color: #529e86 !important; }
 
-  .rounded-3xl { border-radius: 0.75rem !important; }
-  .rounded-2xl { border-radius: 0.5rem !important; }
+  .rounded-3xl { border-radius: 0.625rem !important; }
+  .rounded-2xl { border-radius: 0.375rem !important; }
   .rounded-xl { border-radius: 0.375rem !important; }
-  button.rounded-full, a.rounded-full, span.rounded-full:not([data-color]):not(.w-6) { border-radius: 0.375rem !important; }
-  #music-fab { border-radius: 0.625rem !important; }
+  button.rounded-full:not(.btn-palette):not(#btn-open-custom-color), a.rounded-full, span.rounded-full:not([data-color]):not(.w-6) { border-radius: 0.375rem !important; }
+  #music-toggle-btn { border-radius: 0.5rem !important; }
+  .canvas-dot-grid { background-image: radial-gradient(#c8c2b6 1.5px, transparent 1.5px) !important; background-size: 24px 24px !important; }
 
   main > section:not(.hidden) { animation: fade .25s ease backwards !important; }
   .q-swap { animation: fade .25s ease !important; }
@@ -5317,22 +5417,18 @@
   html .text-\[10px\] { font-size: .8125rem !important; line-height: 1.45; }
   html .text-\[11px\] { font-size: .875rem !important; line-height: 1.5; }
   html .text-xs { font-size: .875rem !important; line-height: 1.55; }
-  html:not(.dark) .text-slate-400 { color: #64748b !important; }
+  html:not(.dark) .text-slate-400 { color: #575c58 !important; }
   main .uppercase, [class*="fixed"] .uppercase { text-transform: none !important; letter-spacing: normal !important; }
 
   #screen-dass-result .bg-red-100 { background: #f3e8e6 !important; color: #7a4b43 !important; }
   #screen-dass-result .bg-orange-100 { background: #f5eee4 !important; color: #7a5a3a !important; }
   #screen-dass-result .bg-yellow-100 { background: #f3f1e4 !important; color: #6b6340 !important; }
   #screen-dass-result .bg-emerald-100 { background: #e6f2ee !important; color: #2f6656 !important; }
-  html.dark #screen-dass-result .bg-red-100,
-  html.dark #screen-dass-result .bg-orange-100,
-  html.dark #screen-dass-result .bg-yellow-100,
-  html.dark #screen-dass-result .bg-emerald-100 { background: #1f1f1f !important; color: #ffffff !important; border: 1px solid #3a3a3a !important; }
+  html.dark #screen-dass-result .bg-red-100 { background: #3b2626 !important; color: #e8b4ac !important; border: 1px solid #573636 !important; }
+  html.dark #screen-dass-result .bg-orange-100 { background: #3a2f22 !important; color: #e6c69c !important; border: 1px solid #54422e !important; }
+  html.dark #screen-dass-result .bg-yellow-100 { background: #363322 !important; color: #e3da9f !important; border: 1px solid #4e4a2f !important; }
+  html.dark #screen-dass-result .bg-emerald-100 { background: #21342c !important; color: #a7d6c3 !important; border: 1px solid #2e4a3f !important; }
 
-  div.mb-4:has(> div > #ai-relief-score), div.mb-4:has(> div > #ai-result-relax),
-  div:has(> #ai-stroke-count), div:has(> #ai-pace) { display: none !important; }
-
-  #calm-grid.calm-collapsed > button:nth-of-type(n+4), #calm-grid.calm-collapsed > #mx2-methods { display: none !important; }
   #calm-finish-more > summary { list-style: none; }
   #calm-finish-more > summary::-webkit-details-marker { display: none; }
 </style>
@@ -5406,12 +5502,7 @@
     var first = D.querySelector('#screen-dass-result .btn-art-mode');
     if (!first || D.getElementById('calm-grid')) return;
     var grid = first.parentElement;
-    grid.id = 'calm-grid'; grid.classList.add('calm-collapsed');
-    moreBtn = D.createElement('button');
-    moreBtn.type = 'button'; moreBtn.id = 'calm-more-methods';
-    moreBtn.className = 'mt-2.5 w-full py-2 rounded-2xl border border-dashed border-teal-200 dark:border-slate-700 text-sm font-semibold text-teal-800 dark:text-teal-200 hover:border-teal-500';
-    moreBtn.addEventListener('click', function () { grid.classList.toggle('calm-collapsed'); relabel(); });
-    grid.after(moreBtn);
+    grid.id = 'calm-grid';
   }
 
   var finSummary = null;
@@ -5598,6 +5689,66 @@
     var dockStyle = D.createElement('style');
     dockStyle.textContent = '#mx-ai-dock{padding-bottom:4.5rem!important}#mx-ai-dock [data-a="dexp"]{margin-right:3.25rem}';
     D.head.appendChild(dockStyle);
+
+    var MINERAL = {
+      pine: ['#1f5c4a', '#387478', '#6b9080', '#a4c3b2', '#d4a373', '#b8543b'],
+      earth: ['#8c3f2b', '#b85d43', '#d49a45', '#dfc298', '#5e6472', '#3d405b'],
+      mist: ['#2b5876', '#4e798c', '#7aa095', '#adc2bc', '#c29d93', '#6c757d']
+    };
+    var palSel = D.getElementById('palette-preset');
+    if (palSel) {
+      palSel.addEventListener('change', function () {
+        var cols = MINERAL[palSel.value] || MINERAL.pine;
+        var btns = D.querySelectorAll('#palette-row .btn-palette');
+        btns.forEach(function (b, idx) {
+          if (!cols[idx]) return;
+          b.setAttribute('data-color', cols[idx]);
+          b.style.backgroundColor = cols[idx];
+        });
+        if (btns[0]) btns[0].click();
+      });
+    }
+    var gBtn = D.getElementById('btn-grid-toggle');
+    if (gBtn) {
+      gBtn.addEventListener('click', function () {
+        var wrap = D.getElementById('art-canvas') && D.getElementById('art-canvas').parentElement;
+        if (!wrap) return;
+        var on = !wrap.classList.contains('canvas-dot-grid');
+        wrap.classList.toggle('canvas-dot-grid', on);
+        if (cv) cv.style.backgroundColor = on ? 'transparent' : '';
+        gBtn.setAttribute('aria-pressed', String(on));
+        gBtn.classList.toggle('bg-[#1f5c4a]', on);
+        gBtn.classList.toggle('text-white', on);
+        gBtn.classList.toggle('border-[#1f5c4a]', on);
+      });
+    }
+    var sBtn = D.getElementById('btn-symmetry-toggle');
+    if (sBtn) {
+      sBtn.addEventListener('click', function () {
+        window.__sym6On = !window.__sym6On;
+        sBtn.setAttribute('aria-pressed', String(!!window.__sym6On));
+        sBtn.classList.toggle('bg-[#1f5c4a]', !!window.__sym6On);
+        sBtn.classList.toggle('text-white', !!window.__sym6On);
+        sBtn.classList.toggle('border-[#1f5c4a]', !!window.__sym6On);
+      });
+    }
+    if (typeof window.selectArtMode === 'function') {
+      var origSel = window.selectArtMode;
+      window.selectArtMode = function (mode) {
+        var r = origSel.apply(this, arguments);
+        var showTools = (mode === 'trame' || mode === 'doodle');
+        if (gBtn) gBtn.classList.toggle('hidden', !showTools);
+        if (sBtn) sBtn.classList.toggle('hidden', !showTools);
+        if (!showTools) {
+          window.__sym6On = false;
+          if (sBtn) { sBtn.setAttribute('aria-pressed', 'false'); sBtn.classList.remove('bg-[#1f5c4a]', 'text-white', 'border-[#1f5c4a]'); }
+          var wrap = D.getElementById('art-canvas') && D.getElementById('art-canvas').parentElement;
+          if (wrap) wrap.classList.remove('canvas-dot-grid');
+          if (gBtn) { gBtn.setAttribute('aria-pressed', 'false'); gBtn.classList.remove('bg-[#1f5c4a]', 'text-white', 'border-[#1f5c4a]'); }
+        }
+        return r;
+      };
+    }
   }
   if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', setup); else setup();
 })();
