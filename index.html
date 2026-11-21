@@ -228,65 +228,73 @@
       </div>
     </section>
 
-    <section id="screen-dass-result" class="hidden w-full bg-white/90 dark:bg-slate-900/90 p-5 md:p-6 rounded-3xl shadow-xl border border-teal-100 dark:border-slate-800 max-w-5xl my-auto">
-      <div class="text-center mb-4">
-        <h2 id="dass-result-title" class="text-xl font-bold text-teal-950 dark:text-teal-100">Kết Quả Đánh Giá Tâm Lý DASS-21</h2>
-        <p class="text-xs text-slate-500">Dành cho: <span id="res-user-name" class="font-bold text-teal-700 dark:text-teal-400"></span></p>
+    <section id="screen-dass-result" class="hidden w-full bg-white/95 dark:bg-slate-900/95 p-5 sm:p-7 rounded-3xl shadow-xl border border-teal-100/80 dark:border-slate-800 max-w-3xl my-auto">
+      <div class="text-center mb-5">
+        <h2 id="dass-result-title" class="text-xl sm:text-2xl font-extrabold tracking-tight text-teal-950 dark:text-teal-50">Kết Quả Đánh Giá Tâm Lý DASS-21</h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Dành cho: <span id="res-user-name" class="font-semibold text-teal-700 dark:text-teal-300"></span></p>
       </div>
 
-      <div class="mx-dass-only grid grid-cols-3 gap-3 mb-4">
-        <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl text-center">
-          <div class="text-[10px] font-bold uppercase text-slate-400">Trầm cảm</div>
-          <div id="score-d" class="text-xl font-extrabold my-1">0</div>
-          <span id="label-d" class="text-[10px] px-2 py-0.5 rounded-full inline-block">Bình thường</span>
+      <div class="mx-dass-only grid grid-cols-3 gap-2.5 sm:gap-3.5 mb-5">
+        <div class="p-3.5 sm:p-4 bg-slate-50/90 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-800 rounded-2xl text-center">
+          <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Trầm cảm</div>
+          <div id="score-d" class="text-2xl font-extrabold my-1.5 text-slate-800 dark:text-slate-100">0</div>
+          <span id="label-d" class="text-[10px] px-2.5 py-0.5 rounded-full inline-block">Bình thường</span>
         </div>
-        <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl text-center">
-          <div class="text-[10px] font-bold uppercase text-slate-400">Lo âu</div>
-          <div id="score-a" class="text-xl font-extrabold my-1">0</div>
-          <span id="label-a" class="text-[10px] px-2 py-0.5 rounded-full inline-block">Bình thường</span>
+        <div class="p-3.5 sm:p-4 bg-slate-50/90 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-800 rounded-2xl text-center">
+          <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Lo âu</div>
+          <div id="score-a" class="text-2xl font-extrabold my-1.5 text-slate-800 dark:text-slate-100">0</div>
+          <span id="label-a" class="text-[10px] px-2.5 py-0.5 rounded-full inline-block">Bình thường</span>
         </div>
-        <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl text-center">
-          <div class="text-[10px] font-bold uppercase text-slate-400">Căng thẳng</div>
-          <div id="score-s" class="text-xl font-extrabold my-1">0</div>
-          <span id="label-s" class="text-[10px] px-2 py-0.5 rounded-full inline-block">Bình thường</span>
+        <div class="p-3.5 sm:p-4 bg-slate-50/90 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-800 rounded-2xl text-center">
+          <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Căng thẳng</div>
+          <div id="score-s" class="text-2xl font-extrabold my-1.5 text-slate-800 dark:text-slate-100">0</div>
+          <span id="label-s" class="text-[10px] px-2.5 py-0.5 rounded-full inline-block">Bình thường</span>
         </div>
       </div>
 
-      <div class="mx-dass-only bg-teal-50/80 dark:bg-teal-950/40 p-4 rounded-2xl mb-4 text-xs text-teal-900 dark:text-teal-200">
-        <div class="font-bold flex items-center mb-1"><i data-lucide="sparkles" class="w-4 h-4 mr-1 text-teal-600"></i>Gợi ý liệu pháp:</div>
-        <p id="recommendation-text" class="text-slate-600 dark:text-slate-300">...</p>
+      <div class="mx-dass-only bg-teal-50/80 dark:bg-teal-950/40 border border-teal-200/70 dark:border-teal-800/60 p-4 sm:p-5 rounded-2xl mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="min-w-0 text-xs text-teal-900 dark:text-teal-200">
+          <div class="font-bold flex items-center mb-1"><i data-lucide="sparkles" class="w-4 h-4 mr-1.5 text-teal-600 dark:text-teal-400 shrink-0"></i>Gợi ý liệu pháp:</div>
+          <p id="recommendation-text" class="text-slate-600 dark:text-slate-300 leading-relaxed">...</p>
+        </div>
+        <button id="btn-rec-start" type="button" class="shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold shadow-sm transition-all whitespace-nowrap">
+          <span id="btn-rec-start-label">Bắt đầu ngay</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 pointer-events-none"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
       </div>
 
-      <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-3 uppercase tracking-wider">Chọn phương pháp trị liệu:</h3>
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-2.5">
-        <button data-mode="trame" class="btn-art-mode p-3 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all">
-          <i data-lucide="circle-dot" class="w-5 h-5 text-teal-600 mb-1.5"></i>
-          <div class="font-bold text-xs mb-1">1. Vẽ Chấm Trame</div>
-          <div class="text-[10px] text-slate-500">Giải tỏa căng thẳng bằng các điểm chấm kiên nhẫn.</div>
-        </button>
-        <button data-mode="doodle" class="btn-art-mode p-3 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all">
-          <i data-lucide="spline" class="w-5 h-5 text-teal-600 mb-1.5"></i>
-          <div class="font-bold text-xs mb-1">2. Vẽ Tự Do</div>
-          <div class="text-[10px] text-slate-500">Tự do phóng bút bộc lộ suy nghĩ miên man.</div>
-        </button>
-        <button data-mode="coloring" class="btn-art-mode p-3 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all">
-          <i data-lucide="paint-bucket" class="w-5 h-5 text-teal-600 mb-1.5"></i>
-          <div class="font-bold text-xs mb-1">3. Tô Màu Mandala</div>
-          <div class="text-[10px] text-slate-500">Chọn một bức tranh mình thích rồi tô màu.</div>
-        </button>
+      <div class="pt-2 border-t border-slate-200/70 dark:border-slate-800/80">
+        <h3 class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-3 mt-3 uppercase tracking-wider">Chọn phương pháp trị liệu:</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+          <button data-mode="trame" class="btn-art-mode p-3.5 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 hover:border-teal-500 text-left transition-all">
+            <i data-lucide="circle-dot" class="w-5 h-5 text-teal-600 dark:text-teal-400 mb-2"></i>
+            <div class="font-bold text-xs mb-1 text-slate-800 dark:text-slate-100">1. Vẽ Chấm Trame</div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Giải tỏa căng thẳng bằng các điểm chấm kiên nhẫn.</div>
+          </button>
+          <button data-mode="doodle" class="btn-art-mode p-3.5 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 hover:border-teal-500 text-left transition-all">
+            <i data-lucide="spline" class="w-5 h-5 text-teal-600 dark:text-teal-400 mb-2"></i>
+            <div class="font-bold text-xs mb-1 text-slate-800 dark:text-slate-100">2. Vẽ Tự Do</div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Tự do phóng bút bộc lộ suy nghĩ miên man.</div>
+          </button>
+          <button data-mode="coloring" class="btn-art-mode p-3.5 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 hover:border-teal-500 text-left transition-all">
+            <i data-lucide="paint-bucket" class="w-5 h-5 text-teal-600 dark:text-teal-400 mb-2"></i>
+            <div class="font-bold text-xs mb-1 text-slate-800 dark:text-slate-100">3. Tô Màu Mandala</div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Chọn một bức tranh mình thích rồi tô màu.</div>
+          </button>
+        </div>
       </div>
 
       <div class="mt-3">
-        <button id="mx-ai-open" type="button" class="w-full flex items-center gap-3 p-3 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 shrink-0 text-teal-600 pointer-events-none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          <div class="min-w-0"><div class="font-bold text-xs mb-0.5">AI hỗ trợ tâm lý</div>
-          <div class="text-[10px] text-slate-500">Trò chuyện với trợ lý AI để được lắng nghe và gợi ý cách thư giãn.</div></div>
+        <button id="mx-ai-open" type="button" class="w-full flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 hover:border-teal-500 text-left transition-all">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 shrink-0 text-teal-600 dark:text-teal-400 pointer-events-none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <div class="min-w-0"><div class="font-bold text-xs mb-0.5 text-slate-800 dark:text-slate-100">AI hỗ trợ tâm lý</div>
+          <div class="text-[11px] text-slate-500 dark:text-slate-400">Trò chuyện với trợ lý AI để được lắng nghe và gợi ý cách thư giãn.</div></div>
         </button>
-        <p class="text-[11px] mt-2 px-1 text-slate-400 leading-snug">Lưu ý: AI chỉ hỗ trợ một phần, không thể giải quyết mọi vấn đề, không chẩn đoán và không thay thế ba mẹ, thầy cô hay chuyên gia tâm lý.</p>
+        <p class="text-[11px] mt-2 px-1 text-slate-400 dark:text-slate-500 leading-snug">Lưu ý: AI chỉ hỗ trợ một phần, không thể giải quyết mọi vấn đề, không chẩn đoán và không thay thế ba mẹ, thầy cô hay chuyên gia tâm lý.</p>
       </div>
 
-      <div class="mt-4 flex justify-start">
-        <button id="btn-dass-result-back" type="button" class="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-teal-200 dark:border-slate-700 text-teal-800 dark:text-teal-200 text-xs font-semibold hover:bg-teal-50 dark:hover:bg-slate-800 transition-all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 pointer-events-none"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg><span>Quay lại câu hỏi</span></button>
+      <div class="mt-5 pt-3 border-t border-slate-200/70 dark:border-slate-800/80 flex justify-start">
+        <button id="btn-dass-result-back" type="button" class="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold hover:border-teal-400 hover:text-teal-700 dark:hover:text-teal-300 transition-all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 pointer-events-none"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg><span>Quay lại câu hỏi</span></button>
       </div>
     </section>
 
@@ -1228,18 +1236,33 @@
       setLabel('label-a', getSeverity(a, 'A'));
       setLabel('label-s', getSeverity(s, 'S'));
 
-      let rec = "";
+      let rec = "", recMode = "coloring", recLabel = "Tô Màu Mandala";
       if (s >= a && s >= d && s > 14) {
         rec = "Mức độ Căng thẳng của bạn khá cao. Phương pháp Vẽ Chấm Trame sẽ giúp bạn định tâm, hạ nhiệt cảm xúc.";
+        recMode = "trame"; recLabel = "Vẽ Chấm Trame";
       } else if (a >= d && a > 7) {
         rec = "Bạn đang có dấu hiệu Lo âu. Hãy dùng Vẽ Tự Do để phóng thích những suy nghĩ miên man ra giấy.";
+        recMode = "doodle"; recLabel = "Vẽ Tự Do";
       } else if (d > 9) {
         rec = "Chỉ số Trầm cảm cần sự vỗ về. Tô màu Mandala với các gam màu ấm áp sẽ giúp bạn cân bằng tâm trạng.";
+        recMode = "coloring"; recLabel = "Tô Màu Mandala";
       } else {
         rec = "Tâm trạng của bạn đang ở trạng thái cân bằng! Bạn có thể tự do trải nghiệm bất kỳ phương pháp nghệ thuật nào.";
+        recMode = "coloring"; recLabel = "Tô Màu Mandala";
       }
-      
+
       document.getElementById('recommendation-text').innerHTML = rec;
+      const recBtn = document.getElementById('btn-rec-start');
+      const recBtnLabel = document.getElementById('btn-rec-start-label');
+      if (recBtn) {
+        recBtn.onclick = () => selectArtMode(recMode);
+        if (recBtnLabel) recBtnLabel.innerText = `Bắt đầu: ${recLabel}`;
+      }
+      document.querySelectorAll('#screen-dass-result .btn-art-mode[data-mode]').forEach(btn => {
+        const isRec = btn.dataset.mode === recMode;
+        btn.classList.toggle('ring-1', isRec);
+        btn.classList.toggle('ring-teal-500/70', isRec);
+      });
       document.getElementById('screen-dass21')?.classList.add('hidden');
       document.getElementById('screen-dass-result')?.classList.remove('hidden');
     }
@@ -2818,9 +2841,9 @@
       
       const card = document.createElement('button');
       card.type = 'button';
-      card.className = 'p-3 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all';
-      card.innerHTML = `${ICON.music}<div class="font-bold text-xs mb-1">4. Vẽ Ra Nhạc</div>
-        <div class="text-[10px] text-slate-500">Vẽ nét lên khung, thanh chạy ngang qua sẽ biến nét vẽ thành giai điệu.</div>`;
+      card.className = 'p-3.5 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 hover:border-teal-500 text-left transition-all';
+      card.innerHTML = `${ICON.music}<div class="font-bold text-xs mb-1 text-slate-800 dark:text-slate-100">4. Vẽ Ra Nhạc</div>
+        <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Vẽ nét lên khung, thanh chạy ngang qua sẽ biến nét vẽ thành giai điệu.</div>`;
       grid.appendChild(card);
       card.addEventListener('click', openScreen);
     }
@@ -3672,9 +3695,9 @@
     var sev = !high && labs.some(function (x) { return /vừa|moderate/i.test(x); });
     if (!banner) {
       banner = document.createElement('div'); banner.id = 'mx-support';
-      banner.className = 'flex-wrap items-center justify-between gap-3 text-left mb-4 px-4 py-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950 text-slate-800 dark:text-slate-100 border border-emerald-200 dark:border-emerald-800';
+      banner.className = 'flex-wrap items-center justify-between gap-3 text-left mb-4 px-4 py-3 rounded-2xl bg-slate-50/90 dark:bg-slate-800/60 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700/80';
       banner.addEventListener('click', function (e) { if (e.target.closest('[data-open]')) open('sup'); });
-      var rec = document.getElementById('recommendation-text'), box = rec && rec.parentNode;
+      var rec = document.getElementById('recommendation-text'), box = rec && (rec.closest('.mx-dass-only') || rec.parentNode);
       if (box && box.parentNode) box.parentNode.insertBefore(banner, box.nextSibling); else scr.appendChild(banner);
     }
     var l = isEn() ? 'en' : 'vi';
@@ -4718,17 +4741,32 @@
   var careEl = null, cmpEl = null;
   function renderCare(level, byScore) {
     if (!careEl) return;
-    if (level < 2) { careEl.innerHTML = ''; return; }
+    var recBtn = $('btn-rec-start');
+    var high = level >= 2;
+    if (recBtn) {
+      recBtn.className = high
+        ? 'shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 hover:bg-teal-50 dark:hover:bg-slate-700 text-teal-800 dark:text-teal-200 border border-teal-300 dark:border-teal-700 text-xs font-bold transition-all whitespace-nowrap'
+        : 'shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold shadow-sm transition-all whitespace-nowrap';
+    }
+    if (!high) { careEl.innerHTML = ''; return; }
     var strong = level >= 3;
-    careEl.innerHTML = '<div class="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-xs text-slate-700 dark:text-slate-200 leading-relaxed">' +
-      '<p class="font-bold text-sm text-rose-800 dark:text-rose-200 mb-1">' + (strong ? T('Mình lo cho bạn và muốn bạn được giúp đỡ sớm', 'I am worried about you and want you to get support soon') : T('Mình muốn hỏi thăm bạn một chút', 'I would like to check in with you')) + '</p>' +
-      '<p>' + (byScore
-        ? T('Điểm tự đánh giá của bạn đang ở mức cao. Đây không phải chẩn đoán, nhưng bạn rất đáng được quan tâm. Hãy tìm một người lớn bạn tin tưởng ngay bây giờ, ở cạnh họ và cho họ biết bạn đang thế nào.', 'Your self-assessment score is high. This is not a diagnosis, but you deserve care. Please find a trusted adult right now, stay near them and let them know how you are doing.')
-        : strong
-        ? T('Bạn vừa chọn mức cao nhất ở những câu nói về cảm giác rất nặng nề (như thấy mình không có giá trị hoặc cuộc sống vô nghĩa). Đây không phải chẩn đoán, nhưng bạn rất đáng được quan tâm. Hãy tìm một người lớn bạn tin tưởng ngay bây giờ, ở cạnh họ và cho họ biết bạn đang thế nào.', 'You chose the highest level on statements about very heavy feelings (such as feeling worthless or that life is meaningless). This is not a diagnosis, but you deserve care. Please find an adult you trust right now, stay near them and tell them how you are.')
-        : T('Bạn có chọn một số câu nói về cảm giác nặng nề (như thấy mình không có giá trị hoặc cuộc sống vô nghĩa). Đây không phải chẩn đoán, nhưng bạn đáng được quan tâm. Hôm nay hãy nói với một người lớn bạn tin (ba mẹ, thầy cô, cô thầy phụ trách tâm lý của trường) và đừng ở một mình với cảm giác này quá lâu.', 'You chose some statements about heavy feelings (such as feeling worthless or that life is meaningless). This is not a diagnosis, but you deserve care. Today, please talk to an adult you trust (a parent, teacher or the school counselor) and try not to stay alone with this feeling for long.')) + '</p>' +
-      '<div class="flex flex-wrap gap-2 mt-3"><a href="tel:111" class="' + PRI + ' no-underline">' + T('Gọi 111 (miễn phí, 24/7)', 'Call 111 (free, 24/7)') + '</a><a href="tel:115" class="' + BTN + ' no-underline bg-white dark:bg-slate-900">' + T('Gọi 115 (cấp cứu)', 'Call 115 (emergency)') + '</a><button type="button" data-a="breath" class="' + BTN + ' bg-white dark:bg-slate-900">' + T('Hít thở 1 phút', 'Breathe for 1 minute') + '</button></div>' +
-      '<p class="mt-3 text-[11px] opacity-80">' + T('Nếu bạn đang nghĩ đến việc làm hại bản thân hoặc thấy không an toàn, hãy gọi 115 hoặc nhờ người lớn ở gần gọi giúp ngay.', 'If you are thinking about hurting yourself or feel unsafe, call 115 or ask an adult nearby to call for you right away.') + '</p></div>';
+    var body = byScore
+      ? T('Điểm tự đánh giá đang ở mức cao (chỉ mang tính tham khảo, không phải chẩn đoán). Hãy chia sẻ với ba mẹ, thầy cô hoặc chuyên gia tâm lý gần bạn ngay lúc này.', 'Your self-assessment score is high (for reference only, not a diagnosis). Please reach out to a parent, teacher or trusted adult right now.')
+      : strong
+      ? T('Bạn vừa chọn mức cao nhất ở các câu về cảm giác rất nặng nề. Đây không phải chẩn đoán, nhưng bạn rất đáng được lắng nghe — hãy ở cạnh và chia sẻ với một người lớn bạn tin tưởng ngay bây giờ.', 'You selected the highest level on statements about very heavy feelings. This is not a diagnosis, but you deserve care — please stay near and talk to a trusted adult right now.')
+      : T('Bạn vừa chọn mức cao ở một số câu về cảm giác nặng nề. Đây không phải chẩn đoán, nhưng hôm nay hãy chia sẻ với ba mẹ, thầy cô hoặc cô thầy tâm lý học đường nhé.', 'You selected high levels on some statements about heavy feelings. This is not a diagnosis, but please talk to a parent, teacher or school counselor today.');
+    careEl.innerHTML = '<div class="p-4 sm:p-5 rounded-2xl bg-rose-50/90 dark:bg-rose-950/35 border border-rose-200/90 dark:border-rose-900/80 text-xs text-slate-700 dark:text-slate-200 leading-relaxed">' +
+      '<div class="flex items-start gap-2.5 mb-2">' +
+        '<span class="w-6 h-6 rounded-full bg-rose-100 dark:bg-rose-900/60 text-rose-600 dark:text-rose-300 flex items-center justify-center shrink-0 mt-0.5"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></span>' +
+        '<div class="min-w-0"><p class="font-bold text-sm text-rose-800 dark:text-rose-200 mb-1">' + (strong ? T('Bạn rất đáng được quan tâm lúc này', 'You deserve care and support right now') : T('Mình muốn hỏi thăm bạn một chút', 'Checking in with you')) + '</p>' +
+        '<p class="text-slate-600 dark:text-slate-300">' + body + '</p></div>' +
+      '</div>' +
+      '<div class="flex flex-wrap items-center gap-2 mt-3.5">' +
+        '<a href="tel:111" class="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-sm no-underline transition-all">' + T('Gọi 111 (miễn phí, 24/7)', 'Call 111 (free, 24/7)') + '</a>' +
+        '<button type="button" data-a="breath" class="inline-flex items-center justify-center px-3.5 py-2 rounded-xl border border-rose-200 dark:border-rose-800/80 bg-white/90 dark:bg-slate-900/80 text-slate-700 dark:text-slate-200 hover:border-rose-400 text-xs font-semibold transition-all">' + T('Hít thở 1 phút', 'Breathe for 1 minute') + '</button>' +
+        '<a href="tel:115" class="inline-flex items-center justify-center px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/60 text-slate-600 dark:text-slate-300 hover:border-rose-400 text-xs font-semibold no-underline transition-all">' + T('Gọi 115 (cấp cứu)', 'Call 115 (emergency)') + '</a>' +
+      '</div>' +
+      '<p class="mt-3 pt-2.5 border-t border-rose-200/60 dark:border-rose-900/60 text-[11px] text-rose-700/80 dark:text-rose-300/80">' + T('Nếu thấy không an toàn hoặc có ý định làm hại bản thân, hãy gọi 115 hoặc nhờ người lớn gần bạn giúp ngay.', 'If you feel unsafe or have thoughts of self-harm, call 115 or ask a nearby adult for help right away.') + '</p></div>';
   }
   function renderCmp() {
     if (!cmpEl) return;
@@ -4961,12 +4999,12 @@
     if (!secEl || !moreEl) return;
     var p = plan(), n = p ? p.done.filter(Boolean).length : 0, dc = dailyCache(), f = FEEL.filter(function (x) { return x[0] === feelSel; })[0];
     var mh = '' +
-      '<button type="button" data-a="open:emotion" class="btn-art-mode p-3 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all"><svg class="w-6 h-6 mb-1.5 text-teal-600 dark:text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg><div class="font-bold text-xs mb-1">' + T('5. Vẽ cảm xúc bằng màu', '5. Draw feelings in color') + '</div><div class="text-[10px] text-slate-500">' + T('Chọn cảm xúc, tô thành màu và đặt tên cho nó.', 'Pick a feeling, turn it into color and give it a name.') + '</div></button>' +
-      '<button type="button" data-a="open:body" class="btn-art-mode p-3 rounded-2xl border border-teal-200 dark:border-slate-700 hover:border-teal-500 text-left transition-all"><svg class="w-6 h-6 mb-1.5 text-teal-600 dark:text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="1"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/></svg><div class="font-bold text-xs mb-1">' + T('6. Quét cơ thể', '6. Body scan') + '</div><div class="text-[10px] text-slate-500">' + T('Tô lên hình người những chỗ đang căng, nặng hoặc đau.', 'Paint the tense, heavy or painful places on a body figure.') + '</div></button>';
+      '<button type="button" data-a="open:emotion" class="btn-art-mode p-3.5 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 hover:border-teal-500 text-left transition-all"><svg class="w-5 h-5 mb-2 text-teal-600 dark:text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg><div class="font-bold text-xs mb-1 text-slate-800 dark:text-slate-100">' + T('5. Vẽ cảm xúc bằng màu', '5. Draw feelings in color') + '</div><div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">' + T('Chọn cảm xúc, tô thành màu và đặt tên cho nó.', 'Pick a feeling, turn it into color and give it a name.') + '</div></button>' +
+      '<button type="button" data-a="open:body" class="btn-art-mode p-3.5 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 hover:border-teal-500 text-left transition-all"><svg class="w-5 h-5 mb-2 text-teal-600 dark:text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="1"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/></svg><div class="font-bold text-xs mb-1 text-slate-800 dark:text-slate-100">' + T('6. Quét cơ thể', '6. Body scan') + '</div><div class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">' + T('Tô lên hình người những chỗ đang căng, nặng hoặc đau.', 'Paint the tense, heavy or painful places on a body figure.') + '</div></button>';
     moreEl.innerHTML = mh;
     if (moreEl.nextSibling) moreEl.parentNode.appendChild(moreEl);
 
-    var h = '<details id="mx2-more" class="group mt-4"' + (moreOpen ? ' open' : '') + '><summary class="flex items-center justify-between gap-3 cursor-pointer select-none py-2"><span><span class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">' + T('Gợi ý thêm cho hôm nay', 'More ideas for today') + '</span><span class="block text-[11px] text-slate-500 dark:text-slate-400">' + T('Tâm trạng, đề bài vẽ và lộ trình 7 ngày', 'Mood, drawing prompt and 7-day plan') + '</span></span><svg class="w-4 h-4 shrink-0 text-slate-500 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>' +
+    var h = '<details id="mx2-more" class="group mt-4 pt-3 border-t border-slate-200/70 dark:border-slate-800/80"' + (moreOpen ? ' open' : '') + '><summary class="flex items-center justify-between gap-3 cursor-pointer select-none py-1.5"><span><span class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">' + T('Gợi ý thêm cho hôm nay', 'More ideas for today') + '</span><span class="block text-[11px] text-slate-500 dark:text-slate-400">' + T('Tâm trạng, đề bài vẽ và lộ trình 7 ngày', 'Mood, drawing prompt and 7-day plan') + '</span></span><svg class="w-4 h-4 shrink-0 text-slate-500 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>' +
       '<div class="' + CARD + ' mt-1"><div class="font-bold text-xs mb-2">' + T('Hôm nay bạn thấy thế nào?', 'How are you feeling today?') + '</div><div class="flex flex-wrap gap-1.5">' + FEEL.map(function (x) {
       return '<button type="button" data-a="feel:' + x[0] + '" class="px-3 py-1.5 rounded-full text-[11px] border ' + (x[0] === feelSel ? 'bg-teal-600 text-white border-teal-600' : 'border-slate-200 dark:border-slate-700') + '">' + T(x[1], x[2]) + '</button>';
     }).join('') + '</div>';
@@ -4985,7 +5023,12 @@
       '<button type="button" data-a="plan" class="' + PRI + ' shrink-0">' + (p ? T('Xem', 'Open') : T('Bắt đầu', 'Start')) + '</button></div>';
 
     h += '</details>';
-    h += '<div class="flex flex-wrap justify-center gap-x-6 gap-y-2 mt-5"><button type="button" data-a="gal" class="' + LNK + '">' + T('Phòng tranh', 'Gallery') + '</button><button type="button" data-a="prog" class="' + LNK + '">' + T('Tiến triển DASS', 'DASS progress') + '</button><button type="button" data-a="sci" class="' + LNK + '">' + T('Cơ sở khoa học', 'Science') + '</button></div>';
+    var qBtn = 'inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 hover:border-teal-500 hover:bg-teal-50/60 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-teal-700 dark:hover:text-teal-300 transition-all';
+    h += '<div class="flex flex-wrap justify-center gap-2.5 mt-4">' +
+      '<button type="button" data-a="gal" class="' + qBtn + '"><svg class="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg><span>' + T('Phòng tranh', 'Gallery') + '</span></button>' +
+      '<button type="button" data-a="prog" class="' + qBtn + '"><svg class="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg><span>' + T('Tiến triển DASS', 'DASS progress') + '</span></button>' +
+      '<button type="button" data-a="sci" class="' + qBtn + '"><svg class="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg><span>' + T('Cơ sở khoa học', 'Science') + '</span></button>' +
+      '</div>';
     secEl.innerHTML = h;
   }
   function refreshAll() { renderSection(); renderCmp(); }
@@ -5009,10 +5052,10 @@
   function mount() {
     var scr = $('screen-dass-result'), back = $('btn-dass-result-back'), rec = $('recommendation-text');
     if (!scr || !back || !rec) return;
-    var box = rec.parentNode;
+    var box = rec.closest('.mx-dass-only') || rec.parentNode;
     careEl = D.createElement('div'); careEl.id = 'mx2-care'; careEl.className = 'mx-dass-only mb-4 empty:hidden';
     cmpEl = D.createElement('div'); cmpEl.id = 'mx2-cmp'; cmpEl.className = 'mx-dass-only mb-4 empty:hidden';
-    box.parentNode.insertBefore(careEl, box.nextSibling); box.parentNode.insertBefore(cmpEl, careEl.nextSibling);
+    box.parentNode.insertBefore(careEl, box); box.parentNode.insertBefore(cmpEl, box.nextSibling);
     secEl = D.createElement('div'); secEl.id = 'mx2-sec';
     back.parentNode.parentNode.insertBefore(secEl, back.parentNode);
     var mg = scr.querySelector('.btn-art-mode'); mg = mg && mg.parentNode;
