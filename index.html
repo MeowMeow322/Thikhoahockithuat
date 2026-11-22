@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#1a73e8">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="icon-192.png">
-  <meta name="description" content="Đánh giá sức khỏe tinh thần theo thang DASS và thư giãn bằng hội họa trị liệu dành cho học sinh.">
+  <meta name="description" content="Đánh giá sức khỏe tinh thần theo thang chuẩn DASS-21/42 và thực hành hội họa trị liệu kết hợp AI dành cho mọi lứa tuổi.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <title>Thi khoa học kỹ thuật</title>
@@ -229,6 +229,8 @@
   #art-canvas { max-width: 100% !important; height: auto !important; }
   .canvas-dot-grid { position: relative !important; }
   .canvas-dot-grid::after { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 5; background-image: radial-gradient(rgba(95, 99, 104, 0.45) 1.5px, transparent 1.5px) !important; background-size: 24px 24px !important; }
+  .canvas-grid-3x3 { position: relative !important; }
+  .canvas-grid-3x3::before { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 6; background-image: linear-gradient(to right, transparent 33.1%, rgba(154, 160, 166, 0.65) 33.1%, rgba(154, 160, 166, 0.65) 33.45%, transparent 33.45%, transparent 66.5%, rgba(154, 160, 166, 0.65) 66.5%, rgba(154, 160, 166, 0.65) 66.85%, transparent 66.85%), linear-gradient(to bottom, transparent 33.1%, rgba(154, 160, 166, 0.65) 33.1%, rgba(154, 160, 166, 0.65) 33.45%, transparent 33.45%, transparent 66.5%, rgba(154, 160, 166, 0.65) 66.5%, rgba(154, 160, 166, 0.65) 66.85%, transparent 66.85%); }
 
   main > section:not(.hidden) { animation: fade .22s ease backwards !important; }
   .q-swap { animation: fade .22s ease !important; }
@@ -291,7 +293,7 @@
       <h2 class="text-xl font-bold text-[#1f2421] dark:text-[#edf2ef] mb-1.5">Bắt đầu phiên tự đánh giá</h2>
       <p class="text-xs text-slate-600 dark:text-slate-400 mb-5 leading-relaxed">Công cụ tự đánh giá theo thang DASS kết hợp hoạt động vẽ thư giãn. Mọi dữ liệu chỉ lưu trên máy của bạn.</p>
 
-      <div class="text-left mb-5">
+      <div class="text-left mb-4">
         <label class="block text-xs font-semibold text-[#1f2421] dark:text-slate-200 mb-1.5">
           Tên hoặc biệt danh của bạn:
         </label>
@@ -299,6 +301,16 @@
         <p id="name-error-msg" class="hidden text-rose-600 text-[11px] font-medium mt-1.5 flex items-center">
           <i data-lucide="alert-circle" class="w-3.5 h-3.5 mr-1"></i> Vui lòng nhập tên để bắt đầu.
         </p>
+      </div>
+
+      <div class="text-left mb-5">
+        <div class="text-xs font-semibold text-[#202124] dark:text-[#e8eaed] mb-1.5">Nhóm của bạn (để AI gợi ý phù hợp hơn):</div>
+        <div id="audience-picker" class="grid grid-cols-2 gap-1.5">
+          <button type="button" data-aud="general" class="px-2.5 py-2 rounded-md border text-xs font-medium text-left bg-[#e8f0fe] dark:bg-[#303134] border-[#1a73e8] dark:border-[#8ab4f8] text-[#1a73e8] dark:text-[#8ab4f8]">Mọi người (Chung)</button>
+          <button type="button" data-aud="student" class="px-2.5 py-2 rounded-md border text-xs font-medium text-left bg-white dark:bg-[#202124] border-[#dadce0] dark:border-[#3c4043] text-[#202124] dark:text-[#e8eaed]">Học sinh · Sinh viên</button>
+          <button type="button" data-aud="worker" class="px-2.5 py-2 rounded-md border text-xs font-medium text-left bg-white dark:bg-[#202124] border-[#dadce0] dark:border-[#3c4043] text-[#202124] dark:text-[#e8eaed]">Người đi làm</button>
+          <button type="button" data-aud="adult" class="px-2.5 py-2 rounded-md border text-xs font-medium text-left bg-white dark:bg-[#202124] border-[#dadce0] dark:border-[#3c4043] text-[#202124] dark:text-[#e8eaed]">Gia đình · Người trưởng thành</button>
+        </div>
       </div>
 
       <button id="btn-start-dass" class="w-full py-3 bg-[#1f5c4a] hover:bg-[#184a3b] text-white font-semibold rounded-lg text-sm flex items-center justify-center">
@@ -414,6 +426,8 @@
               <span id="btn-rec-start-label">Bắt đầu ngay</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 pointer-events-none"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </button>
+            <button id="btn-ai-explain-dass" type="button" class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[#202124] dark:text-[#e8eaed] hover:border-[#1a73e8] text-xs font-medium">AI giải thích chi tiết kết quả này</button>
+            <div id="ai-dass-explanation" class="hidden p-2.5 rounded-md bg-white dark:bg-[#292a2d] border border-[#dadce0] dark:border-[#3c4043] text-xs text-[#202124] dark:text-[#e8eaed] leading-relaxed"></div>
           </div>
         </div>
 
@@ -441,7 +455,7 @@
             <button id="mx-ai-open" type="button" class="w-full flex items-center gap-3 p-3 rounded-md bg-white dark:bg-[#303134] border border-[#dadce0] dark:border-[#3c4043] hover:border-[#1a73e8] text-left transition-colors">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 shrink-0 text-[#202124] dark:text-[#e8eaed] pointer-events-none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
               <div class="min-w-0"><div class="font-semibold text-xs mb-0.5 text-[#202124] dark:text-[#e8eaed]">AI hỗ trợ tâm lý</div>
-              <div class="text-[11px] text-[#5f6368] dark:text-[#9aa0a6]">Trò chuyện để được lắng nghe và gợi ý thư giãn (chỉ tham khảo, không thay thế chuyên gia).</div></div>
+              <div class="text-[11px] text-[#5f6368] dark:text-[#9aa0a6]">Lưu ý: AI chỉ hỗ trợ lắng nghe và gợi ý thư giãn, không chẩn đoán y khoa và không thay thế người thân, người bạn tin cậy hay chuyên gia tâm lý.</div></div>
             </button>
           </div>
         </div>
@@ -557,10 +571,35 @@
           </div>
         </div>
 
+          <div id="ai-starter-bar" class="hidden w-full mb-2.5 p-2.5 rounded-md bg-[#f8f9fa] dark:bg-[#303134] border border-[#dadce0] dark:border-[#3c4043] text-xs">
+            <div class="flex flex-wrap items-center gap-1.5">
+              <input id="ai-starter-input" type="text" maxlength="100" placeholder="AI tạo mẫu dễ vẽ (ví dụ: tách trà ấm, chồi cây nhỏ)..." class="flex-1 min-w-[12rem] px-2.5 py-1.5 rounded-md border border-[#80868b] bg-white dark:bg-[#202124] text-xs text-[#202124] dark:text-[#e8eaed]">
+              <button id="btn-ai-starter-gen" type="button" class="px-3 py-1.5 rounded-md bg-[#1a73e8] text-white dark:bg-[#8ab4f8] dark:text-[#202124] text-xs font-semibold whitespace-nowrap">Tạo mẫu AI dễ vẽ</button>
+            </div>
+            <div id="ai-starter-chips" class="flex flex-wrap items-center gap-1.5 mt-2">
+              <button type="button" data-stchip="Tách trà ấm" class="px-2 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px]">Tách trà ấm</button>
+              <button type="button" data-stchip="Chồi cây nhỏ" class="px-2 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px]">Chồi cây nhỏ</button>
+              <button type="button" data-stchip="Ngọn đồi &amp; mặt trời" class="px-2 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px]">Ngọn đồi &amp; mặt trời</button>
+              <button type="button" data-stchip="Chú chim nhỏ" class="px-2 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px]">Chú chim nhỏ</button>
+            </div>
+            <div id="ai-starter-controls" class="hidden flex flex-wrap items-center gap-2 mt-2 pt-2 border-t border-[#dadce0] dark:border-[#3c4043]">
+              <button id="btn-starter-trace" type="button" class="px-2.5 py-1 rounded-md border border-[#1a73e8] bg-[#e8f0fe] dark:bg-[#1e4273] text-[#1a73e8] dark:text-[#8ab4f8] text-[11px] font-semibold">Giấy can mờ</button>
+              <button id="btn-starter-ref" type="button" class="px-2.5 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px] font-medium">Khung mẫu góc</button>
+              <button id="btn-starter-3x3" type="button" class="px-2.5 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px] font-medium">Lưới căn hình 3x3</button>
+              <button id="btn-starter-toggle" type="button" class="px-2.5 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px] font-medium">Ẩn mẫu AI</button>
+              <label class="inline-flex items-center gap-1.5 text-[11px] text-[#5f6368] dark:text-[#9aa0a6]"><span>Độ mờ</span><input id="ai-starter-opacity" type="range" min="0" max="60" value="28" class="w-16"></label>
+            </div>
+            <p id="ai-starter-msg" class="hidden mt-1.5 text-[11px] text-[#5f6368] dark:text-[#9aa0a6]"></p>
+          </div>
+
         <div class="relative w-full mx-auto bg-white rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-inner cursor-crosshair">
           <div id="loading-spinner" class="absolute inset-0 bg-white/80 dark:bg-slate-900/80 flex flex-col items-center justify-center z-10 hidden">
             <div class="w-8 h-8 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mb-2"></div>
             <span class="text-xs font-semibold text-teal-800 dark:text-teal-200">Đang tải tranh tô màu...</span>
+          </div>
+          <img id="ai-starter-overlay" alt="" class="hidden absolute inset-0 w-full h-full object-contain pointer-events-none select-none z-[4]" style="opacity:0.28;mix-blend-mode:multiply;">
+          <div id="ai-starter-ref" class="hidden absolute top-2 right-2 z-20 w-[120px] h-[120px] bg-white border border-[#dadce0] rounded-md shadow overflow-hidden cursor-pointer" title="Bấm để phóng to / thu nhỏ mẫu">
+            <img id="ai-starter-ref-img" alt="Mẫu AI" class="w-full h-full object-contain block">
           </div>
           <canvas id="art-canvas" class="touch-none block mx-auto"></canvas>
         </div>
@@ -2127,6 +2166,7 @@
       const sec = window.__artSessionStart ? Math.max(1, Math.round((Date.now() - window.__artSessionStart) / 1000)) : 0;
       const mm = String(Math.floor(sec / 60)).padStart(2, '0'), ss = String(sec % 60).padStart(2, '0');
       const cov = stats && Number.isFinite(stats.coverage) ? Math.round(stats.coverage) : 0;
+      window.__lastSpectrum = { coolPct: pCool, warmPct: pWarm, neutralPct: pNeu, coveragePct: cov, durationSec: sec };
       box.innerHTML =
         `<div class="font-semibold text-[#202124] dark:text-[#e8eaed] mb-1.5">${isEn ? 'Color Spectrum & Mindful Time' : 'Phổ Màu Sắc & Thời Gian Tĩnh Tâm'}</div>` +
         `<div class="w-full h-2 rounded-sm overflow-hidden flex bg-[#dadce0] dark:bg-[#3c4043] mb-2">` +
@@ -2812,7 +2852,9 @@
            </div>`).join('')}</div>`;
       hist.firstElementChild.innerHTML = `<h3 class="${H}">Lịch sử của bạn</h3>
         <p class="text-[11px] text-slate-400 mb-3">Dữ liệu chỉ lưu trên thiết bị này, không gửi đi đâu cả.</p>${body}
-        ${all.length ? `<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4"><button type="button" data-report class="${BTN}">Xuất báo cáo (PDF)</button><button type="button" data-export-csv class="${BTN}">Xuất bảng số liệu (.CSV)</button></div>` : ''}
+        <button type="button" data-ai-journey class="${BTN} w-full mt-3">AI Phân Tích Hành Trình Của Bạn</button>
+        <div id="hist-ai-journey" class="hidden mt-2 p-3 rounded-md bg-[#f8f9fa] dark:bg-[#303134] border border-[#dadce0] dark:border-[#3c4043] text-xs leading-relaxed whitespace-pre-line"></div>
+        ${all.length ? `<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3"><button type="button" data-report class="${BTN}">Xuất báo cáo (PDF)</button><button type="button" data-export-csv class="${BTN}">Xuất bảng số liệu (.CSV)</button></div>` : ''}
         <div class="grid grid-cols-2 gap-2 mt-2"><button type="button" data-backup-json class="${BTN}">Sao lưu (.JSON)</button><button type="button" data-restore-json class="${BTN}">Khôi phục (.JSON)</button></div>
         <div class="flex gap-2 mt-3"><button type="button" data-close class="${BTN} flex-1">Đóng</button>${full.length ? `<button type="button" data-clear class="${BTN} flex-1 !text-red-500">${histUser === 'all' ? 'Xóa tất cả' : 'Xóa lịch sử người này'}</button>` : ''}</div>`;
       show(hist);
@@ -2823,6 +2865,7 @@
       else if (e.target.closest('[data-export-csv]')) exportCsv(histCur);
       else if (e.target.closest('[data-backup-json]')) backupJson();
       else if (e.target.closest('[data-restore-json]')) restoreJson();
+      else if (e.target.closest('[data-ai-journey]')) { if (window.__runAiJourney) window.__runAiJourney(hist.querySelector('#hist-ai-journey'), e.target.closest('[data-ai-journey]')); }
       else if (e.target.closest('[data-clear]') && confirm(histUser === 'all' ? 'Xóa toàn bộ lịch sử trên thiết bị này?' : `Xóa lịch sử của ${histUser}?`)) {
         store(histUser === 'all' ? [] : load().filter(r => r.name !== histUser)); openHistory();
       }
@@ -3382,7 +3425,21 @@
           ${Object.entries(SCALES).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join('')}
         </select>
       </div>
-      <p id="ml-inst" class="text-[11px] text-teal-700 dark:text-teal-300 mt-2 font-semibold"></p>`;
+      <p id="ml-inst" class="text-[11px] text-teal-700 dark:text-teal-300 mt-2 font-semibold"></p>
+      <div class="mt-3 p-3 rounded-md bg-[#f8f9fa] dark:bg-[#303134] border border-[#dadce0] dark:border-[#3c4043] text-xs">
+        <div class="font-semibold text-[#202124] dark:text-[#e8eaed] mb-1.5">AI Phổ Nhạc Theo Cảm Xúc</div>
+        <div class="flex flex-wrap items-center gap-1.5 mb-2">
+          <button type="button" data-mltheme="Mưa đêm yên bình" class="px-2.5 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px]">Mưa đêm yên bình</button>
+          <button type="button" data-mltheme="Nắng sớm rừng thông" class="px-2.5 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px]">Nắng sớm rừng thông</button>
+          <button type="button" data-mltheme="Sóng biển vỗ về" class="px-2.5 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px]">Sóng biển vỗ về</button>
+          <button type="button" data-mltheme="Tĩnh tâm sâu" class="px-2.5 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px]">Tĩnh tâm sâu</button>
+        </div>
+        <div class="flex flex-wrap items-center gap-1.5">
+          <input id="ml-ai-input" type="text" maxlength="80" placeholder="Nhập cảm xúc hoặc khung cảnh âm nhạc..." class="flex-1 min-w-[12rem] px-2.5 py-1.5 rounded-md border border-[#80868b] bg-white dark:bg-[#202124] text-xs text-[#202124] dark:text-[#e8eaed]">
+          <button type="button" id="ml-ai-gen" class="px-3 py-1.5 rounded-md bg-[#1a73e8] text-white dark:bg-[#8ab4f8] dark:text-[#202124] text-xs font-semibold whitespace-nowrap">AI Vẽ Giai Điệu</button>
+        </div>
+        <p id="ml-ai-msg" class="hidden mt-1.5 text-[11px] text-[#5f6368] dark:text-[#9aa0a6]"></p>
+      </div>`;
     gallery.parentElement.appendChild(sec);
 
     const $ = (id) => sec.querySelector('#' + id);
@@ -3596,6 +3653,72 @@
       cur = null; stopPreview(); draw();
     };
     cv.addEventListener('pointerup', end);
+    function localMelody(theme) {
+      const seed = Array.from(String(theme || 'calm')).reduce((a, c) => a + c.charCodeAt(0), 0);
+      const out = [];
+      for (let i = 0; i < 7; i++) {
+        const ci = (seed + i) % INST.length;
+        const x0 = 0.06 + (i * 0.11) % 0.55;
+        const len = 0.22 + ((seed + i * 7) % 18) / 100;
+        const yBase = 0.22 + ((i * 13 + seed) % 55) / 100;
+        const pts = [];
+        for (let k = 0; k < 5; k++) {
+          const x = Math.min(0.95, x0 + (len * k) / 4);
+          const y = Math.max(0.15, Math.min(0.85, yBase + Math.sin(k * 1.3 + i) * 0.08));
+          pts.push([x, y]);
+        }
+        out.push({ ci, pts });
+      }
+      return { bpm: 60 + (seed % 16), strokes: out };
+    }
+    const mlAiBtn = $('ml-ai-gen'), mlAiInp = $('ml-ai-input'), mlAiMsg = $('ml-ai-msg');
+    let mlAiBusy = false;
+    function runAiMelody(themeText) {
+      if (mlAiBusy) return;
+      const theme = String(themeText != null ? themeText : (mlAiInp ? mlAiInp.value : '')).trim() || 'Mưa đêm yên bình';
+      if (mlAiInp) mlAiInp.value = theme;
+      mlAiBusy = true;
+      if (mlAiBtn) mlAiBtn.disabled = true;
+      if (mlAiMsg) { mlAiMsg.textContent = 'AI đang sáng tác giai điệu ngũ cung...'; mlAiMsg.classList.remove('hidden'); }
+      const applyMel = (mel) => {
+        pushUndo();
+        strokes = [];
+        const raw = (mel && Array.isArray(mel.strokes)) ? mel.strokes : localMelody(theme).strokes;
+        raw.slice(0, 10).forEach((st) => {
+          const ci = Math.max(0, Math.min(INST.length - 1, Number(st.colorIdx ?? st.ci) || 0));
+          const pts = (Array.isArray(st.pts) ? st.pts : []).filter((p) => Array.isArray(p) && p.length >= 2).map((p) => [Math.max(0.04, Math.min(0.96, Number(p[0]) || 0.1)), Math.max(0.12, Math.min(0.88, Number(p[1]) || 0.5))]);
+          if (pts.length >= 2) strokes.push({ ci, pts });
+        });
+        if (!strokes.length) strokes = localMelody(theme).strokes;
+        bpm = Math.max(56, Math.min(76, Number(mel && mel.bpm) || 64));
+        scaleKey = 'penta';
+        const scSel = $('ml-scale'); if (scSel) scSel.value = 'penta';
+        const spSlider = $('ml-speed'), spN = $('ml-speed-n');
+        if (spSlider) spSlider.value = String(Math.round((bpm / 90) * 100));
+        if (spN) spN.textContent = (bpm / 90).toFixed(1) + 'x';
+        draw();
+        pause();
+        play();
+        if (mlAiMsg) mlAiMsg.textContent = 'Đã vẽ giai điệu "' + theme + '" (' + bpm + ' BPM). Bạn có thể vẽ thêm nét nhạc của riêng mình!';
+      };
+      const acM = typeof AbortController === 'function' ? new AbortController() : null;
+      const tmM = acM ? setTimeout(() => acM.abort(), 14000) : null;
+      const audM = (() => { try { return localStorage.getItem('mindart_audience') || 'general'; } catch (_) { return 'general'; } })();
+      fetch('https://thikhoahockithuat.lexuandang0302.workers.dev', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ task: 'ai_melody', theme, audience: audM, lang: (window.__lang && window.__lang() === 'en') ? 'en' : 'vi' }),
+        signal: acM ? acM.signal : undefined
+      }).then((r) => r.json().catch(() => ({}))).then((j) => {
+        if (j && j.melody && Array.isArray(j.melody.strokes)) applyMel(j.melody);
+        else applyMel(localMelody(theme));
+      }).catch(() => applyMel(localMelody(theme))).finally(() => {
+        if (tmM) clearTimeout(tmM);
+        mlAiBusy = false;
+        if (mlAiBtn) mlAiBtn.disabled = false;
+      });
+    }
+    if (mlAiBtn) mlAiBtn.addEventListener('click', () => runAiMelody());
+    sec.querySelectorAll('[data-mltheme]').forEach((b) => b.addEventListener('click', () => runAiMelody(b.getAttribute('data-mltheme'))));
     cv.addEventListener('pointercancel', end);
 
     function setTool(t) {
@@ -4351,7 +4474,7 @@
     var D = {
       'new': ['Cuộc trò chuyện mới', 'New chat'], dtitle: ['Trợ lý AI', 'AI assistant'], dnew: ['Mới', 'New'], dexp: ['Mở rộng', 'Expand'], hist: ['Lịch sử trò chuyện', 'Chat history'], histBtn: ['Lịch sử', 'History'], clear: ['Xóa tất cả lịch sử', 'Delete all history'],
       back: ['Quay lại', 'Back'], help: ['Hỗ trợ', 'Help'], close: ['Đóng', 'Close'],
-      note: ['AI chỉ hỗ trợ một phần, không chẩn đoán và không thay thế ba mẹ, thầy cô hay chuyên gia tâm lý.', 'AI offers partial support only. It does not diagnose and cannot replace parents, teachers or professionals.'],
+      note: ['Lưu ý: AI chỉ hỗ trợ lắng nghe và gợi ý thư giãn, không chẩn đoán y khoa và không thay thế người thân, người bạn tin cậy hay chuyên gia tâm lý.', 'Note: The AI only listens and suggests relaxation exercises; it does not diagnose and does not replace loved ones, trusted peers, or mental health professionals.'],
       supT: ['Cần được hỗ trợ?', 'Need support?'], supP: ['Hãy nói với người bạn tin tưởng: ba mẹ, thầy cô hoặc cô thầy phụ trách tâm lý của trường.', 'Talk to someone you trust: a parent, teacher or the school counselor.'],
       s111: ['Tổng đài quốc gia bảo vệ trẻ em: miễn phí, 24/7, có tư vấn tâm lý', 'National Child Protection Hotline: free, 24/7, with counseling'],
       s115: ['Cấp cứu y tế (khi bạn hoặc ai đó đang nguy hiểm)', 'Medical emergency (when you or someone is in danger)']
@@ -4432,7 +4555,11 @@
     var fail = function (e) { c.msgs.pop(); inp.value = m; err = e; };
     var ac = typeof AbortController === 'function' ? new AbortController() : null;
     var tm = ac ? setTimeout(function () { ac.abort(); }, 20000) : null;
-    fetch(CHAT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: m, history: hist, lang: en() ? 'en' : 'vi' }), signal: ac ? ac.signal : undefined })
+    var aud = (function () { try { return localStorage.getItem('mindart_audience') || 'general'; } catch (_) { return 'general'; } })();
+    var chatCtx = { audience: aud };
+    try { if (window.__mx2dass) chatCtx.dass = window.__mx2dass; } catch (_) {}
+    try { if (typeof activeArtMode === 'string' && activeArtMode) chatCtx.recentMode = activeArtMode; } catch (_) {}
+    fetch(CHAT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: m, history: hist, lang: en() ? 'en' : 'vi', audience: aud, context: chatCtx }), signal: ac ? ac.signal : undefined })
       .then(function (r) { if (tm) clearTimeout(tm); return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d }; }); })
       .then(function (x) { if (x.ok && x.d.reply) c.msgs.push({ role: 'model', text: x.d.reply, crisis: !!x.d.crisis }); else fail((x.d && x.d.error) || T('Trợ lý đang bận, bạn thử lại sau nhé.', 'The assistant is busy, please try again later.')); })
       .catch(function () { fail(T('Không kết nối được. Hãy kiểm tra mạng rồi thử lại.', 'Could not connect. Check your connection and try again.')); })
@@ -5062,25 +5189,46 @@
     else { m.removeAttribute('aria-hidden'); m.inert = false; }
   }
   aiM.querySelector('.mx2-x')?.addEventListener('click', function () { setBgModalInert(false); });
+  function grabSmallArt() {
+    try {
+      var src = (S && !($('mx2-studio') && $('mx2-studio').classList.contains('hidden')) ? $('st-cv') : null) || $('art-canvas');
+      if (!src || !src.width || !src.height) return '';
+      var maxS = 360, sc = Math.min(1, maxS / Math.max(src.width, src.height));
+      var tmp = D.createElement('canvas');
+      tmp.width = Math.max(1, Math.round(src.width * sc));
+      tmp.height = Math.max(1, Math.round(src.height * sc));
+      var c2 = tmp.getContext('2d');
+      c2.fillStyle = '#ffffff';
+      c2.fillRect(0, 0, tmp.width, tmp.height);
+      c2.drawImage(src, 0, 0, tmp.width, tmp.height);
+      return tmp.toDataURL('image/jpeg', 0.6);
+    } catch (_) { return ''; }
+  }
+  function getAud() { try { return localStorage.getItem('mindart_audience') || 'general'; } catch (_) { return 'general'; } }
   function askAI(ctx) {
-    mb(aiM).innerHTML = '<h3 class="' + H3 + '">' + T('Câu hỏi gợi mở', 'Open questions') + '</h3><p class="text-sm py-6 text-center text-slate-500">' + T('Đang suy nghĩ vài câu hỏi cho bạn...', 'Thinking of a few questions for you...') + '</p>';
+    mb(aiM).innerHTML = '<h3 class="' + H3 + '">' + T('AI ngắm tranh & Câu hỏi gợi mở', 'AI Visual Reflection & Questions') + '</h3><p class="text-sm py-6 text-center text-slate-500">' + T('AI đang quan sát màu sắc và đường nét trong tranh của bạn...', 'AI is observing the colors and strokes in your artwork...') + '</p>';
     setBgModalInert(true);
     showM(aiM);
     var num = function (v) { return typeof v === 'number' && v >= 1 && v <= 5 ? v : null; };
-    callWorker({ task: 'art_questions', mode: ctx.mode, title: ctx.title || '', note: ctx.note || '', before: num(ctx.before), after: num(ctx.after) }, 25000)
+    var img = (ctx && ctx.image) || grabSmallArt();
+    var sp = window.__lastSpectrum || null;
+    callWorker({ task: 'art_questions', mode: ctx.mode, title: ctx.title || '', note: ctx.note || '', before: num(ctx.before), after: num(ctx.after), image: img, spectrum: sp, audience: getAud() }, 28000)
       .then(function (j) {
         if (j.crisis) { renderAsk(null, false, j.reply); return; }
-        var q = parseQs(j.reply);
-        if (q.length >= 2) renderAsk(q, false); else renderAsk(fallbackQs(ctx.mode), true);
+        var rawLines = String(j.reply || '').split(/\n+/).map(function (s) { return s.replace(/^[\s*\-•\d.)]+/, '').trim(); }).filter(function (s) { return s.length > 6; });
+        var obs = rawLines.length >= 4 ? rawLines[0] : '';
+        var qs = rawLines.length >= 4 ? rawLines.slice(1, 4) : parseQs(j.reply);
+        if (qs.length >= 2) renderAsk(qs, false, null, obs); else renderAsk(fallbackQs(ctx.mode), true);
       }, function () { renderAsk(fallbackQs(ctx.mode), true); });
   }
-  function renderAsk(qs, fb, crisis) {
-    var h = '<h3 class="' + H3 + '">' + (crisis ? T('Mình ở đây với bạn', 'I am here with you') : T('Câu hỏi gợi mở', 'Open questions')) + '</h3>';
+  function renderAsk(qs, fb, crisis, obs) {
+    var h = '<h3 class="' + H3 + '">' + (crisis ? T('Mình ở đây với bạn', 'I am here with you') : T('AI ngắm tranh & Câu hỏi gợi mở', 'AI Visual Reflection & Questions')) + '</h3>';
     if (crisis) h += '<p class="text-sm leading-relaxed">' + esc(crisis) + '</p>';
     else {
-      h += '<p class="text-xs text-slate-500 dark:text-slate-400 mb-3">' + T('Những câu hỏi này để bạn tự nhìn lại bức vẽ và cảm xúc của mình. AI không diễn giải hay đánh giá tâm lý từ bức vẽ.', 'These questions are for you to reflect on your drawing and feelings. The AI does not interpret or judge your mind from a drawing.') + (fb ? ' ' + T('(Gợi ý có sẵn vì AI đang bận.)', '(Built-in questions because the AI is busy.)') : '') + '</p>' +
+      if (obs) h += '<p class="text-xs p-2.5 mb-3 rounded-md bg-[#e8f0fe] dark:bg-[#303134] text-[#202124] dark:text-[#e8eaed] leading-relaxed">' + esc(obs) + '</p>';
+      h += '<p class="text-xs text-slate-500 dark:text-slate-400 mb-3">' + T('Những câu hỏi này để bạn tự nhìn lại bức vẽ và cảm xúc của mình. AI không chẩn đoán tâm lý từ bức vẽ.', 'These questions are for you to reflect on your drawing and feelings. The AI does not diagnose from a drawing.') + (fb ? ' ' + T('(Gợi ý có sẵn vì AI đang bận.)', '(Built-in questions because the AI is busy.)') : '') + '</p>' +
         '<ol class="list-decimal pl-5 space-y-2 text-sm leading-relaxed">' + qs.map(function (q) { return '<li>' + esc(q) + '</li>'; }).join('') + '</ol>' +
-        '<p class="text-[11px] text-slate-400 mt-3">' + T('Bạn có thể viết câu trả lời vào nhật ký một dòng hoặc kể với người bạn tin.', 'You can write an answer in your one-line diary or tell someone you trust.') + '</p>';
+        '<p class="text-[11px] text-slate-400 mt-3">' + T('Bạn có thể viết câu trả lời vào nhật ký một dòng hoặc chia sẻ với người bạn tin cậy.', 'You can write an answer in your one-line diary or share with someone you trust.') + '</p>';
     }
     h += '<div class="flex gap-2 mt-4">' + (window.mxChat ? '<button type="button" data-a="chat" class="' + BTN + ' flex-1">' + T('Trò chuyện với AI', 'Chat with AI') + '</button>' : '') + '<button type="button" data-a="x" class="' + PRI + ' flex-1">' + T('Đóng', 'Close') + '</button></div>';
     mb(aiM).innerHTML = h;
@@ -5294,10 +5442,10 @@
     if (!high) { careEl.innerHTML = ''; return; }
     var strong = level >= 3;
     var body = byScore
-      ? T('Điểm tự đánh giá đang ở mức cao (chỉ mang tính tham khảo). Hãy chia sẻ với ba mẹ, thầy cô hoặc chuyên gia tâm lý gần bạn lúc này.', 'Your score is high (reference only). Please reach out to a parent, teacher or trusted adult right now.')
+      ? T('Điểm tự đánh giá đang ở mức cao (chỉ mang tính tham khảo). Hãy chia sẻ với người thân, bạn bè tin cậy, chuyên gia tâm lý hoặc cơ sở y tế gần bạn lúc này.', 'Your score is high (reference only). Please reach out to a loved one, trusted peer, mental health professional, or nearby clinic right now.')
       : strong
-      ? T('Bạn vừa chọn mức cao nhất ở câu về cảm giác nặng nề. Đây không phải chẩn đoán, nhưng hãy ở cạnh và chia sẻ với người lớn bạn tin ngay lúc này.', 'You chose the highest level for heavy feelings. This is not a diagnosis, but please talk to a trusted adult right now.')
-      : T('Bạn vừa chọn mức cao ở một số câu về cảm giác nặng nề. Hôm nay hãy chia sẻ với ba mẹ, thầy cô hoặc cô thầy tâm lý học đường nhé.', 'You chose high levels for some heavy feelings. Please talk to a parent, teacher or school counselor today.');
+      ? T('Bạn vừa chọn mức cao nhất ở câu về cảm giác nặng nề. Đây không phải chẩn đoán, nhưng hãy ở cạnh và chia sẻ với người thân, bạn bè tin cậy hoặc chuyên gia tâm lý ngay lúc này.', 'You chose the highest level for heavy feelings. This is not a diagnosis, but please stay near and talk to a loved one, trusted friend, or professional right now.')
+      : T('Bạn vừa chọn mức cao ở một số câu về cảm giác nặng nề. Hôm nay hãy chia sẻ với người thân, bạn bè tin cậy hoặc chuyên gia tâm lý gần bạn nhé.', 'You chose high levels for some heavy feelings. Please talk to a loved one, trusted peer, or mental health professional today.');
     careEl.innerHTML = '<div class="p-3 rounded-md bg-rose-50/90 dark:bg-rose-950/35 border border-rose-200/90 dark:border-rose-900/80 text-xs text-slate-700 dark:text-slate-200 leading-snug">' +
       '<div class="flex items-start gap-2">' +
         '<span class="w-5 h-5 rounded bg-rose-100 dark:bg-rose-900/60 text-rose-600 dark:text-rose-300 flex items-center justify-center shrink-0 mt-0.5"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></span>' +
@@ -5353,8 +5501,23 @@
       '<p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-2">' + T('Thang đo DASS-21/42 (Lovibond & Lovibond, 1995) kết hợp các phương pháp hội họa trị liệu như Mandala (Curry & Kasser, 2005), Vẽ tự do/Chấm định tâm và Quét cơ thể giúp thư giãn, điều hòa cảm xúc ngắn hạn.', 'DASS-21/42 (Lovibond & Lovibond, 1995) paired with art-based relaxation such as Mandala coloring (Curry & Kasser, 2005), mindful drawing, and body scan.') + '</p>' +
       '<p class="text-[11px] text-slate-500 dark:text-slate-400">' + T('Lưu ý: Toàn bộ điểm số và hoạt động chỉ mang tính tham khảo và hỗ trợ thư giãn, không phải chẩn đoán y khoa.', 'Note: Scores and activities are for self-reflection and relaxation only, not medical diagnosis.') + '</p></div>' +
       '<div><button type="button" data-a="sci" class="' + PRI + '">' + T('Xem đầy đủ tài liệu tham khảo', 'View full scientific references') + '</button></div></div>';
-    cmpEl.innerHTML = '<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">' + progHtml + sciCard + '</div>';
+    var jCard = '<div class="' + CARD + ' mb-4"><div class="flex flex-wrap items-center justify-between gap-2"><div class="text-xs"><div class="font-semibold">' + T('AI Phân Tích Hành Trình & Quy Luật Cảm Xúc', 'AI Journey & Emotion Pattern Analysis') + '</div><div class="text-[11px] text-slate-500 dark:text-slate-400">' + T('Tổng hợp 10 phiên vẽ và 5 lần làm DASS gần nhất để tìm hoạt động hợp với bạn nhất.', 'Summarizes up to 10 recent drawings and 5 DASS logs to highlight what helps you most.') + '</div></div><button type="button" id="btn-ai-journey" data-a="journey" class="' + PRI + ' shrink-0">' + T('AI Phân Tích Hành Trình Của Bạn', 'Analyze My Journey with AI') + '</button></div><div id="tab3-ai-journey" class="hidden mt-3 p-3 rounded-md bg-[#f8f9fa] dark:bg-[#292a2d] border border-[#dadce0] dark:border-[#3c4043] text-xs leading-relaxed whitespace-pre-line"></div></div>';
+    cmpEl.innerHTML = jCard + '<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">' + progHtml + sciCard + '</div>';
   }
+  window.__runAiJourney = function (outEl, btn) {
+    if (!outEl) return;
+    outEl.classList.remove('hidden');
+    outEl.textContent = T('AI đang phân tích hành trình cảm xúc của bạn...', 'AI is analyzing your emotional journey...');
+    if (btn) btn.disabled = true;
+    var sessions = hist().slice(-10).map(function (x) { return { mode: x.mode, before: x.before, after: x.after, note: x.note || '' }; });
+    var dassLogs = myLogs().slice(-5).map(function (x) { return { d: x.d, a: x.a, s: x.s }; });
+    callWorker({ task: 'weekly_insight', sessions: sessions, dassLogs: dassLogs, audience: getAud() }, 25000)
+      .then(function (j) {
+        outEl.textContent = (j && j.reply) ? j.reply : T('Chưa đủ dữ liệu hoặc AI đang bận, bạn thử lại sau nhé.', 'Not enough data or AI is busy, please try again later.');
+      }, function () {
+        outEl.textContent = T('Không kết nối được máy chủ AI lúc này. Bạn thử lại sau giây lát nhé.', 'Could not reach AI server right now. Please try again shortly.');
+      }).then(function () { if (btn) btn.disabled = false; });
+  };
   function afterDass() {
     var v = function (k) { return parseInt(($('score-' + k) || {}).textContent, 10) || 0; };
     var cur = { t: Date.now(), v: (function () { try { return typeof activeDassVersion !== 'undefined' ? activeDassVersion : 21; } catch (_) { return 21; } })(), d: v('d'), a: v('a'), s: v('s'), name: uname() };
@@ -5487,7 +5650,7 @@
     ['angry', 'Bực, tức giận', 'Annoyed, angry', [['doodle', 'Cứ vẽ nét mạnh và nhanh để xả năng lượng, rồi vẽ chậm dần.', 'Draw strong, fast lines to release energy, then slow down.'], ['emotion', 'Tô cơn giận thành màu và hình dạng, rồi đặt tên cho nó.', 'Turn the anger into color and shape, then name it.']]],
     ['tired', 'Mệt mỏi', 'Tired', [['coloring', 'Tô màu nhẹ nhàng, không cần suy nghĩ nhiều.', 'Gentle coloring that needs little thinking.'], ['body', 'Quét cơ thể xem chỗ nào cần được nghỉ ngơi.', 'Scan to see what part of you needs rest.']]],
     ['empty', 'Trống rỗng', 'Empty, flat', [['emotion', 'Chọn một màu hợp với cảm giác này và để nét vẽ dẫn đường.', 'Pick a color that fits this feeling and let your lines lead.'], ['prompt', 'Một đề bài nhỏ giúp bạn bắt đầu mà không phải nghĩ.', 'A small prompt helps you begin without having to think.']]],
-    ['study', 'Áp lực học tập', 'Study pressure', [['trame', 'Năm phút chấm trame là một khoảng nghỉ cho đầu óc.', 'Five minutes of dots is a rest for your mind.'], ['body', 'Cổ, vai và tay thường căng khi học lâu, hãy quét cơ thể.', 'Neck, shoulders and hands tighten when studying, so scan your body.']]],
+    ['study', 'Áp lực công việc / học tập', 'Work or study pressure', [['trame', 'Năm phút chấm trame là một khoảng nghỉ cho đầu óc.', 'Five minutes of dots is a rest for your mind.'], ['body', 'Cổ, vai và tay thường căng khi làm việc hoặc học lâu, hãy quét cơ thể.', 'Neck, shoulders and hands tighten during long work or study, so scan your body.']]],
     ['ok', 'Ổn, muốn vẽ cho vui', 'Fine, just want to draw', [['prompt', 'Vẽ theo đề bài hôm nay.', 'Draw today\'s prompt.'], ['doodle', 'Vẽ tự do không cần lý do.', 'Free drawing for no reason.']]]
   ];
   var feelSel = null;
@@ -5615,6 +5778,18 @@
     h += '<div class="' + CARD + ' flex items-center justify-between gap-3"><div class="text-xs"><div class="font-semibold">' + T('SOS 60 giây — Neo giác quan 5-4-3-2-1', '60-second SOS — 5-4-3-2-1 Grounding') + '</div><div class="text-slate-500 dark:text-slate-400">' +
       T('Bài tập chạm nhanh 5 giác quan giúp hạ nhịp tim và quay về hiện tại ngay lập tức.', 'Quick 5-sense tap exercise to settle a racing heart and return to the present.') + '</div></div>' +
       '<button type="button" data-a="grounding" class="' + PRI + ' shrink-0">' + T('Bắt đầu', 'Start') + '</button></div></div></div>';
+    h += '<div id="mx2-cbt-card" class="' + CARD + ' mt-4"><div class="font-semibold text-xs mb-1">' + T('AI Gỡ Rối Suy Nghĩ & Thiết Kế Bài Vẽ (CBT Reframing)', 'AI Thought Reframing & 3-Min Drawing Prompt (CBT)') + '</div>' +
+      '<p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">' + T('Viết một suy nghĩ đang làm bạn nặng lòng để AI gợi ý góc nhìn cân bằng hơn và tạo ngay bài vẽ giải tỏa.', 'Write a heavy thought and let AI suggest a calmer perspective plus a custom 3-minute drawing prompt.') + '</p>' +
+      '<div class="flex flex-wrap gap-1.5 mb-2">' +
+      [
+        ['Quá tải công việc / học tập', 'Overwhelmed by work or study'],
+        ['Lo lắng về kết quả sắp tới', 'Worried about upcoming results'],
+        ['Cảm thấy kiệt sức, thiếu động lực', 'Feeling drained and unmotivated'],
+        ['Khó ngủ vì suy nghĩ miên man', 'Hard to sleep due to racing thoughts']
+      ].map(function (c) { return '<button type="button" data-a="cbt-chip" data-v="' + esc(T(c[0], c[1])) + '" class="px-2.5 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px]">' + esc(T(c[0], c[1])) + '</button>'; }).join('') +
+      '</div><div class="flex flex-col sm:flex-row gap-2"><input id="mx2-cbt-in" type="text" maxlength="200" placeholder="' + esc(T('Viết một suy nghĩ đang làm bạn nặng lòng...', 'Write a thought weighing on your mind...')) + '" class="flex-1 min-w-0 px-3 py-2 rounded-md border border-[#80868b] bg-white dark:bg-[#202124] text-xs">' +
+      '<button type="button" data-a="cbt-go" class="' + PRI + ' shrink-0 whitespace-nowrap">' + T('AI Gỡ rối & Tạo bài vẽ', 'Reframe & Create Prompt') + '</button></div>' +
+      '<div id="mx2-cbt-out" class="hidden mt-3 p-3 rounded-md bg-[#f8f9fa] dark:bg-[#292a2d] border border-[#dadce0] dark:border-[#3c4043] text-xs space-y-2"></div></div>';
     secEl.innerHTML = h;
     var tabs = $('dass-tabs');
     if (tabs) {
@@ -5639,6 +5814,41 @@
     else if (a === 'sci') openSci();
     else if (a === 'breath') breathe();
     else if (a === 'grounding') openGrounding();
+    else if (a === 'journey') { if (window.__runAiJourney) window.__runAiJourney($('tab3-ai-journey'), b); }
+    else if (a === 'cbt-chip') { var ci = $('mx2-cbt-in'); if (ci) { ci.value = b.getAttribute('data-v') || ''; ci.focus(); } }
+    else if (a === 'cbt-go') {
+      var inp = $('mx2-cbt-in'), out = $('mx2-cbt-out');
+      var th = inp ? inp.value.trim() : '';
+      if (!th) { toast(T('Bạn hãy viết suy nghĩ đang làm mình nặng lòng nhé.', 'Please enter a thought first.')); if (inp) inp.focus(); return; }
+      if (out) { out.classList.remove('hidden'); out.textContent = T('AI đang lắng nghe và thiết kế góc nhìn mới cho bạn...', 'AI is reframing and crafting your drawing prompt...'); }
+      b.disabled = true;
+      callWorker({ task: 'cbt_reframe', thought: th, audience: getAud() }, 25000).then(function (j) {
+        if (j.crisis && j.reply) { out.innerHTML = '<p class="text-rose-600 dark:text-rose-400">' + esc(j.reply) + '</p>'; return; }
+        var parts = String(j.reply || '').split('|||').map(function (s) { return s.trim(); }).filter(Boolean);
+        if (parts.length < 3) parts = [
+          T('Cảm ơn bạn đã gọi tên điều đang làm mình nặng lòng. Khi áp lực dồn lại, tâm trí dễ phóng đại nỗi lo.', 'Thank you for naming what weighs on you. Under pressure, our mind often magnifies worry.'),
+          T('Bạn không cần giải quyết mọi thứ ngay hôm nay; chỉ cần đi từng bước nhỏ và cho phép mình nghỉ ngơi.', 'You do not need to solve everything today; one small step and a brief pause are enough.'),
+          T('Vẽ một chiếc hộp nhỏ đặt tạm nỗi lo vào trong, bên cạnh là một ô cửa mở ra bầu trời thoáng.', 'Draw a small box holding the worry aside, next to a window opening to a clear sky.')
+        ];
+        window.__cbtPrompt = parts[2];
+        out.innerHTML =
+          '<div><b>' + T('1. Thấu cảm & Nhận diện:', '1. Empathy & Pattern:') + '</b> ' + esc(parts[0]) + '</div>' +
+          '<div><b>' + T('2. Góc nhìn cân bằng mới:', '2. Balanced Perspective:') + '</b> ' + esc(parts[1]) + '</div>' +
+          '<div><b>' + T('3. Đề bài vẽ 3 phút:', '3. 3-Min Drawing Prompt:') + '</b> ' + esc(parts[2]) + '</div>' +
+          '<button type="button" data-a="cbt-draw" class="' + PRI + ' mt-1">' + T('Vẽ ngay đề bài này', 'Draw This Prompt Now') + '</button>';
+      }, function () {
+        if (out) out.textContent = T('AI đang bận, bạn thử lại sau giây lát nhé.', 'AI is busy, please try again shortly.');
+      }).then(function () { b.disabled = false; });
+    }
+    else if (a === 'cbt-draw') {
+      launch('doodle');
+      setTimeout(function () {
+        var si = $('ai-starter-input');
+        if (si && window.__cbtPrompt) si.value = window.__cbtPrompt.slice(0, 100);
+        var fb = $('ai-feedback');
+        if (fb && window.__cbtPrompt) fb.textContent = window.__cbtPrompt;
+      }, 150);
+    }
   }
 
   var grM = modal('mx2-grounding', 68), grChecked = {};
@@ -6245,6 +6455,13 @@
         if (sBtn) sBtn.classList.toggle('hidden', !showTools);
         if (sqBtn) sqBtn.classList.toggle('hidden', !isDoodle);
         if (disBtn) disBtn.classList.toggle('hidden', !isDoodle);
+        var stBar = D.getElementById('ai-starter-bar');
+        if (stBar) stBar.classList.toggle('hidden', !isDoodle);
+        if (!isDoodle) {
+          var ov = D.getElementById('ai-starter-overlay'), rf = D.getElementById('ai-starter-ref');
+          if (ov) ov.classList.add('hidden');
+          if (rf) rf.classList.add('hidden');
+        }
         if (!showTools) {
           window.__sym6On = false;
           if (sBtn) { sBtn.setAttribute('aria-pressed', 'false'); sBtn.classList.remove('bg-[#1a73e8]', 'text-white', 'border-[#1a73e8]'); }
@@ -6255,6 +6472,104 @@
         return r;
       };
     }
+    var audBox = D.getElementById('audience-picker');
+    if (audBox) {
+      var curAud = (function () { try { return localStorage.getItem('mindart_audience') || 'general'; } catch (_) { return 'general'; } })();
+      var syncAud = function () {
+        audBox.querySelectorAll('[data-aud]').forEach(function (b) {
+          var on = b.getAttribute('data-aud') === curAud;
+          b.className = 'px-2.5 py-2 rounded-md border text-xs font-medium text-left ' + (on
+            ? 'bg-[#e8f0fe] dark:bg-[#1e4273] border-[#1a73e8] dark:border-[#8ab4f8] text-[#1a73e8] dark:text-[#8ab4f8] font-semibold'
+            : 'bg-white dark:bg-[#202124] border-[#dadce0] dark:border-[#3c4043] text-[#202124] dark:text-[#e8eaed]');
+        });
+      };
+      syncAud();
+      audBox.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-aud]'); if (!b) return;
+        curAud = b.getAttribute('data-aud') || 'general';
+        try { localStorage.setItem('mindart_audience', curAud); } catch (_) {}
+        syncAud();
+      });
+    }
+    var expBtn = D.getElementById('btn-ai-explain-dass'), expOut = D.getElementById('ai-dass-explanation');
+    if (expBtn && expOut) {
+      expBtn.addEventListener('click', function () {
+        var isEn = !!(window.__lang && window.__lang() === 'en');
+        var gv = function (id) { return parseInt((D.getElementById(id) || {}).textContent, 10) || 0; };
+        var d = gv('score-d'), a = gv('score-a'), s = gv('score-s');
+        var prev = null;
+        try { var logs = JSON.parse(localStorage.getItem('mindart_dass_log') || '[]'); if (logs.length >= 2) prev = logs[logs.length - 2]; } catch (_) {}
+        var aud = (function () { try { return localStorage.getItem('mindart_audience') || 'general'; } catch (_) { return 'general'; } })();
+        expOut.classList.remove('hidden');
+        expOut.textContent = isEn ? 'AI is preparing your personalized explanation...' : 'AI đang phân tích kết quả riêng cho bạn...';
+        expBtn.disabled = true;
+        fetch('https://thikhoahockithuat.lexuandang0302.workers.dev', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ task: 'explain_dass', d: d, a: a, s: s, prevD: prev ? prev.d : null, prevA: prev ? prev.a : null, prevS: prev ? prev.s : null, audience: aud, lang: isEn ? 'en' : 'vi' })
+        }).then(function (r) { return r.json().catch(function () { return {}; }); }).then(function (j) {
+          expOut.textContent = (j && j.reply) ? j.reply : (isEn ? 'AI is busy right now. Please try again shortly.' : 'AI đang bận, bạn thử lại sau giây lát nhé.');
+        }).catch(function () {
+          expOut.textContent = isEn ? 'Could not reach AI server.' : 'Không kết nối được máy chủ AI lúc này.';
+        }).then(function () { expBtn.disabled = false; });
+      });
+    }
+    var stGen = D.getElementById('btn-ai-starter-gen'), stIn = D.getElementById('ai-starter-input'), stMsg = D.getElementById('ai-starter-msg');
+    var stCtl = D.getElementById('ai-starter-controls'), stOv = D.getElementById('ai-starter-overlay'), stRef = D.getElementById('ai-starter-ref'), stRefImg = D.getElementById('ai-starter-ref-img');
+    var stTraceBtn = D.getElementById('btn-starter-trace'), stRefBtn = D.getElementById('btn-starter-ref'), stGridBtn = D.getElementById('btn-starter-3x3'), stTogBtn = D.getElementById('btn-starter-toggle'), stOp = D.getElementById('ai-starter-opacity');
+    var stMode = 'trace', stHidden = false, stBusy = false;
+    function syncStarterView() {
+      if (!stOv || !stRef) return;
+      var hasImg = !!(stOv.getAttribute('src'));
+      stOv.classList.toggle('hidden', !hasImg || stHidden || stMode !== 'trace');
+      stRef.classList.toggle('hidden', !hasImg || stHidden || stMode !== 'ref');
+      if (stTogBtn) stTogBtn.textContent = stHidden ? 'Hiện mẫu AI' : 'Ẩn mẫu AI';
+      if (stTraceBtn) stTraceBtn.className = 'px-2.5 py-1 rounded-md border text-[11px] font-semibold ' + (stMode === 'trace' ? 'border-[#1a73e8] bg-[#e8f0fe] dark:bg-[#1e4273] text-[#1a73e8] dark:text-[#8ab4f8]' : 'border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d]');
+      if (stRefBtn) stRefBtn.className = 'px-2.5 py-1 rounded-md border text-[11px] font-semibold ' + (stMode === 'ref' ? 'border-[#1a73e8] bg-[#e8f0fe] dark:bg-[#1e4273] text-[#1a73e8] dark:text-[#8ab4f8]' : 'border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d]');
+    }
+    function runStarter(topicText) {
+      if (stBusy) return;
+      var tp = String(topicText != null ? topicText : (stIn ? stIn.value : '')).trim().slice(0, 100);
+      if (!tp) { if (stMsg) { stMsg.textContent = 'Hãy nhập ý tưởng mẫu dễ vẽ nhé.'; stMsg.classList.remove('hidden'); } return; }
+      if (stIn) stIn.value = tp;
+      stBusy = true;
+      if (stGen) stGen.disabled = true;
+      if (stMsg) { stMsg.textContent = 'AI đang phác thảo hình mẫu tối giản dễ vẽ theo...'; stMsg.classList.remove('hidden'); }
+      var aud = (function () { try { return localStorage.getItem('mindart_audience') || 'general'; } catch (_) { return 'general'; } })();
+      fetch('https://thikhoahockithuat.lexuandang0302.workers.dev', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ task: 'generate_starter', topic: tp, audience: aud, lang: (window.__lang && window.__lang() === 'en') ? 'en' : 'vi' })
+      }).then(function (r) { return r.json().catch(function () { return {}; }); }).then(function (j) {
+        if (!j || !j.image) throw new Error(j && j.error || 'err');
+        if (stOv) stOv.src = j.image;
+        if (stRefImg) stRefImg.src = j.image;
+        if (stCtl) stCtl.classList.remove('hidden');
+        stHidden = false;
+        syncStarterView();
+        if (stMsg) stMsg.textContent = 'Đã tạo mẫu "' + tp + '". Bạn có thể đồ trực tiếp lên giấy can mờ hoặc bật khung mẫu góc & lưới 3x3!';
+      }).catch(function (e) {
+        if (stMsg) stMsg.textContent = (e && e.message && e.message !== 'err') ? e.message : 'Không tạo được mẫu lúc này, bạn thử lại nhé.';
+      }).then(function () { stBusy = false; if (stGen) stGen.disabled = false; });
+    }
+    if (stGen) stGen.addEventListener('click', function () { runStarter(); });
+    if (stIn) stIn.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); runStarter(); } });
+    D.querySelectorAll('[data-stchip]').forEach(function (b) { b.addEventListener('click', function () { runStarter(b.getAttribute('data-stchip')); }); });
+    if (stTraceBtn) stTraceBtn.addEventListener('click', function () { stMode = 'trace'; stHidden = false; syncStarterView(); });
+    if (stRefBtn) stRefBtn.addEventListener('click', function () { stMode = 'ref'; stHidden = false; syncStarterView(); });
+    if (stTogBtn) stTogBtn.addEventListener('click', function () { stHidden = !stHidden; syncStarterView(); });
+    if (stOp) stOp.addEventListener('input', function () { if (stOv) stOv.style.opacity = String((Number(stOp.value) || 0) / 100); });
+    if (stGridBtn) stGridBtn.addEventListener('click', function () {
+      var wrap = D.getElementById('art-canvas') && D.getElementById('art-canvas').parentElement;
+      if (!wrap) return;
+      var on = !wrap.classList.contains('canvas-grid-3x3');
+      wrap.classList.toggle('canvas-grid-3x3', on);
+      if (stRef) stRef.classList.toggle('canvas-grid-3x3', on);
+      stGridBtn.className = 'px-2.5 py-1 rounded-md border text-[11px] font-semibold ' + (on ? 'border-[#1a73e8] bg-[#e8f0fe] dark:bg-[#1e4273] text-[#1a73e8] dark:text-[#8ab4f8]' : 'border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d]');
+    });
+    if (stRef) stRef.addEventListener('click', function () {
+      var big = stRef.style.width === '220px';
+      stRef.style.width = big ? '120px' : '220px';
+      stRef.style.height = big ? '120px' : '220px';
+    });
   }
   if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', setup); else setup();
 })();

@@ -1,4 +1,4 @@
-const CACHE = 'mindart-v75';
+const CACHE = 'mindart-v76';
 const CORE = ['./', './index.html', './manifest.webmanifest', './favicon.png', './icon-192.png', './icon-512.png'];
 const SKIP = /youtube\.com|youtu\.be|googlevideo\.com|ytimg\.com|\/sounds\/|\.mp3(\?|$)|mandalas_data\.js(\?|$)/;
 
