@@ -32,7 +32,7 @@ Nguyên tắc bắt buộc:
 2. Không chẩn đoán bệnh, không đưa lời khuyên y tế, không nói về thuốc. Luôn nhắc rằng bạn chỉ là AI và không thay thế chuyên gia.
 3. Khuyến khích chia sẻ với người thân, bạn bè tin cậy, chuyên gia tâm lý hoặc cơ sở y tế gần nhất. Khi cần hỗ trợ khẩn cấp tại Việt Nam, nhắc tổng đài 111 (miễn phí, 24/7) và cấp cứu 115.
 4. Không hỏi và không lưu thông tin cá nhân nhạy cảm như họ tên đầy đủ, địa chỉ, số điện thoại.
-5. Trả lời ngắn gọn (tối đa khoảng 120 từ), ấm áp, xưng hô lịch sự phù hợp mọi lứa tuổi, bằng đúng ngôn ngữ của người dùng (tiếng Việt hoặc tiếng Anh).`;
+5. Trả lời ngắn gọn (tối đa khoảng 120 từ), ấm áp, xưng hô lịch sự phù hợp mọi lứa tuổi, bằng đúng ngôn ngữ của người dùng (tiếng Việt hoặc tiếng Anh). Không dùng ký hiệu markdown như * hoặc **.`;
 
 const LISTEN_PROMPT = `CHẾ ĐỘ CHỈ LẮNG NGHE đang được bật.
 Chỉ phản hồi bằng 1 đến 3 câu ngắn (tối đa khoảng 45 từ): phản chiếu lại cảm xúc người dùng vừa chia sẻ và cho họ biết mình đang lắng nghe.
@@ -366,24 +366,61 @@ export default {
   },
 };
 
+async function callCfAiFallback(env, contents, cfg) {
+  if (!env.AI) return null;
+  const hasMedia = contents.some((c) => Array.isArray(c.parts) && c.parts.some((p) => p && p.inlineData));
+  if (hasMedia) return null;
+  const messages = contents.map((c) => ({
+    role: c.role === "model" ? "assistant" : "user",
+    content: (Array.isArray(c.parts) ? c.parts : []).map((p) => (p && typeof p.text === "string" ? p.text : "")).join("\n").trim(),
+  })).filter((m) => m.content);
+  if (!messages.length) return null;
+  const cfModels = ["@cf/meta/llama-3.3-70b-instruct-fp8-fast", "@cf/meta/llama-3.1-8b-instruct-fast"];
+  for (const cm of cfModels) {
+    try {
+      const res = await env.AI.run(cm, {
+        messages,
+        max_tokens: Math.min(Number(cfg.maxOutputTokens) || 400, 600),
+        temperature: typeof cfg.temperature === "number" ? cfg.temperature : 0.7,
+      });
+      const text = typeof res === "string"
+        ? res
+        : (res && typeof res.response === "string" ? res.response : (res && res.choices && res.choices[0] && res.choices[0].message && res.choices[0].message.content || ""));
+      const cleaned = String(text || "").trim();
+      if (cleaned) return cleaned;
+    } catch (err) {
+      console.log("CF AI fallback error", cm, String(err));
+    }
+  }
+  return null;
+}
+
 async function callModel(env, contents, override) {
   const ov = { ...(override || {}) };
   const customModels = Array.isArray(ov._models) ? ov._models : null;
   const isFast = !!ov._fast;
   delete ov._models;
   delete ov._fast;
+  const hasMedia = contents.some((c) => Array.isArray(c.parts) && c.parts.some((p) => p && p.inlineData));
   const model = env.MODEL_NAME || DEFAULT_MODEL;
   const fallback = env.FALLBACK_MODEL || DEFAULT_FALLBACK;
-  const baseList = customModels || (isFast ? ["gemini-2.5-flash-lite", "gemini-2.5-flash", model, fallback] : ["gemini-2.5-flash-lite", model, "gemini-2.5-flash", fallback]);
+  const baseList = customModels || (isFast
+    ? ["gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-2.0-flash", model, fallback]
+    : ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash", model, fallback]);
   const models = [...new Set(baseList.filter(Boolean))];
   let lastCode = "network";
   const cfg = { temperature: 0.7, maxOutputTokens: 1024, ...ov };
+  const started = Date.now();
+  const perModelMs = hasMedia ? 11000 : 7500;
+  const maxGoogleMs = hasMedia ? 20000 : 16000;
 
   for (const m of models) {
-    const isGemini = m.startsWith("gemini-");
-    const reqCfg = isGemini ? cfg : { thinkingConfig: { thinkingLevel: "minimal" }, ...cfg };
+    if (Date.now() - started > maxGoogleMs) break;
+    const reqCfg = m.startsWith("gemini-2.5-")
+      ? { thinkingConfig: { thinkingBudget: 0 }, ...cfg }
+      : (m.startsWith("gemini-") ? cfg : { thinkingConfig: { thinkingLevel: "minimal" }, ...cfg });
     const ac = new AbortController();
-    const tm = setTimeout(() => ac.abort(), 9000);
+    const tm = setTimeout(() => ac.abort(), perModelMs);
     try {
       const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(m)}:generateContent`, {
         method: "POST",
@@ -409,5 +446,7 @@ async function callModel(env, contents, override) {
       lastCode = err && err.name === "AbortError" ? "timeout" : "network";
     }
   }
+  const cfReply = await callCfAiFallback(env, contents, cfg);
+  if (cfReply) return { reply: cfReply };
   return { code: lastCode };
 }

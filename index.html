@@ -4397,7 +4397,7 @@
   function en() { return !!(window.__lang && window.__lang() === 'en'); }
   function T(v, e) { return en() ? e : v; }
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-  function fmt(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>'); }
+  function fmt(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>').replace(/\n/g, '<br>'); }
   function cur() { return chats.filter(function (c) { return c.id === curId; })[0]; }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(chats.slice(0, 40))); } catch (_) {} }
   try {
@@ -4492,7 +4492,7 @@
       'new': ['Cuộc trò chuyện mới', 'New chat'], dtitle: ['Trợ lý AI', 'AI assistant'], dnew: ['Mới', 'New'], dexp: ['Mở rộng', 'Expand'], hist: ['Lịch sử trò chuyện', 'Chat history'], histBtn: ['Lịch sử', 'History'], clear: ['Xóa tất cả lịch sử', 'Delete all history'],
       back: ['Quay lại', 'Back'], help: ['Hỗ trợ', 'Help'], close: ['Đóng', 'Close'],
       note: ['Lưu ý: AI chỉ hỗ trợ lắng nghe và gợi ý thư giãn, không chẩn đoán y khoa và không thay thế người thân, người bạn tin cậy hay chuyên gia tâm lý.', 'Note: The AI only listens and suggests relaxation exercises; it does not diagnose and does not replace loved ones, trusted peers, or mental health professionals.'],
-      supT: ['Cần được hỗ trợ?', 'Need support?'], supP: ['Hãy nói với người bạn tin tưởng: ba mẹ, thầy cô hoặc cô thầy phụ trách tâm lý của trường.', 'Talk to someone you trust: a parent, teacher or the school counselor.'],
+      supT: ['Cần được hỗ trợ?', 'Need support?'], supP: ['Hãy nói với người bạn tin tưởng: người thân, bạn bè hoặc chuyên gia tâm lý.', 'Talk to someone you trust: a loved one, trusted friend, or mental health professional.'],
       s111: ['Tổng đài quốc gia bảo vệ trẻ em: miễn phí, 24/7, có tư vấn tâm lý', 'National Child Protection Hotline: free, 24/7, with counseling'],
       s115: ['Cấp cứu y tế (khi bạn hoặc ai đó đang nguy hiểm)', 'Medical emergency (when you or someone is in danger)']
     };
@@ -4571,7 +4571,7 @@
     c.msgs.push({ role: 'user', text: m }); c.t = Date.now(); inp.value = ''; busy = true; err = ''; save(); renderAll();
     var fail = function (e) { c.msgs.pop(); inp.value = m; err = e; };
     var ac = typeof AbortController === 'function' ? new AbortController() : null;
-    var tm = ac ? setTimeout(function () { ac.abort(); }, 20000) : null;
+    var tm = ac ? setTimeout(function () { ac.abort(); }, 28000) : null;
     var aud = (function () { try { return localStorage.getItem('mindart_audience') || 'general'; } catch (_) { return 'general'; } })();
     var chatCtx = { audience: aud };
     try { if (window.__mx2dass) chatCtx.dass = window.__mx2dass; } catch (_) {}
