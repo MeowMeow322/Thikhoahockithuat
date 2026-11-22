@@ -225,7 +225,7 @@ export default {
         if (typeof body.image === "string" && body.image.length < 260000) {
           const m = body.image.match(/^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/);
           if (m && m[2].length < 250000) {
-            imgPart = { inline_data: { mime_type: m[1], data: m[2] } };
+            imgPart = { inlineData: { mimeType: m[1], data: m[2] } };
           }
         }
         if (imgPart) {
@@ -233,14 +233,14 @@ export default {
             { role: "user", parts: [{ text: TASK_SYSTEM }] },
             { role: "model", parts: [{ text: "Mình hiểu và sẽ chỉ trả về nội dung được yêu cầu." }] },
             { role: "user", parts: [imgPart, { text: askText }] },
-          ], { temperature: 0.7, maxOutputTokens: 340 });
+          ], { temperature: 0.7, maxOutputTokens: 340, _models: ["gemini-2.5-flash", "gemini-2.5-flash-lite", env.MODEL_NAME || DEFAULT_MODEL] });
           if (outVis.reply) return json({ reply: outVis.reply, vision: true }, 200, cors);
         }
         const outTxt = await callModel(env, [
           { role: "user", parts: [{ text: TASK_SYSTEM }] },
           { role: "model", parts: [{ text: "Mình hiểu và sẽ chỉ trả về nội dung được yêu cầu." }] },
           { role: "user", parts: [{ text: askText }] },
-        ], { temperature: 0.7, maxOutputTokens: 320 });
+        ], { temperature: 0.7, maxOutputTokens: 320, _fast: true });
         if (outTxt.reply) return json({ reply: outTxt.reply, vision: false }, 200, cors);
         return json({ error: "Trợ lý đang bận, bạn thử lại sau nhé. (mã lỗi: " + outTxt.code + ")" }, 502, cors);
       }
@@ -367,47 +367,46 @@ export default {
 };
 
 async function callModel(env, contents, override) {
+  const ov = { ...(override || {}) };
+  const customModels = Array.isArray(ov._models) ? ov._models : null;
+  const isFast = !!ov._fast;
+  delete ov._models;
+  delete ov._fast;
   const model = env.MODEL_NAME || DEFAULT_MODEL;
   const fallback = env.FALLBACK_MODEL || DEFAULT_FALLBACK;
-  const models = fallback && fallback !== model ? [model, fallback] : [model];
+  const baseList = customModels || (isFast ? ["gemini-2.5-flash-lite", "gemini-2.5-flash", model, fallback] : ["gemini-2.5-flash-lite", model, "gemini-2.5-flash", fallback]);
+  const models = [...new Set(baseList.filter(Boolean))];
   let lastCode = "network";
-  const cfg = { temperature: 0.7, maxOutputTokens: 1024, thinkingConfig: { thinkingLevel: "minimal" }, ...(override || {}) };
+  const cfg = { temperature: 0.7, maxOutputTokens: 1024, ...ov };
 
   for (const m of models) {
-    for (let attempt = 0; attempt < 2; attempt++) {
-      const ac = new AbortController();
-      const tm = setTimeout(() => ac.abort(), 11000);
-      try {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(m)}:generateContent`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
-          body: JSON.stringify({ contents, generationConfig: cfg }),
-          signal: ac.signal,
-        });
-        clearTimeout(tm);
-        if (res.ok) {
-          const data = await res.json();
-          const reply = data?.candidates?.[0]?.content?.parts?.filter((p) => !p.thought).map((p) => p.text || "").join("").trim();
-          if (reply) return { reply };
-          lastCode = "empty";
-          break;
-        }
-        const raw = (await res.text()).slice(0, 800);
-        console.log("Upstream error", m, res.status, raw);
-        lastCode = String(res.status);
-        try { const e = JSON.parse(raw).error; if (e && e.status) lastCode += " " + e.status; } catch (_) {}
-        if (res.status === 400 && cfg.thinkingConfig) { delete cfg.thinkingConfig; attempt--; continue; }
-        if (res.status === 500 || res.status === 503) {
-          if (attempt === 0) { await new Promise((r) => setTimeout(r, 500)); continue; }
-        }
-        break;
-      } catch (err) {
-        clearTimeout(tm);
-        console.log("Worker error", m, String(err));
-        lastCode = err && err.name === "AbortError" ? "timeout" : "network";
-        if (lastCode === "timeout") break;
-        if (attempt === 0) { await new Promise((r) => setTimeout(r, 500)); continue; }
+    const isGemini = m.startsWith("gemini-");
+    const reqCfg = isGemini ? cfg : { thinkingConfig: { thinkingLevel: "minimal" }, ...cfg };
+    const ac = new AbortController();
+    const tm = setTimeout(() => ac.abort(), 9000);
+    try {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(m)}:generateContent`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
+        body: JSON.stringify({ contents, generationConfig: reqCfg }),
+        signal: ac.signal,
+      });
+      clearTimeout(tm);
+      if (res.ok) {
+        const data = await res.json();
+        const reply = data?.candidates?.[0]?.content?.parts?.filter((p) => !p.thought).map((p) => p.text || "").join("").trim();
+        if (reply) return { reply };
+        lastCode = "empty";
+        continue;
       }
+      const raw = (await res.text()).slice(0, 800);
+      console.log("Upstream error", m, res.status, raw);
+      lastCode = String(res.status);
+      try { const e = JSON.parse(raw).error; if (e && e.status) lastCode += " " + e.status; } catch (_) {}
+    } catch (err) {
+      clearTimeout(tm);
+      console.log("Worker error", m, String(err));
+      lastCode = err && err.name === "AbortError" ? "timeout" : "network";
     }
   }
   return { code: lastCode };

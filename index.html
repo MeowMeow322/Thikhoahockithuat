@@ -4405,7 +4405,7 @@
     if (!chats.length) { var o = JSON.parse(localStorage.getItem(OLD)); if (Array.isArray(o) && o.length) { chats = [{ id: 'c' + Date.now(), title: String(o[0].text || '').slice(0, 40), t: Date.now(), msgs: o }]; } }
   } catch (_) {}
   var SUG = [
-    ['', 'Dạo này mình thấy căng thẳng vì học tập', "I've been stressed about school lately"],
+    ['', 'Dạo này mình thấy căng thẳng vì công việc / học tập', "I've been stressed about work or study lately"],
     ['', 'Hướng dẫn mình hít thở chậm để bình tĩnh', 'Guide me through slow breathing to calm down'],
     ['', 'Gợi ý hoạt động vẽ để thư giãn', 'Suggest a relaxing drawing activity'],
     ['', 'Mình khó ngủ và hay suy nghĩ lung tung', "I can't sleep and my mind keeps racing"]
@@ -5523,7 +5523,7 @@
       '<div class="flex flex-wrap items-center gap-1.5 mt-2.5">' +
         '<a href="tel:111" class="inline-flex items-center justify-center px-3 py-1.5 rounded-md bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-semibold no-underline whitespace-nowrap">' + T('Gọi 111 (24/7)', 'Call 111 (24/7)') + '</a>' +
         '<button type="button" data-a="breath" class="inline-flex items-center justify-center px-2.5 py-1.5 rounded-md border border-rose-200 dark:border-rose-800/80 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 text-[11px] font-medium whitespace-nowrap">' + T('Hít thở 1 phút', 'Breathe 1 min') + '</button>' +
-        '<button type="button" data-a="grounding" class="inline-flex items-center justify-center px-2.5 py-1.5 rounded-md border border-rose-200 dark:border-rose-800/80 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 text-[11px] font-medium whitespace-nowrap">' + T('Neo giác quan 5-4-3-2-1', '5-4-3-2-1 Grounding') + '</button>' +
+        '<button type="button" data-a="grounding" class="inline-flex items-center justify-center px-2.5 py-1.5 rounded-md border border-rose-200 dark:border-rose-800/80 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 text-[11px] font-medium whitespace-nowrap">' + T('Neo giác quan 5-4-3-2-1', '60-second SOS — 5-4-3-2-1 Grounding') + '</button>' +
         '<a href="tel:115" class="inline-flex items-center justify-center px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 text-[11px] font-medium no-underline whitespace-nowrap">' + T('Gọi 115', 'Call 115') + '</a>' +
       '</div></div>';
   }
@@ -6340,8 +6340,17 @@
         'Xuất bảng số liệu (.CSV)': 'Export data (.CSV)',
         'Sao lưu (.JSON)': 'Backup (.JSON)',
         'Khôi phục (.JSON)': 'Restore (.JSON)',
-        'Neo giác quan 5-4-3-2-1': '5-4-3-2-1 Grounding',
-        'SOS 60 giây — Neo giác quan 5-4-3-2-1': '60-second SOS — 5-4-3-2-1 Grounding'
+        'Neo giác quan 5-4-3-2-1': '60-second SOS — 5-4-3-2-1 Grounding',
+        'SOS 60 giây — Neo giác quan 5-4-3-2-1': '60-second SOS — 5-4-3-2-1 Grounding',
+        'Nhóm của bạn (để AI gợi ý phù hợp hơn):': 'Your group (for tailored AI suggestions):',
+        'Mọi người (Chung)': 'Everyone (General)',
+        'Học sinh · Sinh viên': 'Student',
+        'Người đi làm': 'Working professional',
+        'Gia đình · Người trưởng thành': 'Adult & Family',
+        'AI giải thích chi tiết kết quả này': 'AI personalized explanation',
+        'Thả trôi': 'Dissolve & let go',
+        'Mẫu AI dễ vẽ': 'AI easy template',
+        'Trợ lý AI': 'AI assistant'
       };
       var EXTRA_VI = {};
       Object.keys(EXTRA_EN).forEach(function (k) { EXTRA_VI[EXTRA_EN[k].trim()] = k; });
@@ -6472,6 +6481,8 @@
         var cx2 = c.getContext('2d');
         if (!cx2) return;
         disBusy = true;
+        var isEnStart = !!(window.__lang && window.__lang() === 'en');
+        showCalmToast(isEnStart ? 'Dissolving your drawing away...' : 'Đang thả trôi nét vẽ muộn phiền...');
         snap();
         var w = c.width, h = c.height;
         var off = D.createElement('canvas');
