@@ -221,10 +221,10 @@
   .rounded-2xl, .rounded-xl, .rounded-lg { border-radius: 6px !important; }
   button.rounded-full:not(.btn-palette):not([id="btn-open-custom-color"]):not([data-color]):not([data-c]), a.rounded-full, span.rounded-full:not([data-color]):not(.w-6), div.rounded-full:not([data-color]):not(.w-6):not(.w-7):not(.w-8) { border-radius: 6px !important; }
   .btn-palette, #btn-open-custom-color, #palette-row button[data-color] { min-height: 0 !important; min-width: 0 !important; width: 1.5rem !important; height: 1.5rem !important; border-radius: 9999px !important; padding: 0 !important; flex: none !important; }
-  #ml-colors button, #ml-colors button.rounded-full { min-height: 0 !important; min-width: 0 !important; width: 1.75rem !important; height: 1.75rem !important; border-radius: 9999px !important; padding: 0 !important; border: 1px solid rgba(0, 0, 0, .18) !important; }
+  #ml-colors button { min-height: 0 !important; padding: 0.25rem 0.5rem !important; border-radius: 6px !important; }
   #screen-dass-result [id^="label-"] { white-space: nowrap !important; }
   @media (max-width: 639px) { #screen-dass-result [id^="label-"] { font-size: 0.6875rem !important; padding: 0.125rem 0.375rem !important; } #screen-dass-result .grid.grid-cols-3 > div > div.flex { flex-wrap: wrap !important; gap: 0.25rem !important; } }
-  html.dark #ml-colors button, html.dark .btn-palette, html.dark button[data-color] { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .32) !important; }
+  html.dark .btn-palette, html.dark button[data-color] { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .32) !important; }
   #screen-canvas, #screen-canvas > div { max-width: 100% !important; box-sizing: border-box !important; }
   #art-canvas { max-width: 100% !important; height: auto !important; }
   .canvas-dot-grid { position: relative !important; }
@@ -493,31 +493,62 @@
     <section id="screen-canvas" class="hidden w-full flex flex-col md:flex-row gap-4 my-auto">
       <div class="flex-1 min-w-0 bg-white dark:bg-slate-900 p-2 rounded-3xl shadow-xl border border-teal-100 dark:border-slate-800 flex flex-col items-center">
         
-        <div id="mandala-control-panel" class="hidden w-full flex items-center justify-between mb-3 bg-teal-50/60 dark:bg-slate-800/60 p-2.5 rounded-2xl text-xs">
-          <span id="mandala-title" class="font-bold text-teal-900 dark:text-teal-200">Đang tô: ...</span>
-          <button id="btn-change-pattern" class="px-2.5 py-1 bg-teal-700 text-white rounded-lg font-bold hover:bg-teal-800">Đổi ảnh khác</button>
+        <div id="canvas-top-bar" class="w-full flex flex-wrap items-center justify-between gap-2 pb-2.5 mb-2.5 border-b border-[#dadce0] dark:border-[#3c4043]">
+          <div class="flex flex-wrap items-center gap-2 min-w-0">
+            <button id="btn-back-to-mode" class="flex items-center space-x-1 px-3 py-1.5 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#303134] text-[#202124] dark:text-[#e8eaed] text-xs font-semibold hover:bg-[#f1f3f4] whitespace-nowrap">
+              <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> <span>Đổi phương pháp</span>
+            </button>
+            <div id="mandala-control-panel" class="hidden inline-flex flex-wrap items-center gap-2 text-xs">
+              <span id="mandala-title" class="font-semibold text-[#202124] dark:text-[#e8eaed] truncate max-w-[14rem]">Đang tô: ...</span>
+              <button id="btn-change-pattern" class="px-2.5 py-1 bg-[#1a73e8] text-white rounded-md font-semibold text-xs whitespace-nowrap">Đổi ảnh khác</button>
+            </div>
+          </div>
+          <div id="canvas-top-actions" class="flex flex-wrap items-center gap-1.5 ml-auto">
+            <button id="btn-toggle-starter" type="button" class="hidden px-2.5 py-1.5 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#303134] text-[#202124] dark:text-[#e8eaed] text-xs font-medium hover:border-[#1a73e8] whitespace-nowrap">Mẫu AI dễ vẽ</button>
+            <button id="btn-toggle-ai-dock" type="button" class="px-2.5 py-1.5 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#303134] text-[#202124] dark:text-[#e8eaed] text-xs font-medium hover:border-[#1a73e8] whitespace-nowrap">Trợ lý AI</button>
+          </div>
         </div>
 
+        <div id="canvas-draw-bar" class="sticky top-0 z-30 bg-white dark:bg-[#292a2d] pt-0.5 w-full flex flex-wrap items-center gap-2 mb-2.5 pb-2.5 border-b border-[#dadce0] dark:border-[#3c4043]">
+          <div class="flex flex-wrap items-center gap-1">
+            <button id="btn-tool-brush" title="Cọ vẽ" class="p-2 rounded-md border border-[#dadce0] dark:border-[#3c4043] hover:bg-[#f1f3f4] text-[#5f6368] dark:text-[#e8eaed]">
+              <i data-lucide="paintbrush" class="w-4 h-4"></i>
+            </button>
+            <button id="btn-tool-bucket" title="Thùng sơn tự động tô" class="p-2 rounded-md border border-[#dadce0] dark:border-[#3c4043] hover:bg-[#f1f3f4] text-[#5f6368] dark:text-[#e8eaed]">
+              <i data-lucide="paint-bucket" class="w-4 h-4"></i>
+            </button>
+            <button id="btn-eraser" title="Tẩy" class="p-2 rounded-md border border-[#dadce0] dark:border-[#3c4043] hover:bg-[#f1f3f4] text-[#5f6368] dark:text-[#e8eaed]">
+              <i data-lucide="eraser" class="w-4 h-4"></i>
+            </button>
+          </div>
 
-        <div class="sticky top-0 z-30 bg-white dark:bg-slate-900 pt-1 w-full flex flex-wrap items-center justify-between gap-2 mb-3 pb-3 border-b border-slate-100 dark:border-slate-800">
-          <button id="btn-back-to-mode" class="flex items-center space-x-1 px-3 py-1.5 rounded-xl border border-teal-200 dark:border-slate-700 bg-teal-50/50 dark:bg-slate-800 text-teal-800 dark:text-teal-300 text-xs font-semibold hover:bg-teal-100">
-            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> <span>Đổi phương pháp</span>
-          </button>
+          <div id="brush-size-wrap" class="flex items-center space-x-1.5">
+            <i data-lucide="circle" class="w-3 h-3 text-slate-400"></i>
+            <input type="range" id="brush-size" min="2" max="30" value="8" class="w-16 accent-teal-600">
+            <i data-lucide="circle" class="w-5 h-5 text-slate-400"></i>
+            <select id="brush-style" aria-label="Kiểu đầu cọ" class="text-xs px-2 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#202124] text-[#202124] dark:text-[#e8eaed]">
+              <option value="solid">Cọ nét chuẩn</option>
+              <option value="watercolor">Cọ màu nước</option>
+              <option value="calligraphy">Cọ thanh đậm</option>
+            </select>
+          </div>
+
+          <span class="hidden sm:inline-block h-5 w-px bg-[#dadce0] dark:bg-[#3c4043]"></span>
 
           <div id="palette-row" class="flex flex-wrap items-center gap-1.5 relative">
-            <select id="palette-preset" aria-label="Chọn gam màu khoáng" class="text-xs px-2 py-1 rounded-md border border-[#d8d1c5] dark:border-[#38403c] bg-[#faf8f3] dark:bg-[#181c1a] text-[#1f2421] dark:text-[#e5e2dc] mr-1">
+            <select id="palette-preset" aria-label="Chọn gam màu khoáng" class="text-xs px-2 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#202124] text-[#202124] dark:text-[#e8eaed] mr-1">
               <option value="pine">Gam Rừng thông</option>
               <option value="earth">Gam Đất ấm</option>
               <option value="mist">Gam Sương sớm</option>
             </select>
-            <button data-color="#1f5c4a" style="background:#1f5c4a" class="btn-palette w-6 h-6 rounded-full ring-2 ring-offset-1 ring-transparent focus:ring-[#1f5c4a]"></button>
-            <button data-color="#387478" style="background:#387478" class="btn-palette w-6 h-6 rounded-full ring-2 ring-offset-1 ring-transparent focus:ring-[#1f5c4a]"></button>
-            <button data-color="#6b9080" style="background:#6b9080" class="btn-palette w-6 h-6 rounded-full ring-2 ring-offset-1 ring-transparent focus:ring-[#1f5c4a]"></button>
-            <button data-color="#a4c3b2" style="background:#a4c3b2" class="btn-palette w-6 h-6 rounded-full ring-2 ring-offset-1 ring-transparent focus:ring-[#1f5c4a]"></button>
-            <button data-color="#d4a373" style="background:#d4a373" class="btn-palette w-6 h-6 rounded-full ring-2 ring-offset-1 ring-transparent focus:ring-[#1f5c4a]"></button>
-            <button data-color="#b8543b" style="background:#b8543b" class="btn-palette w-6 h-6 rounded-full ring-2 ring-offset-1 ring-transparent focus:ring-[#1f5c4a]"></button>
+            <button data-color="#1f5c4a" style="background:#1f5c4a" class="btn-palette w-6 h-6 rounded-full ring-2 ring-offset-1 ring-transparent focus:ring-[#1a73e8]"></button>
+            <button data-color="#387478" style="background:#387478" class="btn-palette w-6 h-6 rounded-full ring-2 ring-offset-1 ring-transparent focus:ring-[#1a73e8]"></button>
+            <button data-color="#6b9080" style="background:#6b9080" class="btn-palette w-6 h-6 rounded-full ring-2 ring-offset-1 ring-transparent focus:ring-[#1a73e8]"></button>
+            <button data-color="#a4c3b2" style="background:#a4c3b2" class="btn-palette w-6 h-6 rounded-full ring-2 ring-offset-1 ring-transparent focus:ring-[#1a73e8]"></button>
+            <button data-color="#d4a373" style="background:#d4a373" class="btn-palette w-6 h-6 rounded-full ring-2 ring-offset-1 ring-transparent focus:ring-[#1a73e8]"></button>
+            <button data-color="#b8543b" style="background:#b8543b" class="btn-palette w-6 h-6 rounded-full ring-2 ring-offset-1 ring-transparent focus:ring-[#1a73e8]"></button>
 
-            <button id="btn-open-custom-color" title="Tự pha màu" class="w-6 h-6 rounded-full border-2 border-dashed border-slate-400 dark:border-slate-500 flex items-center justify-center text-slate-500 hover:border-[#1f5c4a]">
+            <button id="btn-open-custom-color" title="Tự pha màu" class="w-6 h-6 rounded-full border-2 border-dashed border-slate-400 dark:border-slate-500 flex items-center justify-center text-slate-500 hover:border-[#1a73e8]">
               <i data-lucide="plus" class="w-3.5 h-3.5 pointer-events-none"></i>
             </button>
 
@@ -532,39 +563,17 @@
             </div>
           </div>
 
+          <span class="hidden sm:inline-block h-5 w-px bg-[#dadce0] dark:bg-[#3c4043]"></span>
 
-          <div id="brush-size-wrap" class="flex items-center space-x-2">
-            <i data-lucide="circle" class="w-3 h-3 text-slate-400"></i>
-            <input type="range" id="brush-size" min="2" max="30" value="8" class="w-16 accent-teal-600">
-            <i data-lucide="circle" class="w-5 h-5 text-slate-400"></i>
-            <select id="brush-style" aria-label="Kiểu đầu cọ" class="text-xs px-2 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#202124] text-[#202124] dark:text-[#e8eaed]">
-              <option value="solid">Cọ nét chuẩn</option>
-              <option value="watercolor">Cọ màu nước</option>
-              <option value="calligraphy">Cọ thanh đậm</option>
-            </select>
-          </div>
-
-          <div class="flex flex-wrap items-center gap-1.5 max-w-full">
-            <button id="btn-tool-brush" title="Cọ vẽ" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-600 dark:text-slate-300">
-              <i data-lucide="paintbrush" class="w-4 h-4"></i>
-            </button>
-            <button id="btn-tool-bucket" title="Thùng sơn tự động tô" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-600 dark:text-slate-300">
-              <i data-lucide="paint-bucket" class="w-4 h-4"></i>
-            </button>
-            <button id="btn-eraser" title="Tẩy" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-600 dark:text-slate-300">
-              <i data-lucide="eraser" class="w-4 h-4"></i>
-            </button>
-            <button id="btn-undo" title="Hoàn tác" class="p-2 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-600 dark:text-slate-300">
-              <i data-lucide="undo-2" class="w-4 h-4"></i>
-            </button>
-            <button id="btn-grid-toggle" type="button" title="Lưới chấm dẫn hướng" aria-pressed="false" class="p-2 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-600 dark:text-slate-300">
+          <div id="canvas-aux-group" class="flex flex-wrap items-center gap-1.5 max-w-full">
+            <button id="btn-grid-toggle" type="button" title="Lưới chấm dẫn hướng" aria-pressed="false" class="p-2 rounded-md border border-[#dadce0] dark:border-[#3c4043] hover:bg-[#f1f3f4] text-[#5f6368] dark:text-[#e8eaed]">
               <svg class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="5" r="1.6"/><circle cx="12" cy="5" r="1.6"/><circle cx="19" cy="5" r="1.6"/><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/><circle cx="5" cy="19" r="1.6"/><circle cx="12" cy="19" r="1.6"/><circle cx="19" cy="19" r="1.6"/></svg>
             </button>
-            <button id="btn-symmetry-toggle" type="button" title="Đối xứng 6 trục" aria-pressed="false" class="p-2 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-600 dark:text-slate-300">
-              <svg class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="2" x2="12" y2="22"/><line x1="3.34" y1="7" x2="20.66" y2="17"/><line x1="20.66" y1="7" x2="3.34" y2="17"/></svg>
-            </button>
             <button id="btn-squiggle" type="button" title="Nét gợi mở (Squiggle)" class="hidden px-2.5 py-1.5 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#303134] text-[#202124] dark:text-[#e8eaed] text-xs font-medium hover:border-[#1a73e8] whitespace-nowrap">Nét gợi mở</button>
-            <button id="btn-dissolve-worry" type="button" title="Thả trôi muộn phiền" class="hidden px-2.5 py-1.5 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#303134] text-[#202124] dark:text-[#e8eaed] text-xs font-medium hover:border-[#1a73e8] whitespace-nowrap">Thả trôi muộn phiền</button>
+            <button id="btn-dissolve-worry" type="button" title="Thả trôi muộn phiền" class="hidden px-2.5 py-1.5 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#303134] text-[#202124] dark:text-[#e8eaed] text-xs font-medium hover:border-[#1a73e8] whitespace-nowrap">Thả trôi</button>
+            <button id="btn-undo" title="Hoàn tác" class="p-2 rounded-md border border-[#dadce0] dark:border-[#3c4043] hover:bg-[#f1f3f4] text-[#5f6368] dark:text-[#e8eaed]">
+              <i data-lucide="undo-2" class="w-4 h-4"></i>
+            </button>
             <button id="btn-clear" title="Xóa tất cả" class="p-2 rounded-md border border-red-100 dark:border-red-900/50 text-red-500">
               <i data-lucide="trash-2" class="w-4 h-4"></i>
             </button>
@@ -572,7 +581,7 @@
         </div>
 
           <div id="ai-starter-bar" class="hidden w-full mb-2.5 p-2.5 rounded-md bg-[#f8f9fa] dark:bg-[#303134] border border-[#dadce0] dark:border-[#3c4043] text-xs">
-            <div class="flex flex-wrap items-center gap-1.5">
+            <div id="ai-starter-input-row" class="flex flex-wrap items-center gap-1.5">
               <input id="ai-starter-input" type="text" maxlength="100" placeholder="AI tạo mẫu dễ vẽ (ví dụ: tách trà ấm, chồi cây nhỏ)..." class="flex-1 min-w-[12rem] px-2.5 py-1.5 rounded-md border border-[#80868b] bg-white dark:bg-[#202124] text-xs text-[#202124] dark:text-[#e8eaed]">
               <button id="btn-ai-starter-gen" type="button" class="px-3 py-1.5 rounded-md bg-[#1a73e8] text-white dark:bg-[#8ab4f8] dark:text-[#202124] text-xs font-semibold whitespace-nowrap">Tạo mẫu AI dễ vẽ</button>
             </div>
@@ -582,12 +591,13 @@
               <button type="button" data-stchip="Ngọn đồi &amp; mặt trời" class="px-2 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px]">Ngọn đồi &amp; mặt trời</button>
               <button type="button" data-stchip="Chú chim nhỏ" class="px-2 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px]">Chú chim nhỏ</button>
             </div>
-            <div id="ai-starter-controls" class="hidden flex flex-wrap items-center gap-2 mt-2 pt-2 border-t border-[#dadce0] dark:border-[#3c4043]">
+            <div id="ai-starter-controls" class="hidden flex flex-wrap items-center gap-2">
               <button id="btn-starter-trace" type="button" class="px-2.5 py-1 rounded-md border border-[#1a73e8] bg-[#e8f0fe] dark:bg-[#1e4273] text-[#1a73e8] dark:text-[#8ab4f8] text-[11px] font-semibold">Giấy can mờ</button>
               <button id="btn-starter-ref" type="button" class="px-2.5 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px] font-medium">Khung mẫu góc</button>
-              <button id="btn-starter-3x3" type="button" class="px-2.5 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px] font-medium">Lưới căn hình 3x3</button>
-              <button id="btn-starter-toggle" type="button" class="px-2.5 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px] font-medium">Ẩn mẫu AI</button>
+              <button id="btn-starter-3x3" type="button" class="px-2.5 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px] font-medium">Lưới 3x3</button>
               <label class="inline-flex items-center gap-1.5 text-[11px] text-[#5f6368] dark:text-[#9aa0a6]"><span>Độ mờ</span><input id="ai-starter-opacity" type="range" min="0" max="60" value="28" class="w-16"></label>
+              <button id="btn-starter-toggle" type="button" class="px-2.5 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px] font-medium">Ẩn mẫu</button>
+              <button id="btn-starter-change" type="button" class="px-2.5 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px] font-medium">Đổi mẫu khác</button>
             </div>
             <p id="ai-starter-msg" class="hidden mt-1.5 text-[11px] text-[#5f6368] dark:text-[#9aa0a6]"></p>
           </div>
@@ -2412,7 +2422,7 @@
 
     const bar = document.createElement('div');
     bar.setAttribute('data-zoomctl', '');
-    bar.className = 'absolute bottom-2 left-2 z-20 flex items-center gap-0.5 bg-white/90 dark:bg-slate-800/90 rounded-xl shadow border border-slate-200 dark:border-slate-700 p-1';
+    bar.className = 'absolute bottom-2.5 right-2.5 z-20 flex items-center gap-1 bg-white dark:bg-[#292a2d] rounded-md shadow-sm border border-[#dadce0] dark:border-[#3c4043] px-1.5 py-1';
     const B = 'p-1.5 rounded-md text-[#5f6368] dark:text-[#9aa0a6] hover:bg-[#f1f3f4] dark:hover:bg-[#35363a]';
     bar.innerHTML = `
       <button type="button" data-z="out" title="Thu nhỏ" class="${B}"><i data-lucide="zoom-out" class="w-4 h-4 pointer-events-none"></i></button>
@@ -3271,14 +3281,15 @@
       symBox.innerHTML = `<label for="sym-select" class="text-[11px] text-slate-500 dark:text-slate-400">Đối xứng</label>
         <select id="sym-select" class="text-xs rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 px-1.5 py-1">
           <option value="0">Tắt</option><option value="4">4 trục</option><option value="6">6 trục</option><option value="8">8 trục</option></select>`;
-      brushWrap.after(symBox);
+      var aux = $('canvas-aux-group');
+      if (aux) aux.insertBefore(symBox, aux.firstChild); else brushWrap.after(symBox);
       sel = $('sym-select');
-      sel.addEventListener('change', () => { N = +sel.value; });
+      sel.addEventListener('change', () => { N = +sel.value; window.__symN = N; });
     }
     window.__symStart = (pos) => { prev = { x: pos.x, y: pos.y }; };
     window.__symDraw = (pos) => {
       const from = prev; prev = { x: pos.x, y: pos.y };
-      if (!N || !from || activeArtMode !== 'doodle' || currentTool === 'bucket') return;
+      if (!N || !from || (activeArtMode !== 'doodle' && activeArtMode !== 'trame') || currentTool === 'bucket') return;
       const cx = canvas.width / 2, cy = canvas.height / 2;
       const copies = (p) => {
         const dx = p.x - cx, dy = p.y - cy, out = [];
@@ -3391,43 +3402,40 @@
     sec.className = 'hidden w-full bg-white/90 dark:bg-slate-900/90 p-4 md:p-6 rounded-3xl shadow-xl border border-teal-100 dark:border-slate-800 max-w-4xl my-auto';
     const BTN = 'flex items-center justify-center gap-1.5 h-10 min-w-[2.5rem] px-3 rounded-xl border border-teal-200 dark:border-slate-700 text-teal-800 dark:text-teal-200 text-xs font-semibold bg-white dark:bg-slate-800';
     sec.innerHTML = `
-      <div class="flex items-center justify-between gap-2 mb-3">
-        <button type="button" id="ml-back" class="flex items-center gap-1 px-3 py-1.5 rounded-xl border border-teal-200 dark:border-slate-700 text-teal-800 dark:text-teal-200 text-[11px] font-semibold">${ICON.back}<span>Đổi phương pháp</span></button>
-        <h3 class="font-bold text-sm text-teal-950 dark:text-teal-100">Vẽ Ra Nhạc</h3>
-      </div>
-      <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3 leading-snug">Vẽ nét lên khung rồi bấm Phát. Thanh dọc sẽ chạy từ trái sang phải: nét càng cao thì nốt càng cao, mỗi màu là một nhạc cụ.</p>
-      <div id="ml-box" class="relative w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 overflow-hidden h-[56vh] min-h-[300px] max-h-[540px]"
-        style="background-image:linear-gradient(rgba(100,116,139,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(100,116,139,.16) 1px,transparent 1px);background-size:36px 36px">
-        <canvas id="ml-canvas" class="absolute inset-0 w-full h-full" style="touch-action:none;cursor:crosshair"></canvas>
-      </div>
-      <div class="flex flex-wrap items-center gap-2 mt-3">
-        <button type="button" id="ml-play" class="${BTN} bg-teal-600 text-white border-teal-600 dark:bg-teal-600 dark:text-white"></button>
-        <button type="button" id="ml-pen" class="${BTN}" aria-label="Bút vẽ">${ICON.pen}</button>
-        <button type="button" id="ml-eraser" class="${BTN}" aria-label="Tẩy nét">${ICON.eraser}</button>
-        <button type="button" id="ml-undo" class="${BTN}" aria-label="Hoàn tác">${ICON.undo}</button>
-        <button type="button" id="ml-clear" class="${BTN} text-rose-600 dark:text-rose-400" aria-label="Xóa hết">${ICON.trash}</button>
-        <div class="flex flex-col gap-1.5 ml-auto flex-1 min-w-[10rem] max-w-xs">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-semibold text-slate-700 dark:text-slate-200 min-w-[4.75rem] whitespace-nowrap flex-shrink-0">Âm lượng</span>
-            <input id="ml-vol" type="range" min="0" max="100" value="80" class="flex-1 min-w-0 accent-teal-600" aria-label="Âm lượng">
-            <span id="ml-vol-n" class="text-xs w-9 text-right text-slate-500 dark:text-slate-400">80%</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-semibold text-slate-700 dark:text-slate-200 min-w-[4.75rem] whitespace-nowrap flex-shrink-0">Tốc độ</span>
-            <input id="ml-speed" type="range" min="50" max="200" step="10" value="100" class="flex-1 min-w-0 accent-teal-600" aria-label="Tốc độ thanh chạy">
-            <span id="ml-speed-n" class="text-xs w-9 text-right text-slate-500 dark:text-slate-400">1.0x</span>
-          </div>
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 mb-2.5 border-b border-[#dadce0] dark:border-[#3c4043]">
+        <div class="flex items-center gap-2">
+          <button type="button" id="ml-back" class="flex items-center gap-1 px-3 py-1.5 rounded-md border border-[#dadce0] dark:border-[#3c4043] text-[#202124] dark:text-[#e8eaed] text-xs font-semibold bg-white dark:bg-[#303134]">${ICON.back}<span>Đổi phương pháp</span></button>
+          <h3 class="font-semibold text-sm text-[#202124] dark:text-[#e8eaed]">4. Vẽ Ra Nhạc</h3>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button type="button" id="ml-toggle-ai" class="px-3 py-1.5 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#303134] text-[#202124] dark:text-[#e8eaed] text-xs font-medium hover:border-[#1a73e8] whitespace-nowrap">♪ AI Phổ Nhạc</button>
+          <button type="button" id="ml-play" class="${BTN} bg-[#1a73e8] text-white border-[#1a73e8] dark:bg-[#8ab4f8] dark:text-[#202124] dark:border-[#8ab4f8]"></button>
         </div>
       </div>
-      <div class="flex flex-wrap items-center gap-3 mt-3">
-        <div id="ml-colors" class="flex items-center gap-2 flex-wrap"></div>
-        <select id="ml-scale" class="ml-auto text-xs px-2 py-2 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100" aria-label="Thang âm">
+      <div class="flex flex-wrap items-center gap-2 mb-2.5">
+        <div class="flex items-center gap-1">
+          <button type="button" id="ml-pen" class="${BTN}" aria-label="Bút vẽ">${ICON.pen}</button>
+          <button type="button" id="ml-eraser" class="${BTN}" aria-label="Tẩy nét">${ICON.eraser}</button>
+          <button type="button" id="ml-undo" class="${BTN}" aria-label="Hoàn tác">${ICON.undo}</button>
+          <button type="button" id="ml-clear" class="${BTN} text-rose-600 dark:text-rose-400" aria-label="Xóa hết">${ICON.trash}</button>
+        </div>
+        <span class="hidden sm:inline-block h-5 w-px bg-[#dadce0] dark:bg-[#3c4043]"></span>
+        <select id="ml-scale" class="text-xs px-2 py-1.5 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#202124] text-[#202124] dark:text-[#e8eaed]" aria-label="Thang âm">
           ${Object.entries(SCALES).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join('')}
         </select>
+        <div class="flex items-center gap-1.5">
+          <span class="text-xs font-medium text-[#5f6368] dark:text-[#9aa0a6] whitespace-nowrap">Âm lượng</span>
+          <input id="ml-vol" type="range" min="0" max="100" value="80" class="w-20" aria-label="Âm lượng">
+          <span id="ml-vol-n" class="text-[11px] w-8 text-[#5f6368] dark:text-[#9aa0a6]">80%</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span class="text-xs font-medium text-[#5f6368] dark:text-[#9aa0a6] whitespace-nowrap">Tốc độ</span>
+          <input id="ml-speed" type="range" min="50" max="200" step="10" value="100" class="w-20" aria-label="Tốc độ thanh chạy">
+          <span id="ml-speed-n" class="text-[11px] w-8 text-[#5f6368] dark:text-[#9aa0a6]">1.0x</span>
+        </div>
       </div>
-      <p id="ml-inst" class="text-[11px] text-teal-700 dark:text-teal-300 mt-2 font-semibold"></p>
-      <div class="mt-3 p-3 rounded-md bg-[#f8f9fa] dark:bg-[#303134] border border-[#dadce0] dark:border-[#3c4043] text-xs">
-        <div class="font-semibold text-[#202124] dark:text-[#e8eaed] mb-1.5">AI Phổ Nhạc Theo Cảm Xúc</div>
+      <div id="ml-colors" class="flex items-center gap-1.5 flex-wrap mb-2.5"></div>
+      <div id="ml-ai-box" class="hidden mb-2.5 p-2.5 rounded-md bg-[#f8f9fa] dark:bg-[#303134] border border-[#dadce0] dark:border-[#3c4043] text-xs">
         <div class="flex flex-wrap items-center gap-1.5 mb-2">
           <button type="button" data-mltheme="Mưa đêm yên bình" class="px-2.5 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px]">Mưa đêm yên bình</button>
           <button type="button" data-mltheme="Nắng sớm rừng thông" class="px-2.5 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#292a2d] text-[11px]">Nắng sớm rừng thông</button>
@@ -3439,6 +3447,10 @@
           <button type="button" id="ml-ai-gen" class="px-3 py-1.5 rounded-md bg-[#1a73e8] text-white dark:bg-[#8ab4f8] dark:text-[#202124] text-xs font-semibold whitespace-nowrap">AI Vẽ Giai Điệu</button>
         </div>
         <p id="ml-ai-msg" class="hidden mt-1.5 text-[11px] text-[#5f6368] dark:text-[#9aa0a6]"></p>
+      </div>
+      <div id="ml-box" class="relative w-full rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#202124] overflow-hidden h-[54vh] min-h-[280px] max-h-[480px]"
+        style="background-image:linear-gradient(rgba(100,116,139,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(100,116,139,.16) 1px,transparent 1px);background-size:36px 36px">
+        <canvas id="ml-canvas" class="absolute inset-0 w-full h-full" style="touch-action:none;cursor:crosshair"></canvas>
       </div>`;
     gallery.parentElement.appendChild(sec);
 
@@ -3700,6 +3712,7 @@
         pause();
         play();
         if (mlAiMsg) mlAiMsg.textContent = 'Đã vẽ giai điệu "' + theme + '" (' + bpm + ' BPM). Bạn có thể vẽ thêm nét nhạc của riêng mình!';
+        const aiBox = $('ml-ai-box'); if (aiBox) aiBox.classList.add('hidden');
       };
       const acM = typeof AbortController === 'function' ? new AbortController() : null;
       const tmM = acM ? setTimeout(() => acM.abort(), 14000) : null;
@@ -3717,6 +3730,8 @@
         if (mlAiBtn) mlAiBtn.disabled = false;
       });
     }
+    const mlTogAi = $('ml-toggle-ai');
+    if (mlTogAi) mlTogAi.addEventListener('click', () => { const b = $('ml-ai-box'); if (b) b.classList.toggle('hidden'); });
     if (mlAiBtn) mlAiBtn.addEventListener('click', () => runAiMelody());
     sec.querySelectorAll('[data-mltheme]').forEach((b) => b.addEventListener('click', () => runAiMelody(b.getAttribute('data-mltheme'))));
     cv.addEventListener('pointercancel', end);
@@ -3733,12 +3748,14 @@
       COLORS.forEach((c, i) => {
         const b = document.createElement('button');
         b.type = 'button'; b.title = INST[i].name; b.setAttribute('aria-label', 'Màu ' + INST[i].name);
-        b.className = 'w-8 h-8 rounded-full border-2 transition-transform ' + (i === colorIdx ? 'border-slate-700 dark:border-white scale-110' : 'border-transparent');
-        b.style.background = c;
+        const on = i === colorIdx;
+        b.className = 'inline-flex items-center gap-1.5 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap ' + (on
+          ? 'border-[#1a73e8] bg-[#e8f0fe] dark:bg-[#1e4273] text-[#1a73e8] dark:text-[#8ab4f8] font-semibold'
+          : 'border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#303134] text-[#202124] dark:text-[#e8eaed]');
+        b.innerHTML = `<span class="inline-block w-3 h-3 rounded-full shrink-0 border border-black/15 dark:border-white/30" style="background:${c}"></span><span>${INST[i].name}</span>`;
         b.addEventListener('click', () => { colorIdx = i; setTool('pen'); renderColors(); });
         wrap.appendChild(b);
       });
-      $('ml-inst').textContent = 'Màu đang chọn: ' + INST[colorIdx].name;
     }
     playBtn.addEventListener('click', toggle);
     $('ml-pen').addEventListener('click', () => setTool('pen'));
@@ -4586,7 +4603,7 @@
     st.textContent = '#aid-input,#ai-input{min-height:2.5rem}#ai-side-panel{height:28rem}@media (min-width:768px) and (max-width:1023px){#screen-canvas{flex-wrap:wrap}#ai-side-panel{flex-basis:100%}}' +
       '@media (min-width:1024px){main:has(#screen-canvas:not(.hidden)){max-width:76rem}#screen-canvas{flex:1 1 0;min-height:30rem;margin-block:0}#ai-side-panel{order:-1;width:20rem;flex:0 0 20rem;height:auto;min-height:28rem}}';
     document.head.appendChild(st);
-    var d = document.createElement('div'); d.id = 'ai-side-panel'; d.className = 'relative order-last w-full shrink-0';
+    var d = document.createElement('div'); d.id = 'ai-side-panel'; d.className = 'hidden relative order-last w-full shrink-0';
     d.innerHTML = '<div class="absolute inset-0 flex flex-col overflow-hidden rounded-3xl shadow-xl border border-teal-100 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 text-slate-700 dark:text-slate-200">' +
       '<div class="flex items-center gap-1.5 px-3 py-2.5 border-b border-teal-100 dark:border-slate-800">' +
         '<div class="flex-1 min-w-0 truncate text-sm font-bold text-teal-950 dark:text-teal-100" data-t="dtitle"></div>' +
@@ -4628,28 +4645,22 @@
   if (!cv || !fin || !clr) return;
   var panel = fin.parentElement, tools = clr.parentElement, orig = fin.className;
   var head = panel.querySelector('h3').parentElement;
-  var B = 'px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800';
+  var topActs = document.getElementById('canvas-top-actions');
+  var B = 'px-2.5 py-1.5 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#303134] text-xs font-medium text-[#202124] dark:text-[#e8eaed] hover:border-[#1a73e8] whitespace-nowrap';
   var hide = document.createElement('button'); hide.type = 'button'; hide.id = 'btn-panel-collapse'; hide.className = 'ml-auto ' + B;
   head.appendChild(hide);
-  var acts = document.createElement('div'); acts.className = 'flex items-center gap-2'; acts.style.marginLeft = 'auto';
   var show = document.createElement('button'); show.type = 'button'; show.id = 'btn-panel-expand'; show.className = B;
-  acts.appendChild(show);
-  var collapsed = false;
-  try { collapsed = localStorage.getItem(KEY) !== '0'; } catch (_) {}
+  var collapsed = true;
   function en() { return !!(window.__lang && window.__lang() === 'en'); }
   function apply() {
     hide.textContent = en() ? 'Collapse' : 'Thu gọn';
     show.textContent = en() ? 'Analysis' : 'Phân tích';
     panel.classList.toggle('hidden', collapsed);
-    tools.style.width = collapsed ? '100%' : '';
-    if (collapsed) {
-      fin.className = orig.replace(/\bw-full\b/, '').replace(/\bmt-4\b/, '').replace(/\bpy-3\b/, 'py-2') + ' px-4';
-      acts.appendChild(fin);
-      tools.appendChild(acts);
-    } else {
-      fin.className = orig;
-      panel.appendChild(fin);
-      if (acts.parentNode) acts.parentNode.removeChild(acts);
+    show.classList.toggle('border-[#1a73e8]', !collapsed);
+    if (topActs) {
+      if (show.parentNode !== topActs) topActs.appendChild(show);
+      fin.className = 'px-3.5 py-1.5 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-semibold rounded-md text-xs inline-flex items-center justify-center whitespace-nowrap';
+      if (fin.parentNode !== topActs) topActs.appendChild(fin);
     }
   }
   function refit() {
@@ -4660,7 +4671,18 @@
   }
   function set(v) { collapsed = v; try { localStorage.setItem(KEY, v ? '1' : '0'); } catch (_) {} apply(); refit(); }
   hide.addEventListener('click', function () { set(true); });
-  show.addEventListener('click', function () { set(false); });
+  show.addEventListener('click', function () { set(!collapsed); });
+  var aiTog = document.getElementById('btn-toggle-ai-dock');
+  if (aiTog) {
+    aiTog.addEventListener('click', function () {
+      var dock = document.getElementById('ai-side-panel');
+      if (!dock) return;
+      var open = dock.classList.contains('hidden');
+      dock.classList.toggle('hidden', !open);
+      aiTog.classList.toggle('border-[#1a73e8]', open);
+      refit();
+    });
+  }
   var lb = document.getElementById('btn-lang');
   if (lb) lb.addEventListener('click', function () { setTimeout(apply, 120); });
   apply();
@@ -4909,15 +4931,15 @@
     if (root) return;
     root = D.createElement('div');
     root.id = 'mx2-studio';
-    root.className = 'hidden fixed inset-0 bg-slate-50 dark:bg-slate-950 flex flex-col text-slate-700 dark:text-slate-200';
+    root.className = 'hidden fixed inset-0 bg-[#f8f9fa] dark:bg-[#202124] flex flex-col text-[#202124] dark:text-[#e8eaed]';
     root.style.zIndex = 70;
     root.innerHTML =
-      '<div class="flex items-center justify-between gap-2 px-3 py-2 border-b border-teal-100 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80">' +
-      '<button type="button" data-st="back" class="' + BTN + '"></button><div id="st-title" class="flex-1 text-center text-sm font-bold text-teal-950 dark:text-teal-100 truncate"></div>' +
+      '<div class="flex items-center justify-between gap-2 px-3 py-2 border-b border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#171717]">' +
+      '<button type="button" data-st="back" class="' + BTN + '"></button><div id="st-title" class="flex-1 text-center text-sm font-semibold text-[#202124] dark:text-[#e8eaed] truncate"></div>' +
       '<button type="button" data-st="done" class="' + PRI + '"></button></div>' +
-      '<div id="st-hint" class="px-3 pt-1.5 text-[11px] text-slate-500 dark:text-slate-400 text-center"></div>' +
-      '<div id="st-tools" class="px-3 pt-2 pb-5 flex flex-wrap items-center gap-2 justify-center"></div>' +
-      '<div id="st-stage" class="flex-1 min-h-0 flex items-center justify-center px-3 pb-3"><div id="st-wrap" class="relative bg-white rounded-2xl shadow border border-slate-200 dark:border-slate-700 overflow-hidden"></div></div>' +
+      '<div id="st-hint" class="px-3 pt-1.5 text-[11px] text-[#5f6368] dark:text-[#9aa0a6] text-center"></div>' +
+      '<div id="st-tools" class="bg-white dark:bg-[#292a2d] border border-[#dadce0] dark:border-[#3c4043] rounded-md px-3 py-1.5 mx-auto max-w-4xl my-2 flex flex-wrap items-center gap-2 justify-center"></div>' +
+      '<div id="st-stage" class="flex-1 min-h-0 flex items-center justify-center px-3 pb-3"><div id="st-wrap" class="relative bg-white rounded-md shadow-sm border border-[#dadce0] dark:border-[#3c4043] overflow-hidden"></div></div>' +
       '<div id="st-setup" class="absolute inset-0 z-10 bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-4 overflow-y-auto"></div>';
     D.body.appendChild(root);
     root.addEventListener('click', onStudioClick);
@@ -5002,15 +5024,21 @@
   function renderTools() {
     var h = '', pal = palette();
     if (S.mode === 'emotion') {
-      h += '<div class="w-full flex flex-wrap justify-center gap-1.5 mb-1">' + EMO.map(function (e) {
-        return '<button type="button" data-emo="' + e.k + '" title="' + T(e.vi, e.en) + '" class="px-2 py-1 rounded-full text-[11px] border ' + (e.k === S.emo ? 'border-teal-600 bg-teal-50 dark:bg-slate-800 font-bold' : 'border-slate-200 dark:border-slate-700') + '"><i class="inline-block w-2.5 h-2.5 rounded-full mr-1" style="background:' + e.c[0] + '"></i>' + T(e.vi, e.en) + '</button>';
-      }).join('') + '</div>';
+      h += '<select id="st-emo-select" aria-label="' + T('Cảm xúc', 'Feeling') + '" class="text-xs px-2 py-1 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#202124] text-[#202124] dark:text-[#e8eaed]">' + EMO.map(function (e) {
+        return '<option value="' + e.k + '"' + (e.k === S.emo ? ' selected' : '') + '>' + T(e.vi, e.en) + '</option>';
+      }).join('') + '</select>';
     }
     h += pal.map(function (c) { return '<button type="button" data-col="' + c + '" class="mx2-sw" style="background:' + c + '" aria-label="' + c + '"></button>'; }).join('');
-    if (S.mode !== 'body') h += '<input id="st-custom" type="color" value="' + (S.color || '#0d9488') + '" class="w-8 h-8 rounded-full border-0 p-0 bg-transparent cursor-pointer" aria-label="' + T('Chọn màu khác', 'Custom color') + '">';
-    h += '<label class="flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-400">' + T('Nét', 'Size') + '<input id="st-size" type="range" min="3" max="60" value="' + S.size + '" class="w-20 accent-teal-600"></label>' +
+    if (S.mode !== 'body') h += '<input id="st-custom" type="color" value="' + (S.color || '#1a73e8') + '" class="w-7 h-7 rounded-full border-0 p-0 bg-transparent cursor-pointer" aria-label="' + T('Chọn màu khác', 'Custom color') + '">';
+    h += '<label class="flex items-center gap-1 text-[11px] text-[#5f6368] dark:text-[#9aa0a6]">' + T('Nét', 'Size') + '<input id="st-size" type="range" min="3" max="60" value="' + S.size + '" class="w-16"></label>' +
+      (S.mode === 'prompt' ? '<button type="button" data-st="aistarter" class="' + BTN + '">' + T('Mẫu AI dễ vẽ', 'AI easy template') + '</button><button type="button" data-st="grid3" class="' + BTN + '">' + T('Lưới 3x3', '3x3 Grid') + '</button>' : '') +
       '<button type="button" data-st="eraser" class="' + BTN + '"></button><button type="button" data-st="undo" class="' + BTN + '">' + T('Hoàn tác', 'Undo') + '</button><button type="button" data-st="clear" class="' + BTN + '">' + T('Xóa hết', 'Clear') + '</button>';
     $('st-tools').innerHTML = h;
+    var esel = $('st-emo-select');
+    if (esel) esel.addEventListener('change', function () {
+      S.emo = esel.value; S.color = palette()[0]; S.erase = false;
+      renderTools();
+    });
     markTools();
   }
   function markTools() {
@@ -5043,6 +5071,46 @@
       S.started = true; S.color = palette()[0]; $('st-setup').classList.add('hidden'); renderTools(); renderHint(); setTimeout(fit, 30);
     }
     else if (a === 'eraser') { S.erase = !S.erase; markTools(); }
+    else if (a === 'grid3') {
+      var wr = $('st-wrap');
+      if (wr) {
+        var on = !wr.classList.contains('canvas-grid-3x3');
+        wr.classList.toggle('canvas-grid-3x3', on);
+        b.classList.toggle('border-[#1a73e8]', on);
+      }
+    }
+    else if (a === 'aistarter') {
+      var wr = $('st-wrap');
+      if (!wr) return;
+      var ov = $('st-starter-ov');
+      if (ov && ov.src) {
+        ov.classList.toggle('hidden');
+        b.textContent = ov.classList.contains('hidden') ? T('Hiện mẫu AI', 'Show AI template') : T('Ẩn mẫu AI', 'Hide AI template');
+        return;
+      }
+      b.disabled = true;
+      b.textContent = T('Đang tạo mẫu...', 'Generating...');
+      var tp = String(S.prompt || 'calm nature').slice(0, 100);
+      callWorker({ task: 'generate_starter', topic: tp, audience: getAud() }, 30000).then(function (j) {
+        if (!j || !j.image) throw new Error('err');
+        if (!ov) {
+          ov = D.createElement('img');
+          ov.id = 'st-starter-ov';
+          ov.alt = '';
+          ov.className = 'absolute inset-0 w-full h-full object-contain pointer-events-none select-none z-[4]';
+          ov.style.opacity = '0.28';
+          ov.style.mixBlendMode = 'multiply';
+          wr.appendChild(ov);
+        }
+        ov.src = j.image;
+        ov.classList.remove('hidden');
+        b.textContent = T('Ẩn mẫu AI', 'Hide AI template');
+        toast(T('Đã tạo lớp giấy can mờ theo đề bài! Bạn có thể đồ nét trực tiếp lên tranh.', 'Created tracing template! You can trace right over it.'));
+      }, function () {
+        b.textContent = T('Mẫu AI dễ vẽ', 'AI easy template');
+        toast(T('Không tạo được mẫu lúc này, bạn thử lại nhé.', 'Could not generate template right now.'));
+      }).then(function () { b.disabled = false; });
+    }
     else if (a === 'undo') { S.strokes.pop(); redraw(); }
     else if (a === 'clear') { if (S.strokes.length && confirm(T('Xóa toàn bộ bức vẽ?', 'Clear the whole drawing?'))) { S.strokes = []; redraw(); } }
     else if (a === 'done') finish();
@@ -6455,8 +6523,12 @@
         if (sBtn) sBtn.classList.toggle('hidden', !showTools);
         if (sqBtn) sqBtn.classList.toggle('hidden', !isDoodle);
         if (disBtn) disBtn.classList.toggle('hidden', !isDoodle);
+        var stTog = D.getElementById('btn-toggle-starter');
+        if (stTog) stTog.classList.toggle('hidden', !isDoodle);
         var stBar = D.getElementById('ai-starter-bar');
-        if (stBar) stBar.classList.toggle('hidden', !isDoodle);
+        if (stBar) stBar.classList.add('hidden');
+        var symWrap = D.getElementById('sym-wrap');
+        if (symWrap) symWrap.classList.toggle('hidden', !showTools);
         if (!isDoodle) {
           var ov = D.getElementById('ai-starter-overlay'), rf = D.getElementById('ai-starter-ref');
           if (ov) ov.classList.add('hidden');
@@ -6543,6 +6615,9 @@
         if (stOv) stOv.src = j.image;
         if (stRefImg) stRefImg.src = j.image;
         if (stCtl) stCtl.classList.remove('hidden');
+        var stInRow = D.getElementById('ai-starter-input-row'), stChips = D.getElementById('ai-starter-chips');
+        if (stInRow) stInRow.classList.add('hidden');
+        if (stChips) stChips.classList.add('hidden');
         stHidden = false;
         syncStarterView();
         if (stMsg) stMsg.textContent = 'Đã tạo mẫu "' + tp + '". Bạn có thể đồ trực tiếp lên giấy can mờ hoặc bật khung mẫu góc & lưới 3x3!';
@@ -6550,6 +6625,22 @@
         if (stMsg) stMsg.textContent = (e && e.message && e.message !== 'err') ? e.message : 'Không tạo được mẫu lúc này, bạn thử lại nhé.';
       }).then(function () { stBusy = false; if (stGen) stGen.disabled = false; });
     }
+    var stTogBar = D.getElementById('btn-toggle-starter');
+    if (stTogBar) stTogBar.addEventListener('click', function () {
+      var bar = D.getElementById('ai-starter-bar');
+      if (bar) {
+        var open = bar.classList.contains('hidden');
+        bar.classList.toggle('hidden', !open);
+        stTogBar.classList.toggle('border-[#1a73e8]', open);
+      }
+    });
+    var stChg = D.getElementById('btn-starter-change');
+    if (stChg) stChg.addEventListener('click', function () {
+      var stInRow = D.getElementById('ai-starter-input-row'), stChips = D.getElementById('ai-starter-chips');
+      if (stInRow) stInRow.classList.remove('hidden');
+      if (stChips) stChips.classList.remove('hidden');
+      if (stIn) stIn.focus();
+    });
     if (stGen) stGen.addEventListener('click', function () { runStarter(); });
     if (stIn) stIn.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); runStarter(); } });
     D.querySelectorAll('[data-stchip]').forEach(function (b) { b.addEventListener('click', function () { runStarter(b.getAttribute('data-stchip')); }); });
