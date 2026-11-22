@@ -2372,7 +2372,7 @@
     const bar = document.createElement('div');
     bar.setAttribute('data-zoomctl', '');
     bar.className = 'absolute bottom-2 left-2 z-20 flex items-center gap-0.5 bg-white/90 dark:bg-slate-800/90 rounded-xl shadow border border-slate-200 dark:border-slate-700 p-1';
-    const B = 'p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-teal-50 dark:hover:bg-slate-700';
+    const B = 'p-1.5 rounded-md text-[#5f6368] dark:text-[#9aa0a6] hover:bg-[#f1f3f4] dark:hover:bg-[#35363a]';
     bar.innerHTML = `
       <button type="button" data-z="out" title="Thu nhỏ" class="${B}"><i data-lucide="zoom-out" class="w-4 h-4 pointer-events-none"></i></button>
       <span data-z="label" class="text-[11px] font-semibold w-10 text-center text-slate-600 dark:text-slate-300 select-none">100%</span>
@@ -4788,7 +4788,7 @@
       '<button type="button" data-st="back" class="' + BTN + '"></button><div id="st-title" class="flex-1 text-center text-sm font-bold text-teal-950 dark:text-teal-100 truncate"></div>' +
       '<button type="button" data-st="done" class="' + PRI + '"></button></div>' +
       '<div id="st-hint" class="px-3 pt-1.5 text-[11px] text-slate-500 dark:text-slate-400 text-center"></div>' +
-      '<div id="st-tools" class="px-3 py-2 flex flex-wrap items-center gap-2 justify-center"></div>' +
+      '<div id="st-tools" class="px-3 pt-2 pb-5 flex flex-wrap items-center gap-2 justify-center"></div>' +
       '<div id="st-stage" class="flex-1 min-h-0 flex items-center justify-center px-3 pb-3"><div id="st-wrap" class="relative bg-white rounded-2xl shadow border border-slate-200 dark:border-slate-700 overflow-hidden"></div></div>' +
       '<div id="st-setup" class="absolute inset-0 z-10 bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-4 overflow-y-auto"></div>';
     D.body.appendChild(root);
@@ -5279,7 +5279,9 @@
     return m;
   }
   var careEl = null, cmpEl = null;
+  var lastCareArgs = null;
   function renderCare(level, byScore) {
+    lastCareArgs = [level, byScore];
     if (!careEl) return;
     var recBtn = $('btn-rec-start');
     var high = level >= 2;
@@ -5751,6 +5753,7 @@
     var ab = D.querySelector('[data-sci]'); if (ab) ab.textContent = T('Cơ sở khoa học', 'Scientific background');
     var ai = $('mx2-ai-btn'); if (ai) ai.textContent = T('AI hỏi về bức tranh', 'AI questions about the drawing');
     injectListen(); refreshAll();
+    if (lastCareArgs && careEl && careEl.innerHTML.trim()) renderCare(lastCareArgs[0], lastCareArgs[1]);
     var c = dailyCache(); if (!c && secEl && !$('screen-dass-result').classList.contains('hidden')) ensureDaily(false);
   }
   function init() {
@@ -6057,7 +6060,9 @@
         'Thả trôi muộn phiền': 'Dissolve & let go',
         'Xuất bảng số liệu (.CSV)': 'Export data (.CSV)',
         'Sao lưu (.JSON)': 'Backup (.JSON)',
-        'Khôi phục (.JSON)': 'Restore (.JSON)'
+        'Khôi phục (.JSON)': 'Restore (.JSON)',
+        'Neo giác quan 5-4-3-2-1': '5-4-3-2-1 Grounding',
+        'SOS 60 giây — Neo giác quan 5-4-3-2-1': '60-second SOS — 5-4-3-2-1 Grounding'
       };
       var EXTRA_VI = {};
       Object.keys(EXTRA_EN).forEach(function (k) { EXTRA_VI[EXTRA_EN[k].trim()] = k; });
@@ -6126,6 +6131,21 @@
         sBtn.classList.toggle('border-[#1a73e8]', !!window.__sym6On);
       });
     }
+    function showCalmToast(msg) {
+      var el = D.getElementById('calm-ux-toast');
+      if (!el) {
+        el = D.createElement('div');
+        el.id = 'calm-ux-toast';
+        el.setAttribute('role', 'status');
+        el.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 z-[70] max-w-md w-[calc(100vw-2rem)] px-4 py-2.5 rounded-md bg-[#202124] dark:bg-[#e8eaed] text-[#ffffff] dark:text-[#202124] text-xs font-medium shadow-lg text-center transition-opacity duration-200 pointer-events-none';
+        D.body.appendChild(el);
+      }
+      el.textContent = msg;
+      el.style.opacity = '1';
+      el.classList.remove('hidden');
+      clearTimeout(el._tm);
+      el._tm = setTimeout(function () { el.style.opacity = '0'; setTimeout(function () { el.classList.add('hidden'); }, 220); }, 4200);
+    }
     var sqBtn = D.getElementById('btn-squiggle');
     if (sqBtn) {
       sqBtn.addEventListener('click', function () {
@@ -6155,13 +6175,13 @@
         cx2.lineTo(last.x, last.y);
         cx2.stroke();
         cx2.restore();
+        var isEn = !!(window.__lang && window.__lang() === 'en');
+        var msg = isEn
+          ? 'Look at this curve from different angles—what does it remind you of? Add your own lines to turn it into anything you imagine.'
+          : 'Nhìn đường nét vừa xuất hiện từ nhiều góc độ xem nó giống hình gì (đám mây, con vật, ngọn đồi...) rồi vẽ tiếp theo trí tưởng tượng của bạn nhé.';
         var fb = D.getElementById('ai-feedback');
-        if (fb) {
-          var isEn = !!(window.__lang && window.__lang() === 'en');
-          fb.textContent = isEn
-            ? 'Look at this curve from different angles—what does it remind you of? Add your own lines to turn it into anything you imagine.'
-            : 'Nhìn đường nét vừa xuất hiện từ nhiều góc độ xem nó giống hình gì (đám mây, con vật, ngọn đồi...) rồi vẽ tiếp theo trí tưởng tượng của bạn nhé.';
-        }
+        if (fb) fb.textContent = msg;
+        showCalmToast(msg);
       });
     }
     var disBtn = D.getElementById('btn-dissolve-worry'), disBusy = false;
@@ -6201,13 +6221,13 @@
           } else {
             cx2.restore();
             disBusy = false;
+            var isEn = !!(window.__lang && window.__lang() === 'en');
+            var msg = isEn
+              ? 'The lines have dissolved away. Take a slow breath and let your mind rest.'
+              : 'Nét vẽ đã tan đi rồi. Hít một hơi thật sâu và để tâm trí nhẹ lại nhé.';
             var fb = D.getElementById('ai-feedback');
-            if (fb) {
-              var isEn = !!(window.__lang && window.__lang() === 'en');
-              fb.textContent = isEn
-                ? 'The lines have dissolved away. Take a slow breath and let your mind rest.'
-                : 'Nét vẽ đã tan đi rồi. Hít một hơi thật sâu và để tâm trí nhẹ lại nhé.';
-            }
+            if (fb) fb.textContent = msg;
+            showCalmToast(msg);
           }
         }
         requestAnimationFrame(step);
