@@ -5603,6 +5603,21 @@
     menuBtn.title = T('Thêm', 'More'); menuBtn.setAttribute('aria-label', menuBtn.title);
   }
   function closeMenu() { if (panel) { panel.classList.add('hidden'); menuBtn.setAttribute('aria-expanded', 'false'); } }
+  function rankRow(r) {
+    var b = r.firstChild, id = (b && b.id) || '', t = ((b && (b.title || b.getAttribute('aria-label'))) || '').toLowerCase();
+    if (id === 'btn-lang') return 1;
+    if (id === 'mx-open') return 2;
+    if (t.indexOf('lịch sử') >= 0 || t.indexOf('history') >= 0) return 3;
+    if (id === 'mx2-gal-btn' || t.indexOf('phòng tranh') >= 0 || t.indexOf('gallery') >= 0) return 4;
+    if (t.indexOf('về dự án') >= 0 || t.indexOf('about') >= 0) return 5;
+    return 6;
+  }
+  function sortPanel() {
+    if (!panel) return;
+    Array.prototype.slice.call(panel.querySelectorAll('[data-calm-row]'))
+      .sort(function (a, b) { return rankRow(a) - rankRow(b); })
+      .forEach(function (r) { panel.appendChild(r); });
+  }
   function adopt(b) {
     if (!b || b.nodeType !== 1 || b === menuBtn || b === panel || b.id === 'btn-theme-toggle') return;
     if (b.tagName !== 'BUTTON') { if (b.tagName === 'SPAN') b.remove(); return; }
@@ -5617,6 +5632,7 @@
     });
     panel.appendChild(row);
     lab.textContent = labelFor(b);
+    sortPanel();
   }
   if (box) {
     box.style.position = 'relative';
