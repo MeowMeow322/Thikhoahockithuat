@@ -105,24 +105,44 @@ export default {
       const topic = typeof body.topic === "string" ? body.topic.trim().slice(0, 100) : "";
       if (!topic) return json({ error: lang === "en" ? "Please enter a mandala theme." : "Bạn hãy nhập ý tưởng tranh Mandala nhé." }, 400, cors);
       if (isCrisis(topic)) return json({ reply: CRISIS_REPLY[lang], crisis: true }, 200, cors);
-      let imgPrompt = `symmetrical circular mandala coloring book page inspired by ${topic}, clean bold black ink outlines on pure white background, no shading, no gray, no color, simple closed regions for coloring, centered, minimalist line art`;
-      if (env.GEMINI_API_KEY) {
-        const gAsk = `Rewrite this student theme into ONE short English image prompt (max 35 words) for a symmetrical circular mandala coloring page: "${topic}". Requirements: calm, safe, positive, pure white background, crisp bold black ink outlines, closed shapes easy to color, strictly no shading, no grayscale, no colors, no text. Return only the English prompt.`;
+      const pTopic = plain(topic);
+      const presetMap = {
+        "hoa sen": "geometric lotus flower petals pattern",
+        "song bien": "gentle circular ocean waves pattern",
+        "khu rung": "peaceful botanical forest leaves pattern",
+        "canh buom": "symmetric butterfly wings decorative pattern",
+      };
+      const baseTheme = presetMap[pTopic] || topic;
+      const safePrompt = "symmetrical circular geometric floral mandala coloring book page, clean bold black ink outlines on pure white background, simple closed petal shapes for coloring, centered, no shading, no gray, no color, minimalist line art";
+      let imgPrompt = `symmetrical circular mandala coloring book page inspired by ${baseTheme}, clean bold black ink outlines on pure white background, no shading, no gray, no color, simple closed regions for coloring, centered, minimalist line art`;
+      if (env.GEMINI_API_KEY && !presetMap[pTopic]) {
+        const gAsk = `Rewrite this student theme into ONE short neutral English geometric pattern phrase (max 25 words) for a circular mandala coloring book page: "${topic}". Strictly wholesome, abstract botanical or geometric motifs only, pure white background, crisp bold black ink outlines, no shading, no colors, no text. Return only the English prompt.`;
         const gOut = await Promise.race([
           callModel(env, [
             { role: "user", parts: [{ text: TASK_SYSTEM }] },
             { role: "model", parts: [{ text: "Mình hiểu và sẽ chỉ trả về nội dung được yêu cầu." }] },
             { role: "user", parts: [{ text: gAsk }] },
-          ], { temperature: 0.7, maxOutputTokens: 120 }),
-          new Promise((r) => setTimeout(() => r({}), 6000)),
+          ], { temperature: 0.6, maxOutputTokens: 100 }),
+          new Promise((r) => setTimeout(() => r({}), 5000)),
         ]);
         if (gOut && gOut.reply) {
-          const clean = String(gOut.reply).split(/\n/)[0].replace(/^["“\s]+|["”\s]+$/g, "").slice(0, 260);
-          if (clean.length >= 12) imgPrompt = `${clean}, black and white coloring book line art, pure white background, clean bold black outlines, no shading, no color, no text`;
+          const clean = String(gOut.reply).split(/\n/)[0].replace(/^["“\s]+|["”\s]+$/g, "").slice(0, 220);
+          if (clean.length >= 12) imgPrompt = `${clean}, symmetrical circular mandala coloring book line art, pure white background, clean bold black outlines, no shading, no color, no text`;
         }
       }
       try {
-        const res = await env.AI.run("@cf/black-forest-labs/flux-1-schnell", { prompt: imgPrompt, steps: 4 });
+        let res;
+        try {
+          res = await env.AI.run("@cf/black-forest-labs/flux-1-schnell", { prompt: imgPrompt, steps: 4 });
+        } catch (firstErr) {
+          const msg = String(firstErr && firstErr.message || firstErr || "");
+          if (/8007|nsfw|safety|flagged/i.test(msg)) {
+            imgPrompt = safePrompt;
+            res = await env.AI.run("@cf/black-forest-labs/flux-1-schnell", { prompt: safePrompt, steps: 4 });
+          } else {
+            throw firstErr;
+          }
+        }
         if (res && typeof res.image === "string" && res.image.length > 100) {
           return json({ image: "data:image/jpeg;base64," + res.image, prompt: imgPrompt }, 200, cors);
         }
@@ -199,12 +219,16 @@ async function callModel(env, contents, override) {
 
   for (const m of models) {
     for (let attempt = 0; attempt < 2; attempt++) {
+      const ac = new AbortController();
+      const tm = setTimeout(() => ac.abort(), 10000);
       try {
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(m)}:generateContent`, {
           method: "POST",
           headers: { "Content-Type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
           body: JSON.stringify({ contents, generationConfig: cfg }),
+          signal: ac.signal,
         });
+        clearTimeout(tm);
         if (res.ok) {
           const data = await res.json();
           const reply = data?.candidates?.[0]?.content?.parts?.filter((p) => !p.thought).map((p) => p.text || "").join("").trim();
@@ -218,13 +242,15 @@ async function callModel(env, contents, override) {
         try { const e = JSON.parse(raw).error; if (e && e.status) lastCode += " " + e.status; } catch (_) {}
         if (res.status === 400 && cfg.thinkingConfig) { delete cfg.thinkingConfig; attempt--; continue; }
         if (res.status === 500 || res.status === 503) {
-          if (attempt === 0) { await new Promise((r) => setTimeout(r, 700)); continue; }
+          if (attempt === 0) { await new Promise((r) => setTimeout(r, 500)); continue; }
         }
         break;
       } catch (err) {
+        clearTimeout(tm);
         console.log("Worker error", m, String(err));
-        lastCode = "network";
-        if (attempt === 0) { await new Promise((r) => setTimeout(r, 700)); continue; }
+        lastCode = err && err.name === "AbortError" ? "timeout" : "network";
+        if (lastCode === "timeout") break;
+        if (attempt === 0) { await new Promise((r) => setTimeout(r, 500)); continue; }
       }
     }
   }

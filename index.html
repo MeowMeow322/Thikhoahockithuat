@@ -201,8 +201,8 @@
   html.dark #music-toggle-btn { background-color: #303134 !important; color: #e8eaed !important; border: 1px solid #3c4043 !important; box-shadow: none !important; }
   html.dark #music-toggle-btn:hover { background-color: #35363a !important; border-color: #8ab4f8 !important; }
   html.dark #music-preset-lofi, html.dark #music-panel button:not(#music-url-play):not(#music-panel-close) { background-color: #303134 !important; color: #e8eaed !important; border-color: #3c4043 !important; }
-  html:not(.dark) #music-panel button[data-sact][class*="bg-teal-6"] { background-color: #1a73e8 !important; color: #ffffff !important; border-color: #1a73e8 !important; }
-  html.dark #music-panel button[data-sact][class*="bg-teal-6"] { background-color: #8ab4f8 !important; color: #202124 !important; border-color: #8ab4f8 !important; font-weight: 600 !important; }
+  html:not(.dark) #music-panel button[data-sact][class*="bg-teal-6"], html:not(.dark) #music-panel button[data-sact][class*="bg-[#1a73e8]"] { background-color: #1a73e8 !important; color: #ffffff !important; border-color: #1a73e8 !important; }
+  html.dark #music-panel button[data-sact][class*="bg-teal-6"], html.dark #music-panel button[data-sact][class*="bg-[#1a73e8]"] { background-color: #8ab4f8 !important; color: #202124 !important; border-color: #8ab4f8 !important; font-weight: 600 !important; }
   html:not(.dark) button[data-mood].bg-teal-600, html:not(.dark) button[data-mood].bg-teal-600 * { color: #ffffff !important; }
   html:not(.dark) button[data-mood].bg-teal-600 { background-color: #1a73e8 !important; border-color: #1a73e8 !important; }
   html.dark button[data-mood].bg-teal-600, html.dark button[data-mood].bg-teal-600 * { color: #202124 !important; }
@@ -451,12 +451,12 @@
     </section>
 
     <section id="screen-gallery" class="hidden w-full bg-white/90 dark:bg-slate-900/90 p-5 md:p-6 rounded-3xl shadow-xl border border-teal-100 dark:border-slate-800 max-w-4xl my-auto">
-      <div class="flex items-center justify-between mb-4">
-        <button id="btn-gallery-back" class="flex items-center space-x-1 px-3 py-1.5 rounded-xl border border-teal-200 dark:border-slate-700 bg-teal-50/50 dark:bg-slate-800 text-teal-800 dark:text-teal-300 text-xs font-semibold hover:bg-teal-100">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+        <button id="btn-gallery-back" class="flex items-center space-x-1 px-3 py-1.5 rounded-md border border-[#dadce0] dark:border-[#3c4043] bg-white dark:bg-[#303134] text-[#202124] dark:text-[#e8eaed] text-xs font-semibold hover:bg-[#f1f3f4] whitespace-nowrap">
           <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> <span>Đổi phương pháp</span>
         </button>
-        <h3 class="text-sm font-bold text-teal-950 dark:text-teal-100">Chọn một bức tranh để tô màu</h3>
-        <div class="w-24"></div>
+        <h3 class="text-sm font-semibold text-[#202124] dark:text-[#e8eaed]">Chọn một bức tranh để tô màu</h3>
+        <div class="hidden sm:block w-24"></div>
       </div>
       <div id="ai-mandala-box" class="mb-4 p-3.5 sm:p-4 rounded-2xl bg-slate-50/90 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/80">
         <div class="text-xs font-bold text-teal-900 dark:text-teal-200 mb-2.5" id="ai-mandala-title">Tạo tranh Mandala riêng bằng AI</div>
@@ -2312,10 +2312,11 @@
     function updateCursor() {
       const grab = hand || space;
       cv.style.cursor = panning ? 'grabbing' : grab ? 'grab' : '';
-      handBtn.classList.toggle('bg-teal-100', hand);
-      handBtn.classList.toggle('dark:bg-slate-700', hand);
+      handBtn.classList.toggle('bg-[#e8f0fe]', hand);
+      handBtn.classList.toggle('dark:bg-[#303134]', hand);
       handBtn.classList.toggle('ring-2', hand);
-      handBtn.classList.toggle('ring-teal-500', hand);
+      handBtn.classList.toggle('ring-[#1a73e8]', hand);
+      handBtn.classList.toggle('dark:ring-[#8ab4f8]', hand);
     }
     const local = (cx, cy) => { const r = frame.getBoundingClientRect(); return [cx - r.left, cy - r.top]; };
     window.__brushScale = () => (cv.width / (frame.clientWidth || 1)) / (window.devicePixelRatio || 1) / z;
@@ -3801,7 +3802,7 @@
     var h = '<h4 class="font-bold text-sm text-teal-950 dark:text-teal-100 mb-2">' + t('Âm thanh thư giãn', 'Relaxing sounds') + '</h4>';
     h += '<p class="text-[11px] text-slate-400 mb-2">' + t('Bấm một âm thanh để nghe trực tiếp, không cần tải về.', 'Tap a sound to listen right away, no download needed.') + '</p>';
     h += '<div class="grid grid-cols-2 gap-1.5 mb-2">';
-    keys.forEach(function (k) { h += '<button type="button" data-sact="snd:' + k + '" class="' + SBTN + (playing === k ? 'bg-teal-600 text-white border-teal-600' : 'bg-teal-50 dark:bg-slate-800 text-teal-800 dark:text-teal-200 border-slate-200 dark:border-slate-600') + '">' + t(SND[k][0], SND[k][1]) + '</button>'; });
+    keys.forEach(function (k) { h += '<button type="button" data-sact="snd:' + k + '" class="' + SBTN + (playing === k ? 'bg-[#1a73e8] text-white border-[#1a73e8] dark:bg-[#8ab4f8] dark:text-[#202124] dark:border-[#8ab4f8]' : 'bg-[#f1f3f4] dark:bg-[#303134] text-[#202124] dark:text-[#e8eaed] border-[#dadce0] dark:border-[#3c4043]') + '">' + t(SND[k][0], SND[k][1]) + '</button>'; });
     h += '</div>';
     if (playing) h += '<div class="flex items-center justify-between gap-2 mb-2"><p class="text-[11px] text-slate-500 dark:text-slate-400">' + (sndBuf === playing ? t('Đang tải âm thanh...', 'Loading sound...') : t('Đang phát', 'Now playing') + ': <b>' + t(SND[playing][0], SND[playing][1]) + '</b>') + '</p><button type="button" data-sact="stop:x" class="' + SBTN + 'shrink-0 bg-rose-50 dark:bg-slate-800 text-rose-600 dark:text-rose-300 border-rose-200 dark:border-slate-600">' + t('Dừng', 'Stop') + '</button></div>';
     h += '<label class="text-[11px] text-slate-500 dark:text-slate-400 block mb-2">' + t('Âm lượng', 'Volume') + ' <input id="mx-vol" type="range" min="0" max="1" step="0.05" value="' + vol + '" class="w-full"></label>';
@@ -4126,7 +4127,7 @@
             '<button type="button" data-a="menu" class="md:hidden px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-semibold" data-t="histBtn"></button>' +
             '<button type="button" data-a="close" class="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-teal-200 dark:border-slate-700 text-teal-700 dark:text-teal-300 text-sm font-semibold hover:bg-teal-50 dark:hover:bg-slate-800"><span data-t="back"></span></button>' +
             '<div id="ai-title" class="flex-1 min-w-0 truncate text-sm font-bold text-teal-950 dark:text-teal-100 text-center"></div>' +
-            '<span id="ai-listen-badge" class="hidden shrink-0 px-2.5 py-1 rounded-full bg-teal-100 dark:bg-teal-950 text-teal-800 dark:text-teal-300 border border-teal-300/70 dark:border-teal-800 text-[11px] font-semibold"></span>' +
+            '<span id="ai-listen-badge" class="hidden shrink-0 px-2.5 py-1 rounded-md bg-[#e8f0fe] dark:bg-[#303134] text-[#1a73e8] dark:text-[#8ab4f8] border border-[#d2e3fc] dark:border-[#3c4043] text-[11px] font-semibold"></span>' +
             '<button type="button" data-a="sup" class="px-3 py-2 rounded-xl border border-teal-200 dark:border-slate-700 text-xs font-semibold hover:bg-teal-50 dark:hover:bg-slate-800"><span data-t="help"></span></button>' +
           '</div>' +
           '<div id="ai-sc" class="flex-1 overflow-y-auto overflow-x-hidden"><div id="ai-log" class="max-w-3xl mx-auto px-4 py-5 space-y-4 overflow-x-hidden"></div></div>' +
@@ -4261,8 +4262,10 @@
     var hist = c.msgs.slice(-6).map(function (x) { return { role: x.role, text: x.text }; });
     c.msgs.push({ role: 'user', text: m }); c.t = Date.now(); inp.value = ''; busy = true; err = ''; save(); renderAll();
     var fail = function (e) { c.msgs.pop(); inp.value = m; err = e; };
-    fetch(CHAT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: m, history: hist, lang: en() ? 'en' : 'vi' }) })
-      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d }; }); })
+    var ac = typeof AbortController === 'function' ? new AbortController() : null;
+    var tm = ac ? setTimeout(function () { ac.abort(); }, 20000) : null;
+    fetch(CHAT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: m, history: hist, lang: en() ? 'en' : 'vi' }), signal: ac ? ac.signal : undefined })
+      .then(function (r) { if (tm) clearTimeout(tm); return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d }; }); })
       .then(function (x) { if (x.ok && x.d.reply) c.msgs.push({ role: 'model', text: x.d.reply, crisis: !!x.d.crisis }); else fail((x.d && x.d.error) || T('Trợ lý đang bận, bạn thử lại sau nhé.', 'The assistant is busy, please try again later.')); })
       .catch(function () { fail(T('Không kết nối được. Hãy kiểm tra mạng rồi thử lại.', 'Could not connect. Check your connection and try again.')); })
       .then(function () { busy = false; if (!c.msgs.length) { chats = chats.filter(function (x) { return x !== c; }); if (curId === c.id) curId = null; } save(); renderAll(); inp.focus(); });
@@ -4394,7 +4397,7 @@
     if (!sv(HK, a)) { a.forEach(function (r, i) { if (i < a.length - 3) delete r.thumb; }); sv(HK, a); }
   }
 
-  var BTN = 'py-2 px-4 rounded-xl border border-teal-200 dark:border-slate-700 text-teal-800 dark:text-teal-200 text-xs font-semibold hover:bg-teal-50 dark:hover:bg-slate-800';
+  var BTN = 'py-2 px-4 rounded-md border border-[#dadce0] dark:border-[#3c4043] text-[#202124] dark:text-[#e8eaed] text-xs font-semibold hover:bg-[#f1f3f4] dark:hover:bg-[#303134]';
   var PRI = 'py-2.5 px-4 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold disabled:opacity-40';
   var CARD = 'p-4 rounded-2xl border border-teal-200 dark:border-slate-700 bg-white/60 dark:bg-slate-800/40';
   var H3 = 'font-bold text-teal-950 dark:text-teal-100 text-base mb-1';
